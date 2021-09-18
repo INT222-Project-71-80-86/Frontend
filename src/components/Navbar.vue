@@ -1,10 +1,10 @@
 <template>
-    <nav class="p-6">
+    <nav class="p-6 sticky">
       <div class="flex justify-between items-center">
         <h1 class="pr-6 border-r-2 text-2xl font-bold text-gray-500">NPN SHOP</h1>
         <div class="flex justify-between flex-grow">
           <div class="flex justify-between ml-6 items-center">
-              <div class="space-x-5 pr-6 border-r-2 font-bold">
+              <div class="space-x-10 pr-6 border-r-2 font-bold">
               <span class="text-gray-500 text-md">something</span>
               <span class="text-gray-500 text-md">something</span>
               <span class="text-gray-500 text-md">something</span>
