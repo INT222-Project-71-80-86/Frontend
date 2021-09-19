@@ -22,7 +22,8 @@
             </span>
             <input class="outline-none text-sm flex-grow bg-gray-100" type="text" placeholder="Search your gears here...." />
               </div>
-            <router-link to="/"><span class="text-gray-500 text-md">Sign up</span></router-link>
+            <router-link to="/cart"><span class="text-gray-500 text-md">Cart</span></router-link>
+            <router-link to="/Addproduct"><span class="text-gray-500 text-md">Add Product</span></router-link>
             <router-link to="/"><span class="text-gray-500 text-md">Log in</span></router-link>
           </div>
         </div>
