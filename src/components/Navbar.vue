@@ -5,7 +5,7 @@
         <div class="flex justify-between flex-grow">
           <div class="flex justify-between ml-6 items-center">
               <div class="space-x-10 pr-6 border-r-2 font-bold">
-              <span class="text-gray-500 text-md">something</span>
+              <span class="text-gray-500 text-md"><router-link to="/showproducts">ShowPros(test)</router-link> </span>
               <span class="text-gray-500 text-md">something</span>
               <span class="text-gray-500 text-md">something</span>
               <span class="text-gray-500 text-md">something</span>
