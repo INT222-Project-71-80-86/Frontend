@@ -1,15 +1,11 @@
 <template>
-  <nav-bar></nav-bar>
-    <div
-        class="flex items-center min-h-screen mt-2"
-        style="background-image: url('https://images.unsplash.com/photo-1493514789931-586cb221d7a7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80');"
-    >
-        <div class="flex justify-center container mx-auto">
-            <div class="md:w-4/5 lg:w-4/5 rounded-2xl my-10 bg-white p-5 shadow-sm">
-                <div class="m-5">
-                    <form @submit.prevent="submitForm" enctype="multipart/form-data">
-                        <!-- prod Name -->
-                        <div class="mb-6">
+ <nav-bar></nav-bar>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            
+            <h1>Edit Product</h1>
+            <form @submit.prevent="updateForm">
+                 <div class="mb-6">
                             <label
                                 for="name"
                                 class="block mb-2 text-sm text-black font-medium"
@@ -17,7 +13,7 @@
                             <input
                                 type="text"
                                 name="name"
-                                v-model="name"
+                                v-model="product.name"
                                 id="name"
                                 class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
                                 require
@@ -37,7 +33,7 @@
                                 name="date"
                                 min="2021-01-01"
                                 max="2028-12-31"
-                                v-model="releaseDate"
+                                v-model="product.releaseDate"
                             />
                             <p
                                 v-if="invalidDateInput"
@@ -67,7 +63,7 @@
                                 rows="5"
                                 name="description"
                                 id="description"
-                                v-model="description"
+                                v-model="product.description"
                                 placeholder="Enter Description"
                                 class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
                             ></textarea>
@@ -95,7 +91,7 @@
                                 <select
                                     id="brand"
                                     name="brandid"
-                                    v-model="brandid"
+                                    v-model="product.brandid"
                                     class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
                                 >
                                     <option selected disabled hidden>Brand</option>
@@ -161,7 +157,7 @@
                                 max="10000000"
                                 name="price"
                                 id="price"
-                                v-model="price"
+                                v-model="product.price"
                                 class="mx-10 px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
                             />
                         </div>
@@ -175,7 +171,7 @@
                                     type="radio"
                                     class="form-checkbox h-5 w-5 text-gray-600"
                                     id="warranty"
-                                    v-model="warranty"
+                                    v-model="product.warranty"
                                     value="0"
                                 />
                                 <span class="ml-2 text-gray-700">None</span>
@@ -185,7 +181,7 @@
                                     type="radio"
                                     class="form-checkbox h-5 w-5 text-gray-600"
                                     id="warranty1"
-                                    v-model="warranty"
+                                    v-model="product.warranty"
                                     value="1"
                                 />
                                 <span class="ml-2 text-gray-700">1 Year</span>
@@ -195,7 +191,7 @@
                                     type="radio"
                                     class="form-checkbox h-5 w-5 text-gray-600"
                                     id="warranty2"
-                                    v-model="warranty"
+                                    v-model="product.warranty"
                                     value="2"
                                 />
                                 <span class="ml-2 text-gray-700">2 Years</span>
@@ -219,7 +215,7 @@
                                     <input
                                         class="w-6 h-6"
                                         type="checkbox"
-                                        v-model="colors"
+                                        v-model="product.colors"
                                         :value="color.colorid"
                                     />
                                     <div
@@ -234,179 +230,35 @@
                                 >Please, Select at least one color.</p>
                             </div>
                         </div>
-
-                        <!-- submit -->
-                        <div class="mb-6 my-6 space-x-3">
-                            <button
-                                type="submit"
-                                class="w-40 px-3 py-4 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 focus:outline-none"
-                            >Apply</button>
-                            <button
-                                class="w-40 px-3 py-4 text-white bg-red-500 rounded-md hover:bg-red-700"
-                            >Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </template>
-<script>
-export default {
-    name: 'AddProducts',
 
+<script>
+import axios from 'axios';
+export default {
     data() {
         return {
-            urlJson: "http://",
-            pid: 0, //product code
-            image: null,
-            name: '',
-            releaseDate: null,
-            description: '',
-            price: 0,
-            brandid: 0,
-            warranty: 0,
-            Quantity:0,
-            colors: [],
-
-            brandsDB: [],
-            colorsDB: [],
-            isLocal: false,
-
-            invalidNameInput: false,
-            invalidDateInput: false,
-            invalidDescInput: false,
-            invalidPriceInput: false,
-            invalidBrandInput: false,
-            invalidFileInput: false,
-            invalidWarrantyInput: false,
-            invalidColorsInput: false,
-            uploadFile: null
-        };
+            product: {}
+        }
+    },
+    created() {
+        let apiURL = `http://13.76.112.88/edit/${this.$route.params.id}`;
+        axios.get(apiURL).then((res) => {
+            this.product = res.data
+        })
     },
     methods: {
-        getImageUrl(filename) {
-            if (this.isLocal) {
-                return this.image
-            }
-            return `http://52.148.79.33:8083/files/${filename}`
-        },
-        loadFile(e) {
-            this.isLocal = true;
-            let file = e.target.files[0];
-            let data = new FormData();
-            data.append("file", file, file.name);
-            this.uploadFile = data.get("file")
-            this.image = URL.createObjectURL(this.uploadFile);
-        },
-        removeimg() {
-            this.image = null;
-        },
-        async submitForm() {
-            this.invalidNameInput = (this.name === null || this.name.trim() === '') ? true : false;
-            this.invalidDateInput = this.releaseDate === null ? true : false;
-            this.invalidDescInput = (this.description === "" || this.description.trim() === '') ? true : false;
-            this.invalidPriceInput = (this.price <= 0) ? true : false;
-            this.invalidBrandInput = this.brandid === 'Brand' ? true : false;
-            this.invalidFileInput = this.image === null ? true : false;
-            this.invalidWarrantyInput = (this.warranty === null || this.warranty < 0) ? true : false;
-            this.invalidColorsInput = (this.colors.length < 1) ? true : false;
-
-            if ((!this.invalidNameInput && !this.invalidDateInput && !this.invalidDescInput && !this.invalidPriceInput && !this.invalidBrandInput && !this.invalidFileInput && !this.invalidWarrantyInput && !this.invalidColorsInput)) {
-                {
-                    this.makeDataForm();
-                }
-
-                this.id = null
-                this.name = ''
-                this.releaseDate = null
-                this.description = ''
-                this.price = 0
-                this.brandid = 'Brand'
-                this.warranty = 0
-                this.colors = []
-                this.image = null
-
-            }
-        },
-          makeDataForm(){
-            // Make product object to send to backend
-            let product = { pid: this.pid,
-                            name: this.name,
-                            releaseDate: this.releaseDate,
-                            description: this.description,
-                            price: this.price,
-                            brandid: this.brandid,
-                            warranty: this.warranty,
-                            image: '',
-                            productcolors: [] }
-            // Add Colors to productcolors
-            this.colors.forEach(c => {
-                let color = { colors: {colorid: c} }
-                product.productcolors.push(color)
-            });
-
-            const jsonProduct = JSON.stringify(product)
-            const blob = new Blob([jsonProduct], {
-                type: 'application/json'
-            })
-
-            let formData = new FormData()
-            formData.append('file', this.uploadFile) // Add image file
-            formData.append('product', blob) // Add blob json file
-
-            // Split to POST or PUT
-            if(this.isedit){
-                // If editing go PUT
-                this.saveEditProduct(formData);
-            } else {
-                // Else go POST
-                this.saveAddProduct(formData);
-            }
-        },
-        async getAllBrands() {
-            try {
-                const res = await fetch(`${this.urlJson}/brands`)
-                const data = await res.json()
-                return data
-            } catch (error) {
-                console.log(`Can not get brands.`)
-            }
-        },
-        async getAllColors() {
-            try {
-                const res = await fetch(`${this.urlJson}/colors`)
-                const data = await res.json()
-                return data
-            } catch (error) {
-                console.log(`Can not get colors.`)
-            }
-        },
-        async saveAddProduct(formData) {
-            try {
-                const res = await fetch(`${this.urlJson}/save`, {
-                    method: 'POST',
-                    body: formData
-                })
-                if (res.status != 200) {
-                    alert("An Unexpected Error Occured. Response Status: " + res.status)
-                } else {
-                    alert("Successfully Add Product.")
-                }
-                this.back();
-            } catch (error) {
+        updateForm() {
+            let apiURL = `http://13.76.112.88/update/${this.$route.params.id}`;
+            axios.put(apiURL, this.product).then((res) => {
+                console.log(res);
+                this.$router.push('/showproducts')
+            }).catch(error => {
                 console.log(error)
-            }
-        },
-    },
-    async created() {
-        if (this.product != null) {
-            this.fillForm(this.product);
+            })
         }
-        this.brandsDB = await this.getAllBrands()
-        this.colorsDB = await this.getAllColors()
     }
-
 }
-
 </script>
