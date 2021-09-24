@@ -5,6 +5,7 @@ import Addproduct from '../components/Addproduct.vue'
 import ShowProducts from '../components/ShowProducts.vue'
 import EditProduct from '../components/EditProduct.vue'
 import Login from '../components/Login.vue'
+import About from '../views/About.vue'
 
 const routes = [
   {
@@ -20,6 +21,7 @@ const routes = [
   {
     path: '/about',
     name: 'About',
+    component: About
   },
   {
     path: '/cart',
