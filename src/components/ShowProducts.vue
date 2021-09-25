@@ -69,6 +69,7 @@
         </div>
       
           </div>
+          <footer-com />
 </template>
 <script>
 

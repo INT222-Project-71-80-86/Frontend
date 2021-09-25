@@ -36,9 +36,8 @@
       </div>
       <hr class="w-40 my-14 border-4 rounded-md sm:mx-0 mx-auto" />
     </section>
-
-    
   </main>
+  <footer-com />
 </template>
 
 <script>

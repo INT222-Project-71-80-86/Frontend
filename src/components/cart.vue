@@ -140,9 +140,9 @@
                         </div>
 
                         <!-- back -->
-                        <div class=" absolute -bottom-20">
+                        <div class=" absolute -bottom-20 md:flex">
                             <router-link to="/"><button
-                                class=" bg-red-500 tracking-wide text-gray-800 font-bold rounded border-b-2 hover:text-green-500 py-3 px-56"
+                                class=" bg-red-500 tracking-wide text-gray-800 font-bold rounded border-b-2 hover:text-green-500 py-3 px-40"
                             > <span class="text-white">Continue Shopping...</span>
                             </button></router-link>
                         </div>

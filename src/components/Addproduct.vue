@@ -131,7 +131,7 @@
                                     id="upload-file"
                                     accept="image/*"
                                     name="file"
-                                    class="text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+                                    class="text-gray-600 h-10 pl-5 bg-white hover:border-gray-400 focus:outline-none appearance-none"
                                     @change="loadFile"
                                 />
                             </div>

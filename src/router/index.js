@@ -7,7 +7,9 @@ import EditProduct from '../components/EditProduct.vue'
 import Login from '../components/Login.vue'
 import About from '../views/About.vue'
 
+
 const routes = [
+
   {
     path: '/',
     name: 'Home',

@@ -1,16 +1,12 @@
 <template>
-    <nav class="z-0 pl-6 pr-6 sticky border-b shadow-md mb-4">
+    <nav class="pl-6 pr-6 sticky border-b shadow-md mb-4">
       <div class="flex justify-between items-center">
         <router-link to="/"><h1 class="pr-6 border-r-2 text-2xl font-bold text-black">NPN SHOP</h1></router-link>
         <div class="flex justify-between flex-grow">
           <div class="flex justify-between ml-6 items-center">
               <div class="space-x-10 pr-6  font-bold">
-              <span class="text-black text-md">MOUSE</span>
-              <span class="text-black text-md">MONITOR</span>
-              <span class="text-black text-md">MOUSEPAD</span>
-              <span class="text-black text-md">KEYBOARD</span>
-              <span class="text-black text-md">HEADPHONE</span>
-              <span class="text-black text-md">CONTROLLER</span>
+                <router-link to="/Showproducts"><span class="text-md font-bold hover:text-green-500">PRODUCTS</span></router-link>
+                <dd-nav />
               </div>
           </div>
           <div class="md:flex space-x-6 hidden">
@@ -28,7 +24,7 @@
     </div>
   </div>
   <!-- dropdown button account -->
-            <div class="dropdown mt-4">
+            <div class="md-flex dropdown mt-4">
             <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                   <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                   <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
@@ -36,17 +32,15 @@
                   </svg>
             </button>
             <ul class="dropdown-menu dropdown-menu-dark p-2 transition ease-out duration-500 m-2 -mt-3" aria-labelledby="dropdownMenuButton1">
-            <router-link to="/Showproducts"><li><a class="text-white dropdown-item font-semibold" href="#">Products</a></li></router-link>
-            <li><hr class="dropdown-divider"></li>
-            <router-link to="/Cart"><li><a class="text-white dropdown-item font-semibold" href="#">Cart</a></li></router-link>
+            <router-link to="/"><li><a class="text-white dropdown-item font-semibold" href="#">Register</a></li></router-link>
             <li><hr class="dropdown-divider"></li>
             <router-link to="/Login"><li><a class="text-white dropdown-item font-semibold" href="#">Login</a></li></router-link>
             <li><hr class="dropdown-divider"></li>
-            <router-link to="/"><li><a class="text-white dropdown-item font-semibold" href="#">Register</a></li></router-link>
-            <li><hr class="dropdown-divider"></li>
-            <router-link to="/About"><li><a class="text-white dropdown-item font-semibold" href="#">About</a></li></router-link>
+            <router-link to="/Cart"><li><a class="text-white dropdown-item font-semibold" href="#">Cart</a></li></router-link>
             <li><hr class="dropdown-divider"></li>
             <router-link to="/Addproduct"><li><a class="text-white dropdown-item font-semibold" href="#">Addproduct</a></li></router-link>
+            <li><hr class="dropdown-divider"></li>
+            <router-link to="/About"><li><a class="text-white dropdown-item font-semibold" href="#">About</a></li></router-link>
             </ul>
             </div> 
             <!-- end dropdown button account -->

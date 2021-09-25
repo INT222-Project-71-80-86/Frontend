@@ -12,6 +12,7 @@
     </div>
 </div>
 </div>
+<footer-com />
 </template>
 <script>
   export default {
