@@ -13,7 +13,7 @@
       <div class="pt-5 flex items-center justify-between">
         <p class="text-lg font-semibold italic">{{ item.name }}</p>
       </div>
-      <p class="text-base font-semibold italic">{{ getBrandName(item.brandid) }}</p>
+      <p class="text-base font-semibold italic">{{ item.brand.name }}</p>
       
       <p class="text-sm text-gray-400 italic">{{ item.description }}</p>
       <p class="text-base font-semibold italic">Warranty - {{ item.warranty }} years.</p>
@@ -21,9 +21,9 @@
       <p class="text-base font-semibold italic">฿ {{ pricenumber(item.price) }}</p>
       <div class="flex space-x-1 items-center mt-1 mb-1"><span class="text-base font-semibold italic">Color </span>
         <span class="text-xl font-semibold italic"> [ </span>
-        <div class="" v-for="c in item.productcolors" :key="c.colors.colorid">
+        <div class="" v-for="c in item.productcolor" :key="c.color.cid">
           <div
-          :style="{'background-color': c.colors.colorcode}"
+          :style="{'background-color': c.color.code}"
             class="rounded-full w-6 h-6 focus:outline-none border-2 border-black" 
           ></div>
         </div>
@@ -34,11 +34,11 @@
         <button
           class="inline-flex items-center justify-center w-10 h-10 text-gray-700 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-gray-200"
          >
-          <router-link :to="{name: 'edit', params: {id: showproducts.pid}}" class="btn btn-success">
+          <!-- <router-link :to="{name: 'edit', params: {id: showproducts.pid}}" class="btn btn-success">
              Edit <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-5 17l1.006-4.036 3.106 3.105-4.112.931zm5.16-1.879l-3.202-3.202 5.841-5.919 3.201 3.2-5.84 5.921z" />
           </svg>
-        </router-link>
+        </router-link> -->
         </button>
         <button
           class="inline-flex items-center justify-center w-10 h-10 text-gray-700 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-gray-200"
@@ -57,6 +57,7 @@
         </button>
       </div>
     </div>
+   
     <!-- Paging -->
   </div>
   <div id="paging" class="mb-5 -mt-8">
@@ -77,7 +78,7 @@ export default {
 
   data() {
     return {
-      urlproduct: "http://***",
+      urlproduct: "http://localhost:8083/api",
       showproducts: [],
       pageInfo: null,
       brandCode: [],
@@ -88,7 +89,7 @@ export default {
   },
   methods: {
     async fetchProduct(pageNo = 1) {
-      const res = await fetch(`${this.urlproduct}/products?pageNo=${pageNo-1}`);
+      const res = await fetch(`${this.urlproduct}/product?pageNo=${pageNo-1}`);
       const data = await res.json();
       this.showproducts = data.content;
       this.pageInfo = data.pageable;
@@ -101,7 +102,7 @@ export default {
       return;
     },
     async fetchBrands(){
-      const res = await fetch(`${this.urlproduct}/brands`);
+      const res = await fetch(`${this.urlproduct}/brand`);
       const data = await res.json();
       this.brandCode = data;
       // console.log(this.brandCode)
@@ -109,7 +110,7 @@ export default {
       return;
     },
       async fetchColors(){
-      const res = await fetch(`${this.urlproduct}/colors`);
+      const res = await fetch(`${this.urlproduct}/color`);
       const data = await res.json();
       this.colorCode = data;
       // console.log(this.colorCode)
@@ -119,7 +120,7 @@ export default {
     async deleteProduct(pid){
       if(confirm("Do you really want to delete this product?")){
         try {
-          const res = await fetch(`${this.urlproduct}/delete/${pid}`, {
+          const res = await fetch(`${this.urlproduct}/product/delete/${pid}`, {
             method: 'DELETE'
           });
           if(res.status === 200){
@@ -135,25 +136,29 @@ export default {
         return
       } 
     },
-    
+    // filterBrand(e){
+    //   if(this.showproducts=e.brand.bid){
+        
+    //   }
+    // },
     getImages(image){
-      return `${this.urlproduct}/files/${image}`
+      return `${this.urlproduct}/file/${image}`
     }, 
     sortColors(product){
       product.forEach(p => {
-        p.productcolors.sort(function(a, b){return a.colors.colorid - b.colors.colorid});
+        p.productcolor.sort(function(a, b){return a.color.cid - b.color.cid});
       });
     },
     checkCurrentPage(i){
     return this.pageInfo.pageNumber+1 == i 
   },     
-    getBrandName(bid){
-      for (let i = 0; i < this.brandCode.length; i++) {
-        if(this.brandCode[i].brandid == bid){
-          return this.brandCode[i].name;
-        }
-      }
-    },
+    // getBrandName(bid){
+    //   for (let i = 0; i < this.brandCode.length; i++) {
+    //     if(this.brandCode[i].brandid == bid){
+    //       return this.brandCode[i].name;
+    //     }
+    //   }
+    // },
      pricenumber(price){
      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
