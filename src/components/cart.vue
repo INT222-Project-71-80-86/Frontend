@@ -1,9 +1,11 @@
 <template>
+
+    <nav-bar />
     <div
-        class="relative w-full"
-        style=" background-image: url('https://i.pinimg.com/564x/db/87/3d/db873daadf558f81f80b59bfec9495d8.jpg');"
+        class="w-full"
+        style="background-image: url('https://i.pinimg.com/564x/db/87/3d/db873daadf558f81f80b59bfec9495d8.jpg');"
     >
-        <div class="flex justify-center my-6">
+        <div class="flex justify-center my-6 pt-4 pb-4">
             <div
                 class="flex flex-col p-8 text-gray-800 bg-white shadow-lg pin-r pin-y md:w-4/5 lg:w-4/5 rounded-2xl"
             >
@@ -138,12 +140,11 @@
                         </div>
 
                         <!-- back -->
-                        <div class="m-3 absolute bottom-10 left-60">
-                            <button
-                                class="w-32 bg-red-500 tracking-wide text-gray-800 font-bold rounded border-b-2 border-yellow-500 hover:text-white py-2 px-6"
-                            > <router-link to="/"> <span class="mx-auto">Back</span></router-link>
-                               
-                            </button>
+                        <div class=" absolute -bottom-20">
+                            <router-link to="/"><button
+                                class=" bg-red-500 tracking-wide text-gray-800 font-bold rounded border-b-2 hover:text-green-500 py-3 px-56"
+                            > <span class="text-white">Continue Shopping...</span>
+                            </button></router-link>
                         </div>
 
                         <!-- Statement -->
