@@ -5,7 +5,7 @@
         style="background-image: url('https://images.unsplash.com/photo-1493514789931-586cb221d7a7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80');"
     >
         <div class="flex justify-center container mx-auto">
-            <div class="md:w-4/5 lg:w-4/5 rounded-2xl my-10 bg-white p-5 shadow-sm">
+            <div class="md:w-4/5 lg:w-2/5 rounded-2xl my-10 bg-white p-3 shadow-sm">
                 <div class="m-5">
                     <form @submit.prevent="submitForm" enctype="multipart/form-data">
                         <!-- prod Name -->
@@ -19,7 +19,7 @@
                                 name="name"
                                 v-model="name"
                                 id="name"
-                                class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                                class=" px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
                                 require
                             />
                             <p v-if="invalidNameInput" class="text-red-500">Please, Enter your Name</p>
@@ -54,7 +54,7 @@
                         <input
                             type="number"
                             value="Quantity"
-                            class="w-full font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black"
+                            class=" font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black"
                         />
                         </div>
                         <!-- prod Description -->
@@ -241,15 +241,16 @@
                                 type="submit"
                                 class="w-40 px-3 py-4 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 focus:outline-none"
                             >Apply</button>
-                            <button
+                            <router-link to="/"><button
                                 class="w-40 px-3 py-4 text-white bg-red-500 rounded-md hover:bg-red-700"
-                            >Cancel</button>
+                            >Cancel</button></router-link>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    
 </template>
 <script>
 export default {
