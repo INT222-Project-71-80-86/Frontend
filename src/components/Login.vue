@@ -1,82 +1,38 @@
 <template>
-  <div>
+
     <nav-bar></nav-bar>
-    <section class="absolute w-full h-full">
-      <div class="absolute top-0 w-full h-full bg-gray-900"></div>
-      <div class="container mx-auto px-4 h-full">
-        <div class="flex content-center items-center justify-center h-full">
-          <div class="w-full lg:w-4/12 px-4">
-            <div
-              class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-300 border-0"
-            >
-              <div class="rounded-t mb-0 px-6 py-6">
-                 <p class="text-gray-500 text-center mb-3 font-bold">Sign in with credentials</p>
-                <hr class="mt-6 border-b-1 border-gray-400" />
-              </div>
-              <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-                <form>
-                  <div class="relative w-full mb-3">
-                    <label
-                      class="block uppercase text-gray-700 text-xs font-bold mb-2"
-                      for="grid-password"
-                    >Email</label>
-                    <input
-                      type="email"
-                      class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
-                      placeholder="Email"
-
-                    />
-                  </div>
-                  <div class="relative w-full mb-3">
-                    <label
-                      class="block uppercase text-gray-700 text-xs font-bold mb-2"
-                      for="grid-password"
-                    >Password</label>
-                    <input
-                      type="password"
-                      class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
-                      placeholder="Password"
-
-                    />
-                  </div>
-                  <div>
-                    <label class="inline-flex items-center cursor-pointer">
-                      <input
-                        id="customCheckLogin"
-                        type="checkbox"
-                        class="form-checkbox border-0 rounded text-gray-800 ml-1 w-5 h-5"
-                  
-                      />
-                      <span class="ml-2 text-sm font-semibold text-gray-700">Remember me</span>
-                    </label>
-                  </div>
-                  <div class="text-center mt-6">
-                    <button
-                      class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                      type="button"
-                     
-                    >Sign In</button>
-                  </div>
-                </form>
-                <div class="flex flex-wrap mt-6">
-                  <div class="w-1/2">
-                    <a href="forgotPassword" class="text-gray-800">
-                      <small>Forgot password?</small>
-                    </a>
-                  </div>
-                  <div class="w-1/2 text-right">
-                    <a href="createAccount" class="text-gray-800">
-                      <small>Create new account</small>
-                    </a>
-                  </div>
-                </div>
-              </div>
+    <div class="flex justify-center h-screen">
+        <form class="w-full md:w-1/3 bg-white rounded-lg border-t-2 border-b-2 border-green-500 shadow-md h-2/4">
+            <div class="flex font-bold justify-center mt-6">
+               <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-person-check-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+  <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+</svg>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+            <h2 class="text-3xl text-center text-gray-700 mb-4 mt-4">NPN MEMBER</h2>
+            <div class="px-12 pb-10">
+                <div class="w-full mb-2">
+                    <div class="flex items-center">
+                        <i class='ml-3 fill-current text-gray-400 text-xs z-10 fas fa-user'></i>
+                        <input type='text' placeholder="Username"
+                            class="-mx-6 px-8  w-full border rounded px-3 py-2 text-gray-700 focus:outline-none" />
+                    </div>
+                </div>
+                <div class="w-full mb-2">
+                    <div class="flex items-center">
+                        <i class='ml-3 fill-current text-gray-400 text-xs z-10 fas fa-lock'></i>
+                        <input type='text' placeholder="Password"
+                            class="-mx-6 px-8 w-full border rounded px-3 py-2 text-gray-700 focus:outline-none" />
+                    </div>
+                </div>
+                <a href="#" class="text-xs text-gray-500 float-left mb-4 -ml-2">Create Account?</a>
+                <a href="#" class="text-xs text-gray-500 float-right mb-4">Forgot Password?</a> 
+                <button type="submit"
+                    class="w-full py-2 rounded-full bg-green-600 text-gray-100  focus:outline-none">Login</button>
+            </div>
+        </form>
+    </div>
+
 </template>
 <script>
 
