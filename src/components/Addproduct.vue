@@ -53,7 +53,7 @@
                             >Quantity</label>
                         <input
                             type="number"
-                            value="Quantity"
+                            v-model="Quantity"
                             class=" font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black"
                         />
                         </div>
@@ -95,14 +95,14 @@
                                 <select
                                     id="brand"
                                     name="brandid"
-                                    v-model="brandid"
+                                    v-model="brand"
                                     class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
                                 >
                                     <option selected disabled hidden>Brand</option>
                                     <option
                                         v-for="brand in brandsDB"
-                                        :key="brand.brandid"
-                                        :value="brand.brandid"
+                                        :key="brand.bid"
+                                        :value="brand"
                                     >{{ brand.name }}</option>
                                 </select>
                             </div>
@@ -111,14 +111,47 @@
                                 class="text-red-500"
                             >Please, Enter your Brand</p>
                         </div>
+                        <!--cate-->
+                        <div>
+                            <div class="relative inline-flex pb-6">
+                                <svg
+                                    class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 412 232"
+                                >
+                                    <path
+                                        d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z"
+                                        fill="#648299"
+                                        fill-rule="nonzero"
+                                    />
+                                </svg>
+                                <select
+                                    id="category"
+                                    name="categoryid"
+                                    v-model="category"
+                                    class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+                                >
+                                    <option selected disabled hidden>category</option>
+                                    <option
+                                        v-for="category in categoryDB"
+                                        :key="category.catid"
+                                        :value="category"
+                                    >{{ category.name }}</option>
+                                </select>
+                            </div>
+                            <p
+                                v-if="invalidCategoryInput"
+                                class="text-red-500"
+                            >Please, Enter your category</p>
+                        </div>
 
                         <!-- choose file -->
-                        <div id="mb-6 ">
+                        <div id="mb-6">
                             <div v-if="!image">
                                 <label
-                                    class="block mb-2 text-sm text-black font-medium pb-5"
+                                    class="block mb-2 text-sm text-black font-medium "
                                     for="file"
-                                >Upload Image</label>
+                                >Press the button to upload the image.</label>
                                 <div id="preview">
                                     <img
                                         class="rounded h-48 w-48 mx-auto my-8"
@@ -214,17 +247,17 @@
                                 <div
                                     class="flex items-center justify-start space-x-3"
                                     v-for="color in colorsDB"
-                                    :key="color.colorid"
+                                    :key="color.cid"
                                 >
                                     <input
                                         class="w-6 h-6"
                                         type="checkbox"
                                         v-model="colors"
-                                        :value="color.colorid"
+                                        :value="color.cid"
                                     />
                                     <div
                                         class="color-circle rounded-full w-8 h-8 border-2 border-black"
-                                        :style="{ backgroundColor: color.colorcode }"
+                                        :style="{ backgroundColor: color.code }"
                                     ></div>
                                     <span>{{ color.name }}</span>
                                 </div>
@@ -250,6 +283,73 @@
             </div>
         </div>
     </div>
+    <!-- test div form -->
+    <!-- <div class="flex h-screen bg-gray-200 items-center justify-center  mt-32 mb-32">
+  <div class="grid bg-white rounded-lg shadow-xl w-11/12 md:w-9/12 lg:w-1/2">
+    <div class="flex justify-center py-4">
+      <div class="flex bg-purple-200 rounded-full md:p-4 p-2 border-2 border-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+  <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+</svg>
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <div class="flex">
+        <h1 class="text-gray-600 font-bold md:text-2xl text-xl">NPN | NEWPRODUCT</h1>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 mt-5 mx-7">
+      <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Input 1</label>
+      <input class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text" placeholder="Input 1" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 mt-5 mx-7">
+      <div class="grid grid-cols-1">
+        <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Input 2</label>
+        <input class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text" placeholder="Input 2" />
+      </div>
+      <div class="grid grid-cols-1">
+        <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Input 3</label>
+        <input class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text" placeholder="Input 3" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 mt-5 mx-7">
+      <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Selection</label>
+      <select class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+        <option>Option 1</option>
+        <option>Option 2</option>
+        <option>Option 3</option>
+      </select>
+    </div>
+
+    <div class="grid grid-cols-1 mt-5 mx-7">
+      <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Another Input</label>
+      <input class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text" placeholder="Another Input" />
+    </div>
+
+    <div class="grid grid-cols-1 mt-5 mx-7">
+      <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold mb-1">Upload Photo</label>
+        <div class='flex items-center justify-center w-full'>
+            <label class='flex flex-col border-4 border-dashed w-full h-32 hover:bg-gray-100 hover:border-purple-300 group'>
+                <div class='flex flex-col items-center justify-center pt-7'>
+                  <svg class="w-10 h-10 text-purple-400 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  <p class='lowercase text-sm text-gray-400 group-hover:text-purple-600 pt-1 tracking-wider'>Select a photo</p>
+                </div>
+              <input type='file' class="hidden" />
+            </label>
+        </div>
+    </div>
+
+    <div class='flex items-center justify-center  md:gap-8 gap-4 pt-5 pb-5'>
+      <button class='w-auto bg-gray-500 hover:bg-gray-700 rounded-lg shadow-xl font-medium text-white px-4 py-2'>Cancel</button>
+      <button class='w-auto bg-purple-500 hover:bg-purple-700 rounded-lg shadow-xl font-medium text-white px-4 py-2'>Create</button>
+    </div>
+
+  </div>
+</div> -->
     
 </template>
 <script>
@@ -258,18 +358,19 @@ export default {
 
     data() {
         return {
-            urlJson: "http://",
+            urlJson: "http://localhost:8083/api",
             pid: 0, //product code
             image: null,
             name: '',
             releaseDate: null,
             description: '',
             price: 0,
-            brandid: 0,
+            brand: null,
             warranty: 0,
             Quantity:0,
             colors: [],
-
+            category: null,
+            categoryDB: [],
             brandsDB: [],
             colorsDB: [],
             isLocal: false,
@@ -282,6 +383,7 @@ export default {
             invalidFileInput: false,
             invalidWarrantyInput: false,
             invalidColorsInput: false,
+            invalidCategoryInput: false,
             uploadFile: null
         };
     },
@@ -290,7 +392,7 @@ export default {
             if (this.isLocal) {
                 return this.image
             }
-            return `http://52.148.79.33:8083/files/${filename}`
+            return `http://localhost:8083/files/${filename}`
         },
         loadFile(e) {
             this.isLocal = true;
@@ -308,12 +410,14 @@ export default {
             this.invalidDateInput = this.releaseDate === null ? true : false;
             this.invalidDescInput = (this.description === "" || this.description.trim() === '') ? true : false;
             this.invalidPriceInput = (this.price <= 0) ? true : false;
-            this.invalidBrandInput = this.brandid === 'Brand' ? true : false;
+            this.invalidBrandInput = this.brand === null ? true : false;
             this.invalidFileInput = this.image === null ? true : false;
             this.invalidWarrantyInput = (this.warranty === null || this.warranty < 0) ? true : false;
             this.invalidColorsInput = (this.colors.length < 1) ? true : false;
-
-            if ((!this.invalidNameInput && !this.invalidDateInput && !this.invalidDescInput && !this.invalidPriceInput && !this.invalidBrandInput && !this.invalidFileInput && !this.invalidWarrantyInput && !this.invalidColorsInput)) {
+            this.invalidCategoryInput = this.category === null ? true : false;
+            
+            
+            if ((!this.invalidNameInput && !this.invalidDateInput && !this.invalidDescInput && !this.invalidPriceInput && !this.invalidBrandInput && !this.invalidFileInput && !this.invalidWarrantyInput && !this.invalidColorsInput && !this.invalidCategoryInput)) {
                 {
                     this.makeDataForm();
                 }
@@ -323,11 +427,12 @@ export default {
                 this.releaseDate = null
                 this.description = ''
                 this.price = 0
-                this.brandid = 'Brand'
+                this.brand = null
                 this.warranty = 0
                 this.colors = []
                 this.image = null
-
+                this.category = null
+                
             }
         },
           makeDataForm(){
@@ -337,14 +442,16 @@ export default {
                             releaseDate: this.releaseDate,
                             description: this.description,
                             price: this.price,
-                            brandid: this.brandid,
                             warranty: this.warranty,
                             image: '',
-                            productcolors: [] }
+                            brand: this.brand,
+                            category: this.category,
+                            amount: this.Quantity,
+                            productcolor: [] }
             // Add Colors to productcolors
             this.colors.forEach(c => {
-                let color = { colors: {colorid: c} }
-                product.productcolors.push(color)
+                let color = { color: {cid: c} }
+                product.productcolor.push(color)
             });
 
             const jsonProduct = JSON.stringify(product)
@@ -353,21 +460,21 @@ export default {
             })
 
             let formData = new FormData()
-            formData.append('file', this.uploadFile) // Add image file
+            formData.append('photo', this.uploadFile) // Add image file
             formData.append('product', blob) // Add blob json file
-
+            console.log(formData)
+            console.log(product)
             // Split to POST or PUT
-            if(this.isedit){
-                // If editing go PUT
-                this.saveEditProduct(formData);
-            } else {
-                // Else go POST
+            // if(this.isedit){
+            //     // If editing go PUT
+            //     this.saveEditProduct(formData);
+    
                 this.saveAddProduct(formData);
-            }
+            
         },
         async getAllBrands() {
             try {
-                const res = await fetch(`${this.urlJson}/brands`)
+                const res = await fetch(`${this.urlJson}/brand`)
                 const data = await res.json()
                 return data
             } catch (error) {
@@ -376,16 +483,25 @@ export default {
         },
         async getAllColors() {
             try {
-                const res = await fetch(`${this.urlJson}/colors`)
+                const res = await fetch(`${this.urlJson}/color`)
                 const data = await res.json()
                 return data
             } catch (error) {
-                console.log(`Can not get colors.`)
+                console.log(`Can not get color.`)
+            }
+        },
+        async getAllCategory() {
+            try {
+                const res = await fetch(`${this.urlJson}/cats`)
+                const data = await res.json()
+                return data
+            } catch (error) {
+                console.log(`Can not get category.`)
             }
         },
         async saveAddProduct(formData) {
             try {
-                const res = await fetch(`${this.urlJson}/save`, {
+                const res = await fetch(`${this.urlJson}/product/save`, {
                     method: 'POST',
                     body: formData
                 })
@@ -406,6 +522,7 @@ export default {
         }
         this.brandsDB = await this.getAllBrands()
         this.colorsDB = await this.getAllColors()
+        this.categoryDB = await this.getAllCategory()
     }
 
 }
