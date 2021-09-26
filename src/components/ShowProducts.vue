@@ -1,50 +1,35 @@
 <template>
   <nav-bar></nav-bar>
-<div>
-  <div class="container mx-auto flex items-start flex-wrap pt-4 pb-12 md:flex">
-    <div
-      class="w-full md:w-1/2 lg:w-1/4 p-6 flex flex-col "
-      v-for="item in showproducts"
-      :key="item.pid"
-    >
-  <div>
-      <img class="hover:grow hover:shadow-lg zoom w-80 h-80" :src="getImages(item.image)" />
-      
-      <div class="pt-5 flex items-center justify-between">
-        <p class="text-lg font-semibold italic">{{ item.name }}</p>
-      </div>
-      <p class="text-base font-semibold italic">{{ item.brand.name }}</p>
-      
-      <p class="text-sm text-gray-400 italic">{{ item.description }}</p>
-      <p class="text-base font-semibold italic">Warranty - {{ item.warranty }} years.</p>
-      <p class="text-base font-semibold italic">Release Date - {{ item.releaseDate }}</p>
-      <p class="text-base font-semibold italic">฿ {{ pricenumber(item.price) }}</p>
-      <div class="flex space-x-1 items-center mt-1 mb-1"><span class="text-base font-semibold italic">Color </span>
-        <span class="text-xl font-semibold italic"> [ </span>
-        <div class="" v-for="c in item.productcolor" :key="c.color.cid">
-          <div
-          :style="{'background-color': c.color.code}"
-            class="rounded-full w-6 h-6 focus:outline-none border-2 border-black" 
-          ></div>
-        </div>
-        <span class="text-xl font-semibold italic"> ] </span>
-      </div>
-  </div>
-      <div class="flex">
-        <button
-          class="inline-flex items-center justify-center w-10 h-10 text-gray-700 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-gray-200"
-         >
-          <!-- <router-link :to="{name: 'edit', params: {id: showproducts.pid}}" class="btn btn-success">
-             Edit <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-5 17l1.006-4.036 3.106 3.105-4.112.931zm5.16-1.879l-3.202-3.202 5.841-5.919 3.201 3.2-5.84 5.921z" />
-          </svg>
-        </router-link> -->
-        </button>
-        <button
-          class="inline-flex items-center justify-center w-10 h-10 text-gray-700 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-gray-200"
-          @click="deleteProduct(item.pid)"
-        >
-          <svg
+          <!-- test div -->
+          <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="lg:w-4/5 mx-auto flex flex-wrap border-b-2 mt-5 border-gray-800" v-for="item in showproducts"
+      :key="item.pid">
+        <img alt="ecommerce" class="bg-cover lg:w-80 w-full lg:h-80 h-32 object-cover object-center rounded" :src="getImages(item.image)">
+        <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0 ">
+          <h2 class="text-sm title-font text-gray-500 tracking-widest">{{ item.brand.name }}</h2>
+          <h1 class="text-white text-3xl title-font font-medium mb-1 italic">{{ item.name }}</h1>
+          <div class="flex mb-4">
+            <span class="flex items-center">
+              
+              <span class="ml-3"><span class="font-semibold">Release Date:</span> {{ item.releaseDate }}</span>
+            </span>
+            <span class="flex ml-3 pl-3 py-2 border-l-2 border-gray-800 space-x-2">
+            <span class=""> <span class="font-semibold">Warranty: </span> {{ item.warranty }} years </span>
+            </span>
+          </div>
+          <p class="leading-relaxed">{{ item.description }}</p>
+          <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-800 mb-5 space-x-1">
+            <span class="mr-3 font-semibold">Color </span>
+            <div class="flex" v-for="c in item.productcolor" :key="c.color.cid">
+              <div class="border-2 border-gray-800 rounded-full w-6 h-6 focus:outline-none " :style="{'background-color': c.color.code}"></div>
+            </div>
+          </div>
+          <div class="flex">
+            <span class="title-font font-medium text-2xl text-white">{{ pricenumber(item.price) }} THB.</span>
+            <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Add to Cart</button>
+            <button class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+              <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -54,22 +39,23 @@
               d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.151 17.943l-4.143-4.102-4.117 4.159-1.833-1.833 4.104-4.157-4.162-4.119 1.833-1.833 4.155 4.102 4.106-4.16 1.849 1.849-4.1 4.141 4.157 4.104-1.849 1.849z"
             />
           </svg>
-        </button>
+              
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-   
     <!-- Paging -->
-  </div>
-  <div id="paging" class="mb-5 -mt-8">
+      <div id="paging" class="mb-5 -mt-8">
           <div class="flex space-x-5 justify-center">
             <button @click="fetchProduct(i)" v-for="i in pageTotal" :key="i" 
-                    class=" w-10 h-8 align-middle bg-gray-400" 
+                    class=" w-10 h-8 align-middle text-white border " 
                     :class="{ 'bg-green-400': checkCurrentPage(i) }">{{i}}</button>
           </div>   
         </div>
-      
-          </div>
-          <footer-com />
+      <!-- End Paging -->
+  </section>
+   <footer-com />
 </template>
 <script>
 
