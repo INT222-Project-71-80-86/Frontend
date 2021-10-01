@@ -11,7 +11,7 @@
     </div>
       <main class="py-16 container mx-auto px-6 md:px-0">
     <section>
-      <h1 class="text-3xl font-bold text-gray-600 mb-10">MAI RU JA PIM A RAI D DEAW KOI KID RA GUN YED MAEEE</h1>
+      <h1 class="text-3xl font-bold text-black mb-10">NPN SHOP | G A M I N G — G E A R S </h1>
       <div class="grid sm:grid-cols-2 gap-1 grid-cols-2">
       <button><div class="container mx-auto h-96 rounded-md flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=80');">
       <!--<h1 class="text-3xl font-bold text-white mb-20">KEYBOARD</h1>-->

@@ -27,8 +27,8 @@
           </div>
           <div class="flex">
             <span class="title-font font-medium text-2xl text-white">{{ pricenumber(item.price) }} THB.</span>
-            <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Add to Cart</button>
-            <button class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+            <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded duration-500">Add to Cart</button>
+            <button class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-red-500 duration-500"  @click="deleteProduct(item.pid)">
               <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     async fetchProduct(pageNo = 1) {
-      const res = await fetch(`${this.urlproduct}/product?pageNo=${pageNo-1}`);
+      const res = await fetch(`${this.urlproduct}/product?pageNo=${pageNo-1}&size=5`);
       const data = await res.json();
       this.showproducts = data.content;
       this.pageInfo = data.pageable;
@@ -105,7 +105,7 @@ export default {
       return;
     },
     async deleteProduct(pid){
-      if(confirm("Do you really want to delete this product?")){
+      if(confirm("Do you really want to remove the product?")){
         try {
           const res = await fetch(`${this.urlproduct}/product/delete/${pid}`, {
             method: 'DELETE'
@@ -114,7 +114,7 @@ export default {
             this.showproducts = this.showproducts.filter((product) => product.pid !== pid)
             alert("Successfully Remove the product")
           } else {
-            alert("Error Deleting Product")
+            alert("Error Removing Product")
           }
         } catch (error) {
           console.log(error)

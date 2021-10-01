@@ -2,7 +2,7 @@
 
     <nav-bar></nav-bar>
     <div class="flex justify-center h-screen">
-        <form class="w-full md:w-1/3 bg-white rounded-lg border-t-2 border-b-2 border-green-500 shadow-md h-2/4">
+        <form class="w-full md:w-1/3 bg-white rounded-lg border-t-2 border-b-2 border-green-500 shadow-md h-2/4 mt-32">
             <div class="flex font-bold justify-center mt-6">
                <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-person-check-fill" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>

@@ -2,7 +2,7 @@
 
     <nav-bar />
     <div
-        class="w-full"
+        class="w-full absolute mt-36"
         style="background-image: url('https://i.pinimg.com/564x/db/87/3d/db873daadf558f81f80b59bfec9495d8.jpg');"
     >
         <div class="flex justify-center my-6 pt-4 pb-4">
@@ -140,7 +140,7 @@
                         </div>
 
                         <!-- back -->
-                        <div class=" absolute -bottom-20 md:flex">
+                        <div class="absolute -bottom-20 md:flex">
                             <router-link to="/"><button
                                 class=" bg-red-500 tracking-wide text-gray-800 font-bold rounded border-b-2 hover:text-green-500 py-3 px-40"
                             > <span class="text-white">Continue Shopping...</span>

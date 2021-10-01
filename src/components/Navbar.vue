@@ -1,6 +1,6 @@
 <template>
-    <nav class="pl-6 pr-6 sticky border-b shadow-md mb-4">
-      <div class="flex justify-between items-center">
+    <nav class="pl-6 pr-6 border-b shadow-md mb-4 fixed bg-white w-screen">
+      <div class="flex justify-between items-center ">
         <router-link to="/"><h1 class="pr-6 border-r-2 text-2xl font-bold text-black">NPN SHOP</h1></router-link>
         <div class="flex justify-between flex-grow">
           <div class="flex justify-between ml-6 items-center">
@@ -51,6 +51,7 @@
         </div>
       </div>
     </nav>
+   
 </template>
 <script>
     export default{
