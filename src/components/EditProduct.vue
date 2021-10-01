@@ -1,22 +1,25 @@
 <template>
- <nav-bar></nav-bar>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            
-            <h1>Edit Product</h1>
-            <form @submit.prevent="updateForm">
-                 <div class="mb-6">
+
+    <nav-bar></nav-bar>
+    <div
+        class="flex items-center min-h-screen mt-2"
+        style="background-image: url('https://images.unsplash.com/photo-1493514789931-586cb221d7a7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80');"
+    >
+        <div class="flex justify-center container mx-auto">
+            <div class="md:w-4/5 lg:w-2/5 rounded-2xl my-10 bg-white p-3 shadow-sm">
+                <div class="m-5">
+                    <form @submit.prevent="submitForm" enctype="multipart/form-data">
+                        <!-- prod Name -->
+                        <div class="mb-6">
                             <label
                                 for="name"
                                 class="block mb-2 text-sm text-black font-medium"
                             >Product Name</label>
                             <input
                                 type="text"
-                                name="name"
                                 v-model="product.name"
                                 id="name"
-                                class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
-                                require
+                                class="px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
                             />
                             <p v-if="invalidNameInput" class="text-red-500">Please, Enter your Name</p>
                         </div>
@@ -47,11 +50,11 @@
                                 for="date"
                                 class="block mb-2 text-sm text-black font-medium"
                             >Quantity</label>
-                        <input
-                            type="number"
-                            value="Quantity"
-                            class="w-full font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black"
-                        />
+                            <input
+                                type="number"
+                                v-model="product.amount"
+                                class="font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black"
+                            />
                         </div>
                         <!-- prod Description -->
                         <div class="mb-6">
@@ -91,14 +94,14 @@
                                 <select
                                     id="brand"
                                     name="brandid"
-                                    v-model="product.brandid"
+                                    v-model="product.brand"
                                     class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
                                 >
                                     <option selected disabled hidden>Brand</option>
                                     <option
                                         v-for="brand in brandsDB"
-                                        :key="brand.brandid"
-                                        :value="brand.brandid"
+                                        :key="brand.bid"
+                                        :value="brand"
                                     >{{ brand.name }}</option>
                                 </select>
                             </div>
@@ -107,19 +110,52 @@
                                 class="text-red-500"
                             >Please, Enter your Brand</p>
                         </div>
+                        <!--cate-->
+                        <div>
+                            <div class="relative inline-flex pb-6">
+                                <svg
+                                    class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 412 232"
+                                >
+                                    <path
+                                        d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z"
+                                        fill="#648299"
+                                        fill-rule="nonzero"
+                                    />
+                                </svg>
+                                <select
+                                    id="category"
+                                    name="categoryid"
+                                    v-model="product.category"
+                                    class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+                                >
+                                    <option selected disabled hidden>category</option>
+                                    <option
+                                        v-for="category in categoryDB"
+                                        :key="category.catid"
+                                        :value="category"
+                                    >{{ category.name }}</option>
+                                </select>
+                            </div>
+                            <p
+                                v-if="invalidCategoryInput"
+                                class="text-red-500"
+                            >Please, Enter your category</p>
+                        </div>
 
                         <!-- choose file -->
-                        <div id="mb-6 ">
-                            <div v-if="!image">
+                        <div id="mb-6">
+                            <div v-if="!product.image">
                                 <label
-                                    class="block mb-2 text-sm text-black font-medium pb-5"
+                                    class="block mb-2 text-sm text-black font-medium"
                                     for="file"
-                                >Upload Image</label>
+                                >Press the button to upload the image.</label>
                                 <div id="preview">
                                     <img
                                         class="rounded h-48 w-48 mx-auto my-8"
-                                        v-if="image"
-                                        :src="getImageUrl(image)"
+                                        v-if="product.image"
+                                        :src="getImageUrl(product.image)"
                                     />
                                 </div>
                                 <input
@@ -127,14 +163,14 @@
                                     id="upload-file"
                                     accept="image/*"
                                     name="file"
-                                    class="text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+                                    class="text-gray-600 h-10 pl-5 bg-white hover:border-gray-400 focus:outline-none appearance-none"
                                     @change="loadFile"
                                 />
                             </div>
                             <div v-else>
                                 <img
                                     class="rounded h-48 w-48 mx-auto my-8"
-                                    :src="getImageUrl(image)"
+                                    :src="getImageUrl(product.image)"
                                 />
                                 <button
                                     @click="removeimg"
@@ -210,17 +246,17 @@
                                 <div
                                     class="flex items-center justify-start space-x-3"
                                     v-for="color in colorsDB"
-                                    :key="color.colorid"
+                                    :key="color.cid"
                                 >
                                     <input
                                         class="w-6 h-6"
                                         type="checkbox"
-                                        v-model="product.colors"
-                                        :value="color.colorid"
+                                        v-model="colors"
+                                        :value="color.cid"
                                     />
                                     <div
                                         class="color-circle rounded-full w-8 h-8 border-2 border-black"
-                                        :style="{ backgroundColor: color.colorcode }"
+                                        :style="{ backgroundColor: color.code }"
                                     ></div>
                                     <span>{{ color.name }}</span>
                                 </div>
@@ -230,35 +266,262 @@
                                 >Please, Select at least one color.</p>
                             </div>
                         </div>
-            </form>
+
+                        <!-- submit -->
+                        <div class="mb-6 my-6 space-x-3">
+                            <button
+                                type="submit"
+                                class="w-40 px-3 py-4 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 focus:outline-none"
+                            >Apply</button>
+                            <router-link to="/">
+                                <button
+                                    class="w-40 px-3 py-4 text-white bg-red-500 rounded-md hover:bg-red-700"
+                                >Cancel</button>
+                            </router-link>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</template>
+    <!-- test div form -->
+    <!-- <div class="flex h-screen bg-gray-200 items-center justify-center  mt-32 mb-32">
+  <div class="grid bg-white rounded-lg shadow-xl w-11/12 md:w-9/12 lg:w-1/2">
+    <div class="flex justify-center py-4">
+      <div class="flex bg-purple-200 rounded-full md:p-4 p-2 border-2 border-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+  <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+</svg>
+      </div>
+    </div>
 
+    <div class="flex justify-center">
+      <div class="flex">
+        <h1 class="text-gray-600 font-bold md:text-2xl text-xl">NPN | NEWPRODUCT</h1>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 mt-5 mx-7">
+      <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Input 1</label>
+      <input class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text" placeholder="Input 1" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 mt-5 mx-7">
+      <div class="grid grid-cols-1">
+        <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Input 2</label>
+        <input class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text" placeholder="Input 2" />
+      </div>
+      <div class="grid grid-cols-1">
+        <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Input 3</label>
+        <input class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text" placeholder="Input 3" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 mt-5 mx-7">
+      <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Selection</label>
+      <select class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+        <option>Option 1</option>
+        <option>Option 2</option>
+        <option>Option 3</option>
+      </select>
+    </div>
+
+    <div class="grid grid-cols-1 mt-5 mx-7">
+      <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold">Another Input</label>
+      <input class="py-2 px-3 rounded-lg border-2 border-purple-300 mt-1 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="text" placeholder="Another Input" />
+    </div>
+
+    <div class="grid grid-cols-1 mt-5 mx-7">
+      <label class="uppercase md:text-sm text-xs text-gray-500 text-light font-semibold mb-1">Upload Photo</label>
+        <div class='flex items-center justify-center w-full'>
+            <label class='flex flex-col border-4 border-dashed w-full h-32 hover:bg-gray-100 hover:border-purple-300 group'>
+                <div class='flex flex-col items-center justify-center pt-7'>
+                  <svg class="w-10 h-10 text-purple-400 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  <p class='lowercase text-sm text-gray-400 group-hover:text-purple-600 pt-1 tracking-wider'>Select a photo</p>
+                </div>
+              <input type='file' class="hidden" />
+            </label>
+        </div>
+    </div>
+
+    <div class='flex items-center justify-center  md:gap-8 gap-4 pt-5 pb-5'>
+      <button class='w-auto bg-gray-500 hover:bg-gray-700 rounded-lg shadow-xl font-medium text-white px-4 py-2'>Cancel</button>
+      <button class='w-auto bg-purple-500 hover:bg-purple-700 rounded-lg shadow-xl font-medium text-white px-4 py-2'>Create</button>
+    </div>
+
+  </div>
+    </div>-->
+</template>
 <script>
-import axios from 'axios';
 export default {
+    name: 'EditProduct',
+    props: ['editProduct'],
     data() {
         return {
-            product: {}
-        }
-    },
-    created() {
-        let apiURL = `http://13.76.112.88/edit/${this.$route.params.id}`;
-        axios.get(apiURL).then((res) => {
-            this.product = res.data
-        })
+            urlJson: "http://localhost:8083/api",
+
+            product: {},
+            colors: [],
+            categoryDB: [],
+            brandsDB: [],
+            colorsDB: [],
+            isLocal: false,
+
+            invalidNameInput: false,
+            invalidDateInput: false,
+            invalidDescInput: false,
+            invalidPriceInput: false,
+            invalidBrandInput: false,
+            invalidFileInput: false,
+            invalidWarrantyInput: false,
+            invalidColorsInput: false,
+            invalidCategoryInput: false,
+            uploadFile: null
+        };
     },
     methods: {
-        updateForm() {
-            let apiURL = `http://13.76.112.88/update/${this.$route.params.id}`;
-            axios.put(apiURL, this.product).then((res) => {
-                console.log(res);
-                this.$router.push('/showproducts')
-            }).catch(error => {
-                console.log(error)
+        getImageUrl(image) {
+
+            return `${this.urlJson}/file/${image}`
+        },
+        loadFile(e) {
+            this.isLocal = true;
+            let file = e.target.files[0];
+            let data = new FormData();
+            data.append("file", file, file.name);
+            this.uploadFile = data.get("file")
+            this.image = URL.createObjectURL(this.uploadFile);
+        },
+        removeimg() {
+            this.image = null;
+        },
+        async submitForm() {
+            this.invalidNameInput = (this.product.name === null || this.product.name.trim() === '') ? true : false;
+            this.invalidDateInput = this.product.releaseDate === null ? true : false;
+            this.invalidDescInput = (this.product.description === "" || this.product.description.trim() === '') ? true : false;
+            this.invalidPriceInput = (this.product.price <= 0) ? true : false;
+            this.invalidBrandInput = this.product.brand === null ? true : false;
+            this.invalidFileInput = this.product.image === null ? true : false;
+            this.invalidWarrantyInput = (this.product.arranty === null || this.product.warranty < 0) ? true : false;
+            this.invalidColorsInput = (this.colors.length < 1) ? true : false;
+            this.invalidCategoryInput = this.product.category === null ? true : false;
+
+
+            if ((!this.invalidNameInput && !this.invalidDateInput && !this.invalidDescInput && !this.invalidPriceInput && !this.invalidBrandInput && !this.invalidFileInput && !this.invalidWarrantyInput && !this.invalidColorsInput && !this.invalidCategoryInput)) {
+                {
+                    this.makeDataForm(); 
+                 setTimeout( () => this.$router.push({ path: '/showproducts'}), 1000);
+                    // this.$router.push('/showproducts')
+
+                }
+
+
+            }
+        },
+        makeDataForm() {
+            // Make product object to send to backend
+            let product = {
+                pid: this.product.pid,
+                name: this.product.name,
+                releaseDate: this.product.releaseDate,
+                description: this.product.description,
+                price: this.product.price,
+                warranty: this.product.warranty,
+                image: '',
+                brand: this.product.brand,
+                category: this.product.category,
+                amount: this.product.amount,
+                productcolor: []
+            }
+            // Add Colors to productcolors
+            this.colors.forEach(c => {
+                let color = { color: { cid: c } }
+                product.productcolor.push(color)
+            });
+
+            const jsonProduct = JSON.stringify(product)
+            const blob = new Blob([jsonProduct], {
+                type: 'application/json'
             })
+
+            let formData = new FormData()
+            formData.append('photo', this.uploadFile) // Add image file
+            formData.append('product', blob) // Add blob json file
+            console.log(formData)
+            console.log(product)
+            // Split to POST or PUT
+            // if(this.isedit){
+            //     // If editing go PUT
+            //     this.saveEditProduct(formData);
+
+            this.saveEditProduct(formData);
+           
+
+        },
+        async getAllBrands() {
+            try {
+                const res = await fetch(`${this.urlJson}/brand`)
+                const data = await res.json()
+                return data
+            } catch (error) {
+                console.log(`Can not get brands.`)
+            }
+        },
+        async getAllColors() {
+            try {
+                const res = await fetch(`${this.urlJson}/color`)
+                const data = await res.json()
+                return data
+            } catch (error) {
+                console.log(`Can not get color.`)
+            }
+        },
+        async getAllCategory() {
+            try {
+                const res = await fetch(`${this.urlJson}/cats`)
+                const data = await res.json()
+                return data
+            } catch (error) {
+                console.log(`Can not get category.`)
+            }
+        },
+        async saveEditProduct(formData) {
+            try {
+                const res = await fetch(`${this.urlJson}/product/edit`, {
+                    method: 'PUT',
+                    body: formData
+                })
+                if (res.status != 200) {
+                    alert("An Unexpected Error Occured. Response Status: " + res.status)
+                } else {
+                    alert("Successfully Edit Product.")
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async fetchProduct() {
+            try {
+                const res = await fetch(`${this.urlJson}/product/${this.editProduct}`)
+                const data = await res.json()
+                return this.product = data
+            } catch (error) {
+                console.log(`Can not get color.`)
+            }
+        },
+        fillColor() {
+            this.product.productcolor.forEach(c => { this.colors.push(c.color.cid) })
         }
-    }
+    },
+    async created() {
+        await this.fetchProduct()
+        this.brandsDB = await this.getAllBrands()
+        this.colorsDB = await this.getAllColors()
+        this.categoryDB = await this.getAllCategory()
+        await this.fillColor()
+    },
+   
+
 }
+
 </script>
