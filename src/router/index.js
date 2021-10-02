@@ -40,8 +40,9 @@ const routes = [
   },
   {
     path: '/edit',
-    name: 'editproduct',
-    component: EditProduct
+    name: 'EditProduct',
+    component: EditProduct,
+    props:true
   }
 ]
 
