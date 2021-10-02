@@ -1,7 +1,7 @@
 <template>
     <nav-bar></nav-bar>
 <div class="flex bg-gray-200 items-center justify-center">
-        <div class="grid bg-white rounded-lg shadow-xl w-11/12 md:w-9/12 lg:w-1/2 mt-5">
+        <div class="grid bg-white rounded-lg shadow-xl w-11/12 md:w-9/12 lg:w-1/2 mt-5 mb-5">
             <div class="flex justify-center py-4">
                 <div class="flex bg-purple-300 rounded-full md:p-4 p-2 border-4 border-gray-800">
                     <svg
