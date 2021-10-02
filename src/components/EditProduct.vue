@@ -251,15 +251,16 @@
                         </label>
                     </div>
 
-                    <div v-else class="items-center justify-center">
+                    <div v-else class="grid items-center justify-center">
                         <img
                             class="rounded h-96 w-96 mx-auto my-8"
                             :src="getImageUrl(product.image)"
                         />
                         <button
                             @click="removeimg"
-                            class="md:mx-52 mx-48 lg:mx-48 sm:mx-56 xl:mx-60 2xl:mx-72 items-center justify-center bg-blue-600 hover:bg-red-500 text-white font-bold py-1 focus:outline-none px-4 rounded duration-300"
+                            class="bg-blue-600 hover:bg-red-500 text-white font-bold py-2 focus:outline-none px-4 rounded-full duration-300"
                         >Remove Photo</button>
+                       
                     </div>
                     <p
                         v-if="invalidFileInput"
@@ -274,7 +275,7 @@
                     </router-link>
                     <button
                         type="submit"
-                        class="w-auto bg-purple-500 hover:bg-purple-700 rounded-lg shadow-xl font-medium text-white px-4 py-2 duration-300"
+                        class="w-auto bg-purple-500 hover:bg-green-500 rounded-lg shadow-xl font-medium text-white px-4 py-2 duration-300"
                     >Success</button>
                 </div>
             </form>
