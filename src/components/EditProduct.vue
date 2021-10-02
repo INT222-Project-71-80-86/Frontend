@@ -255,7 +255,7 @@
                         <img
                             class="rounded h-96 w-96 mx-auto my-8"
                             :src="getImageUrl(product.image)"
-                        />
+                        />เ
                         <button
                             @click="removeimg"
                             class="bg-blue-600 hover:bg-red-500 text-white font-bold py-2 focus:outline-none px-4 rounded-full duration-300"

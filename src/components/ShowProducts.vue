@@ -14,11 +14,14 @@
           :src="getImages(item.image)"
         />
         <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-          <h2 class="text-sm title-font text-gray-500 tracking-widest">{{ item.brand.name }}</h2>
+          <div class="flex space-x-2">
+          <h2 class="text-xl title-font text-white tracking-widest uppercase font-extrabold">{{ item.brand.name }}</h2>
+          <h2 class="text-xl title-font text-white tracking-widest uppercase font-light">— {{ item.category.name }}</h2>
+          </div>
           <h1 class="text-white text-3xl title-font font-medium mb-1 italic">{{ item.name }}</h1>
           <div class="flex mb-4">
             <span class="flex items-center">
-              <span class="ml-3">
+              <span class="">
                 <span class="font-semibold">Release Date:</span>
                 {{ item.releaseDate }}
               </span>
@@ -32,7 +35,7 @@
           </div>
           <p class="leading-relaxed">{{ item.description }}</p>
           <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-800 mb-5 space-x-1">
-            <span class="mr-3 font-semibold">Color</span>
+            <span class="mr-1 font-semibold italic text-white">Color —</span>
             <div class="flex" v-for="c in item.productcolor" :key="c.color.cid">
               <div
                 class="border-2 border-gray-800 rounded-full w-6 h-6 focus:outline-none"
@@ -45,19 +48,14 @@
               class="title-font font-medium text-2xl text-white"
             >{{ pricenumber(item.price) }} THB.</span>
             <button
-              class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded duration-500"
-            >Add to Cart</button>
-            <button
-              class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-red-500 duration-500"
-              @click="deleteProduct(item.pid)"
+              class="flex ml-auto rounded-full w-10 h-10 bg-gray-800 p-0 border-0  items-center justify-center  hover:bg-indigo-500 duration-500"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path
-                  d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.151 17.943l-4.143-4.102-4.117 4.159-1.833-1.833 4.104-4.157-4.162-4.119 1.833-1.833 4.155 4.102 4.106-4.16 1.849 1.849-4.1 4.141 4.157 4.104-1.849 1.849z"
-                />
-              </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+  <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+</svg>
             </button>
-            <router-link :to="{ name: 'EditProduct', params: { editProduct: item.pid } }">
+                        <router-link :to="{ name: 'EditProduct', params: { editProduct: item.pid } }">
               <button
                 class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-green-500 duration-500"
               >
@@ -72,6 +70,17 @@
                 </svg>
               </button>
             </router-link>
+            <button
+              class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-red-500 duration-500"
+              @click="deleteProduct(item.pid)"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path
+                  d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.151 17.943l-4.143-4.102-4.117 4.159-1.833-1.833 4.104-4.157-4.162-4.119 1.833-1.833 4.155 4.102 4.106-4.16 1.849 1.849-4.1 4.141 4.157 4.104-1.849 1.849z"
+                />
+              </svg>
+            </button>
+
           </div>
         </div>
       </div>
