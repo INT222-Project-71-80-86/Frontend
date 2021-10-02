@@ -321,7 +321,7 @@ export default {
                 if (res.status != 200) {
                     alert("An Unexpected Error Occured. Response Status: " + res.status)
                 } else {
-                    alert("Successfully Add Product.")
+                    alert("The Product Has Been Succesfully Added to Store.")
                 }
                 this.back();
             } catch (error) {
