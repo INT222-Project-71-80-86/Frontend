@@ -139,7 +139,6 @@
               <input type='file' class="hidden" id="upload-file" accept="image/*" name="file" @change="loadFile" />
             </label>
         </div>
-        <p v-if="invalidQuantity" class="text-red-500 text-sm font-semibold uppercase"> — &nbsp;&nbsp;Upload Photo of the Product&nbsp;&nbsp;  —</p>
         <div v-else class="items-center justify-center">
                                 <img
                                     class="rounded h-96 w-96 mx-auto my-8"
@@ -326,6 +325,7 @@ export default {
         this.brandsDB = await this.getAllBrands()
         this.colorsDB = await this.getAllColors()
         this.categoryDB = await this.getAllCategory()
+        await this.fillColor()
     },
    
 
