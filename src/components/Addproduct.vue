@@ -390,6 +390,7 @@ export default {
             console.log(product)
     
                 this.saveAddProduct(formData);
+                setTimeout(() => this.$router.push({ path: "/showproducts" }), 1000);
         },
         async saveAddProduct(formData) {
             try {
@@ -399,7 +400,7 @@ export default {
                 } else {
                     alert("Successfully Add Product.")
                 }
-                this.back();
+                
             } catch (error) {
                 console.log(error)
             }
