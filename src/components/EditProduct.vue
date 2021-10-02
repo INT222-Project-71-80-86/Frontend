@@ -50,8 +50,6 @@
                             type="date"
                             id="date"
                             name="date"
-                            min="2021-01-01"
-                            max="2028-12-31"
                             v-model="product.releaseDate"
                         />
                         <p
@@ -110,7 +108,7 @@
                             <option disabled value>CATEGORY</option>
                             <option
                                 class="duration-200"
-                                v-for="category in categoryDB"
+                                v-for="category in categories"
                                 :key="category.catid"
                                 :value="category"
                             >{{ category.name }}</option>
@@ -132,7 +130,7 @@
                         >
                             <option disabled value>BRAND</option>
                             <option
-                                v-for="brand in brandsDB"
+                                v-for="brand in brands"
                                 :key="brand.bid"
                                 :value="brand"
                             >{{ brand.name }}</option>
@@ -283,165 +281,157 @@
     </div>
 </template>
 <script>
+import { computed } from "@vue/reactivity";
+import { useStore } from "vuex";
+import axios from "axios";
 export default {
-    name: 'EditProduct',
-    props: ['editProduct'],
-    data() {
-        return {
-            urlJson: "http://localhost:8083/api",
-            product: {},
-            colors: [],
-            image: null,
-            categoryDB: [],
-            brandsDB: [],
-            colorsDB: [],
-            isLocal: false,
-            invalidNameInput: false,
-            invalidDateInput: false,
-            invalidDescInput: false,
-            invalidPriceInput: false,
-            invalidBrandInput: false,
-            invalidFileInput: false,
-            invalidWarrantyInput: false,
-            invalidColorsInput: false,
-            invalidCategoryInput: false,
-            uploadFile: null
-        };
-    },
-    methods: {
-        getImageUrl(image) {
-            if (this.isLocal) {
-                return this.image
-            }
-            return `${this.urlJson}/file/${image}`
-        },
-        loadFile(e) {
-            this.isLocal = true;
-            let file = e.target.files[0];
-            let data = new FormData();
-            data.append("file", file, file.name);
-            this.uploadFile = data.get("file")
-            this.image = URL.createObjectURL(this.uploadFile);
-            this.product.image =  URL.createObjectURL(this.uploadFile);
-        },
-        removeimg() {
-            this.product.image = null;
-        },
-        async submitForm() {
-            this.invalidNameInput = (this.product.name === null || this.product.name.trim() === '') ? true : false;
-            this.invalidDateInput = this.product.releaseDate === null ? true : false;
-            this.invalidDescInput = (this.product.description === "" || this.product.description.trim() === '') ? true : false;
-            this.invalidPriceInput = (this.product.price <= 0) ? true : false;
-            this.invalidBrandInput = this.product.brand === null ? true : false;
-            this.invalidFileInput = this.product.image === null ? true : false;
-            this.invalidWarrantyInput = (this.product.arranty === null || this.product.warranty < 0) ? true : false;
-            this.invalidColorsInput = (this.colors.length < 1) ? true : false;
-            this.invalidCategoryInput = this.product.category === null ? true : false;
-            if ((!this.invalidNameInput && !this.invalidDateInput && !this.invalidDescInput && !this.invalidPriceInput && !this.invalidBrandInput && !this.invalidFileInput && !this.invalidWarrantyInput && !this.invalidColorsInput && !this.invalidCategoryInput)) {
-                {
-                    this.makeDataForm();
-                    setTimeout(() => this.$router.push({ path: '/showproducts' }), 1000);
-                    // this.$router.push('/showproducts')
-                }
-            }
-        },
-        makeDataForm() {
-            // Make product object to send to backend
-            let product = {
-                pid: this.product.pid,
-                name: this.product.name,
-                releaseDate: this.product.releaseDate,
-                description: this.product.description,
-                price: this.product.price,
-                warranty: this.product.warranty,
-                image: '',
-                brand: this.product.brand,
-                category: this.product.category,
-                amount: this.product.amount,
-                productcolor: []
-            }
-            // Add Colors to productcolors
-            this.colors.forEach(c => {
-                let color = { color: { cid: c } }
-                product.productcolor.push(color)
-            });
-            const jsonProduct = JSON.stringify(product)
-            const blob = new Blob([jsonProduct], {
-                type: 'application/json'
-            })
-            let formData = new FormData()
-            formData.append('photo', this.uploadFile) // Add image file
-            formData.append('product', blob) // Add blob json file
-            console.log(formData)
-            console.log(product)
-            // Split to POST or PUT
-            // if(this.isedit){
-            //     // If editing go PUT
-            //     this.saveEditProduct(formData);
-            this.saveEditProduct(formData);
-        },
-        async getAllBrands() {
-            try {
-                const res = await fetch(`${this.urlJson}/brand`)
-                const data = await res.json()
-                return data
-            } catch (error) {
-                console.log(`Can not get brands.`)
-            }
-        },
-        async getAllColors() {
-            try {
-                const res = await fetch(`${this.urlJson}/color`)
-                const data = await res.json()
-                return data
-            } catch (error) {
-                console.log(`Can not get color.`)
-            }
-        },
-        async getAllCategory() {
-            try {
-                const res = await fetch(`${this.urlJson}/cats`)
-                const data = await res.json()
-                return data
-            } catch (error) {
-                console.log(`Can not get category.`)
-            }
-        },
-        async saveEditProduct(formData) {
-            try {
-                const res = await fetch(`${this.urlJson}/product/edit`, {
-                    method: 'PUT',
-                    body: formData
-                })
-                if (res.status != 200) {
-                    alert("An Unexpected Error Occured. Response Status: " + res.status)
-                } else {
-                    alert("Successfully Edit Product.")
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        },
-        async fetchProduct() {
-            try {
-                const res = await fetch(`${this.urlJson}/product/${this.editProduct}`)
-                const data = await res.json()
-                return this.product = data
-            } catch (error) {
-                console.log(`Can not get color.`)
-            }
-        },
-        fillColor() {
-            this.product.productcolor.forEach(c => { this.colors.push(c.color.cid) })
-        }
-    },
-    async created() {
-        await this.fetchProduct()
-        this.brandsDB = await this.getAllBrands()
-        this.colorsDB = await this.getAllColors()
-        this.categoryDB = await this.getAllCategory()
-        await this.fillColor()
-    },
-}
+  name: "EditProduct",
+  props: ["editProduct"],
+  data() {
+    return {
+      backend_url: process.env.VUE_APP_BACKEND_URL,
+      isLocal: false,
+      colors: [],
+      product: {},
 
+      invalidNameInput: false,
+      invalidDateInput: false,
+      invalidDescInput: false,
+      invalidPriceInput: false,
+      invalidBrandInput: false,
+      invalidFileInput: false,
+      invalidWarrantyInput: false,
+      invalidColorsInput: false,
+      invalidCategoryInput: false,
+      uploadFile: null,
+    };
+  },
+  methods: {
+    getImageUrl(image) {
+      if (this.isLocal) {
+        return this.product.image;
+      }
+      return `${this.backend_url}/file/${image}`;
+    },
+    loadFile(e) {
+      this.isLocal = true;
+      let file = e.target.files[0];
+      let data = new FormData();
+      data.append("file", file, file.name);
+      this.uploadFile = data.get("file");
+      this.product.image = URL.createObjectURL(this.uploadFile);
+      // this.image = URL.createObjectURL(this.uploadFile);
+    },
+    removeimg() {
+      this.product.image = null;
+    },
+    async submitForm() {
+      this.invalidNameInput =
+        this.product.name === null || this.product.name.trim() === ""
+          ? true
+          : false;
+      this.invalidDateInput = this.product.releaseDate === null ? true : false;
+      this.invalidDescInput =
+        this.product.description === "" ||
+        this.product.description.trim() === ""
+          ? true
+          : false;
+      this.invalidPriceInput = this.product.price <= 0 ? true : false;
+      this.invalidBrandInput = this.product.brand === null ? true : false;
+      this.invalidFileInput = this.product.image === null ? true : false;
+      this.invalidWarrantyInput =
+        this.product.arranty === null || this.product.warranty < 0
+          ? true
+          : false;
+      this.invalidColorsInput = this.colors.length < 1 ? true : false;
+      this.invalidCategoryInput = this.product.category === null ? true : false;
+
+      if (
+        !this.invalidNameInput &&
+        !this.invalidDateInput &&
+        !this.invalidDescInput &&
+        !this.invalidPriceInput &&
+        !this.invalidBrandInput &&
+        !this.invalidFileInput &&
+        !this.invalidWarrantyInput &&
+        !this.invalidColorsInput &&
+        !this.invalidCategoryInput
+      ) {
+        {
+          this.makeDataForm();
+          setTimeout(() => this.$router.push({ path: "/showproducts" }), 1000);
+        }
+      }
+    },
+    makeDataForm() {
+      // Make product object to send to backend
+      let product = {
+        pid: this.product.pid,
+        name: this.product.name,
+        releaseDate: this.product.releaseDate,
+        description: this.product.description,
+        price: this.product.price,
+        warranty: this.product.warranty,
+        image: this.product.image,
+        brand: this.product.brand,
+        category: this.product.category,
+        amount: this.product.amount,
+        productcolor: [],
+      };
+      // Add Colors to productcolors
+      this.colors.forEach((c) => {
+        let color = { color: { cid: c } };
+        product.productcolor.push(color);
+      });
+
+      const jsonProduct = JSON.stringify(product);
+      const blob = new Blob([jsonProduct], {
+        type: "application/json",
+      });
+
+      let formData = new FormData();
+      formData.append("photo", this.uploadFile); // Add image file
+      formData.append("product", blob); // Add blob json file
+      this.saveEditProduct(formData);
+    },
+    async saveEditProduct(formData) {
+      try {
+        const res = await axios.put(
+          `${this.backend_url}/product/edit`,
+          formData
+        );
+        if (res.status != 200) {
+          alert("An Unexpected Error Occured. Response Status: " + res.status);
+        } else {
+          alert("Successfully Edit Product.");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async fetchProduct(pid) {
+      const res = await axios.get(`${this.backend_url}/product/${pid}`);
+      this.product = res.data;
+    },
+    fillColor(){
+        this.product.productcolor.forEach( c => this.colors.push( c.color.cid ))
+    }
+  },
+  async created() {
+    await this.fetchProduct(this.editProduct)
+    this.fillColor()
+  },
+  setup() {
+    const store = useStore();
+    store.dispatch("fetchAllBrands");
+    store.dispatch("fetchAllCategories");
+    store.dispatch("fetchAllColors");
+
+    return {
+      brands: computed(() => store.state.brands),
+      categories: computed(() => store.state.categories),
+      colorsDB: computed(() => store.state.colors),
+    };
+  },
+};
 </script>

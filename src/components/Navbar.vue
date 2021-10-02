@@ -18,6 +18,7 @@
             <div class="bg-white flex items-center rounded-full shadow-sm -mt-3 border">
               <input
                 class="rounded-l-full w-full px-6 py-3 text-gray-700 leading-tight focus:outline-none"
+                @keyup.enter="this.$router.push('showproducts',{searchProduct: searchProduct})"
                 id="search"
                 type="text"
                 placeholder="Search"

@@ -5,7 +5,8 @@ import './assets/tailwind.css'
 import Navbar from './components/Navbar.vue'
 import ddnav from './components/ddnav.vue'
 import footer from './components/footer.vue'
-const app = createApp(App)
+import store from './store'
+const app = createApp(App).use(store)
 app.component('nav-bar',Navbar)
 app.component('dd-nav',ddnav)
 app.component('footer-com',footer)

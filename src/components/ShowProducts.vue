@@ -5,7 +5,7 @@
     <div class="container px-5 py-24 mx-auto">
       <div
         class="lg:w-4/5 mx-auto flex flex-wrap border-b-2 mt-5 border-gray-800"
-        v-for="item in showproducts"
+        v-for="item in products"
         :key="item.pid"
       >
         <img
@@ -103,71 +103,37 @@
 </template>
 <script>
 
+import { computed } from '@vue/reactivity'
+import { useStore } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: "showProducts",
   props: ['searchProduct'],
   data() {
     return {
-      urlproduct: "http://localhost:8083/api",
-      showproducts: [],
-      pageInfo: null,
-      brandCode: [],
-      colorCode: [],
-      pageTotal: null,
+      backend_url: process.env.VUE_APP_BACKEND_URL,
     };
   },
   methods: {
-    async fetchProduct(pageNo = 1) {
-      let res
-      if (this.searchProduct) {
-        res = await fetch(`${this.urlproduct}/product/query?searchValue=${this.searchProduct}&pageNo=${pageNo - 1}`);
+    fetchProduct(pageNo = 1) {
+      if(this.searchProduct){
+        this.$store.dispatch('fetchSearchProduct',{q:this.searchProduct,p:pageNo})
+      } else {
+        this.$store.dispatch('fetchAllProducts', pageNo)
       }
-      else {
-        res = await fetch(`${this.urlproduct}/product?pageNo=${pageNo - 1}`);
-      }
-      const data = await res.json();
-      this.showproducts = data.content;
-      this.pageInfo = data.pageable;
-      this.pageTotal = data.totalPages;
-      this.sortColors(this.showproducts);
-      // console.log(this.showproducts)
-      // console.log(this.pageInfo)
-      // console.log(this.pageTotal)
-      // parses JSON response into native JavaScript objects
-      return;
+      
+      this.currentPage = pageNo;
+      return {
+        products: computed(() => this.$store.state.products.content)
+      } 
     },
-    async fetchSearch() {
-      const res = await fetch(`${this.urlproduct}/product/query?searchValue=${this.searchProduct}`)
-      const data = await res.json();
-      this.showproducts = data.content;
-      this.pageInfo = data.pageable;
-      this.pageTotal = data.totalPages;
-    },
-    async fetchBrands() {
-      const res = await fetch(`${this.urlproduct}/brand`);
-      const data = await res.json();
-      this.brandCode = data;
-      // console.log(this.brandCode)
-      // parses JSON response into native JavaScript objects
-      return;
-    },
-    async fetchColors() {
-      const res = await fetch(`${this.urlproduct}/color`);
-      const data = await res.json();
-      this.colorCode = data;
-      // console.log(this.colorCode)
-      // parses JSON response into native JavaScript objects
-      return;
-    },
-    async deleteProduct(pid) {
-      if (confirm("Do you really want to remove the product?")) {
+    async deleteProduct(pid){
+      if(confirm("Do you really want to remove the product?")){
         try {
-          const res = await fetch(`${this.urlproduct}/product/delete/${pid}`, {
-            method: 'DELETE'
-          });
-          if (res.status === 200) {
-            this.showproducts = this.showproducts.filter((product) => product.pid !== pid)
+          const res = await axios.delete(`${this.backend_url}/product/delete/${pid}`)
+          if(res.status === 200){
+            this.$store.dispatch('fetchAllProducts', this.currentPage)
             alert("Successfully Remove the product")
           } else {
             alert("Error Removing Product")
@@ -177,48 +143,39 @@ export default {
         }
       } else {
         return
-      }
+      } 
     },
-    // filterBrand(e){
-    //   if(this.showproducts=e.brand.bid){
-
-    //   }
-    // },
-    getImages(image) {
-      return `${this.urlproduct}/file/${image}`
-    },
-    sortColors(product) {
-      product.forEach(p => {
-        p.productcolor.sort(function (a, b) { return a.color.cid - b.color.cid });
-      });
-    },
-    checkCurrentPage(i) {
-      return this.pageInfo.pageNumber + 1 == i
-    },
-    // getBrandName(bid){
-    //   for (let i = 0; i < this.brandCode.length; i++) {
-    //     if(this.brandCode[i].brandid == bid){
-    //       return this.brandCode[i].name;
-    //     }
-    //   }
-    // },
-    pricenumber(price) {
-      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    getImages(image){
+      return `${this.backend_url}/file/${image}`
+    }, 
+    checkCurrentPage(i){
+    return this.pageInfo.pageNumber+1 == i 
+  },     
+     pricenumber(price){
+     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   },
-  async created() {
-    await this.fetchBrands();
-    await this.fetchColors();
-    if (this.searchProduct) {
-      await this.fetchSearch();
-
+  setup(props){
+    const store = useStore();
+    console.log(props)
+    if(props.searchProduct){
+      store.dispatch('fetchSearchProduct',{q:props.searchProduct,p:1})
     } else {
-      await this.fetchProduct();
+      store.dispatch('fetchAllProducts',1)
+    }
+    
+    store.dispatch('fetchAllBrands')
+    store.dispatch('fetchAllCategories')
+
+    return {
+      products: computed(() => store.state.products.content),
+      pageInfo: computed(() => store.state.products.pageable),
+      pageTotal: computed(() => store.state.products.totalPages),
+      brands: computed(() => store.state.brands),
+      categories: computed(() => store.state.categories),
+      currentPage: computed(() => store.state.currentPage)
     }
   }
-
-
-
 }
 </script>
 

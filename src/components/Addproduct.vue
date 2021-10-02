@@ -50,8 +50,6 @@
                             type="date"
                             id="date"
                             name="date"
-                            min="2021-01-01"
-                            max="2028-12-31"
                             v-model="releaseDate"
                         />
                         <p
@@ -110,7 +108,7 @@
                             <option disabled value>CATEGORY</option>
                             <option
                                 class="duration-200"
-                                v-for="category in categoryDB"
+                                v-for="category in categories"
                                 :key="category.catid"
                                 :value="category"
                             >{{ category.name }}</option>
@@ -132,7 +130,7 @@
                         >
                             <option disabled value>BRAND</option>
                             <option
-                                v-for="brand in brandsDB"
+                                v-for="brand in brands"
                                 :key="brand.bid"
                                 :value="brand"
                             >{{ brand.name }}</option>
@@ -279,12 +277,15 @@
     </div>
 </template>
 <script>
+import { computed } from '@vue/reactivity';
+import { useStore } from 'vuex';
+import axios from 'axios';
 export default {
     name: 'AddProducts',
 
     data() {
         return {
-            urlJson: "http://localhost:8083/api",
+            backend_url: process.env.VUE_APP_BACKEND_URL,
             pid: 0, //product code
             image: null,
             name: '',
@@ -293,12 +294,9 @@ export default {
             price: 0,
             brand: null,
             warranty: 0,
-            Quantity: 0,
+            Quantity:0,
             colors: [],
             category: null,
-            categoryDB: [],
-            brandsDB: [],
-            colorsDB: [],
             isLocal: false,
 
             invalidNameInput: false,
@@ -310,7 +308,6 @@ export default {
             invalidWarrantyInput: false,
             invalidColorsInput: false,
             invalidCategoryInput: false,
-            invalidQuantity: false,
             uploadFile: null
         };
     },
@@ -319,7 +316,7 @@ export default {
             if (this.isLocal) {
                 return this.image
             }
-            return `http://localhost:8083/files/${filename}`
+            return `${this.backend_url}/files/${filename}`
         },
         loadFile(e) {
             this.isLocal = true;
@@ -337,18 +334,16 @@ export default {
             this.invalidDateInput = this.releaseDate === null ? true : false;
             this.invalidDescInput = (this.description === "" || this.description.trim() === '') ? true : false;
             this.invalidPriceInput = (this.price <= 0) ? true : false;
-            this.invalidQuantity = (this.Quantity <= 0) ? true : false;
             this.invalidBrandInput = this.brand === null ? true : false;
             this.invalidFileInput = this.image === null ? true : false;
             this.invalidWarrantyInput = (this.warranty === null || this.warranty < 0) ? true : false;
             this.invalidColorsInput = (this.colors.length < 1) ? true : false;
             this.invalidCategoryInput = this.category === null ? true : false;
-
-
+            
+            
             if ((!this.invalidNameInput && !this.invalidDateInput && !this.invalidDescInput && !this.invalidPriceInput && !this.invalidBrandInput && !this.invalidFileInput && !this.invalidWarrantyInput && !this.invalidColorsInput && !this.invalidCategoryInput)) {
                 {
                     this.makeDataForm();
-                     setTimeout(() => this.$router.push({ path: '/showproducts' }), 1000);
                 }
 
                 this.id = null
@@ -361,27 +356,25 @@ export default {
                 this.colors = []
                 this.image = null
                 this.category = null
-
+                
             }
         },
-        makeDataForm() {
+          makeDataForm(){
             // Make product object to send to backend
-            let product = {
-                pid: this.pid,
-                name: this.name,
-                releaseDate: this.releaseDate,
-                description: this.description,
-                price: this.price,
-                warranty: this.warranty,
-                image: '',
-                brand: this.brand,
-                category: this.category,
-                amount: this.Quantity,
-                productcolor: []
-            }
+            let product = { pid: this.pid,
+                            name: this.name,
+                            releaseDate: this.releaseDate,
+                            description: this.description,
+                            price: this.price,
+                            warranty: this.warranty,
+                            image: '',
+                            brand: this.brand,
+                            category: this.category,
+                            amount: this.Quantity,
+                            productcolor: [] }
             // Add Colors to productcolors
             this.colors.forEach(c => {
-                let color = { color: { cid: c } }
+                let color = { color: {cid: c} }
                 product.productcolor.push(color)
             });
 
@@ -395,51 +388,16 @@ export default {
             formData.append('product', blob) // Add blob json file
             console.log(formData)
             console.log(product)
-            // Split to POST or PUT
-            // if(this.isedit){
-            //     // If editing go PUT
-            //     this.saveEditProduct(formData);
-
-            this.saveAddProduct(formData);
-
-        },
-        async getAllBrands() {
-            try {
-                const res = await fetch(`${this.urlJson}/brand`)
-                const data = await res.json()
-                return data
-            } catch (error) {
-                console.log(`Can not get brands.`)
-            }
-        },
-        async getAllColors() {
-            try {
-                const res = await fetch(`${this.urlJson}/color`)
-                const data = await res.json()
-                return data
-            } catch (error) {
-                console.log(`Can not get color.`)
-            }
-        },
-        async getAllCategory() {
-            try {
-                const res = await fetch(`${this.urlJson}/cats`)
-                const data = await res.json()
-                return data
-            } catch (error) {
-                console.log(`Can not get category.`)
-            }
+    
+                this.saveAddProduct(formData);
         },
         async saveAddProduct(formData) {
             try {
-                const res = await fetch(`${this.urlJson}/product/save`, {
-                    method: 'POST',
-                    body: formData
-                })
+                const res = await axios.post(`${this.backend_url}/product/save`, formData)
                 if (res.status != 200) {
                     alert("An Unexpected Error Occured. Response Status: " + res.status)
                 } else {
-                    alert("The Product Has Been Succesfully Added to Store.")
+                    alert("Successfully Add Product.")
                 }
                 this.back();
             } catch (error) {
@@ -447,15 +405,18 @@ export default {
             }
         },
     },
-    async created() {
-        if (this.product != null) {
-            this.fillForm(this.product);
-        }
-        this.brandsDB = await this.getAllBrands()
-        this.colorsDB = await this.getAllColors()
-        this.categoryDB = await this.getAllCategory()
-    }
+    setup() {
+    const store = useStore();
+    store.dispatch("fetchAllBrands");
+    store.dispatch("fetchAllCategories");
+    store.dispatch("fetchAllColors");
 
+    return {
+      brands: computed(() => store.state.brands),
+      categories: computed(() => store.state.categories),
+      colorsDB: computed(() => store.state.colors),
+    };
+  },
 }
 
 </script>
