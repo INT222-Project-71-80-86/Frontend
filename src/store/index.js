@@ -52,7 +52,6 @@ export default createStore({
       const pages = search.p
       console.log(product)
       commit('setProducts',{product, pages})
-
     }
   },
   modules: {
