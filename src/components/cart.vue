@@ -2,12 +2,12 @@
 
     <nav-bar />
     <div
-        class="w-full absolute mt-36"
+        class="w-full"
         style="background-image: url('https://i.pinimg.com/564x/db/87/3d/db873daadf558f81f80b59bfec9495d8.jpg');"
     >
         <div class="flex justify-center my-6 pt-4 pb-4">
             <div
-                class="flex flex-col p-8 text-gray-800 bg-white shadow-lg pin-r pin-y md:w-4/5 lg:w-4/5 rounded-2xl"
+                class="flex flex-col p-8 text-gray-800 bg-white shadow-lg pin-r pin-y md:w-4/5 lg:w-4/5 rounded-2xl mt-36"
             >
                 <div class="flex-1">
                     <table class="w-full text-sm lg:text-base" cellspacing="0">

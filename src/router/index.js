@@ -33,7 +33,8 @@ const routes = [
   {
     path: '/showproducts',
     name: 'showproducts',
-    component: ShowProducts
+    component: ShowProducts,
+    props:true
   },
   {
     path: '/Addproduct',

@@ -1,74 +1,103 @@
 <template>
   <nav-bar></nav-bar>
-          <!-- test div -->
-          <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+  <!-- test div -->
+  <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
-      <div class="lg:w-4/5 mx-auto flex flex-wrap border-b-2 mt-5 border-gray-800" v-for="item in showproducts"
-      :key="item.pid">
-        <img alt="ecommerce" class="bg-cover lg:w-80 w-full lg:h-80 h-32 object-cover object-center rounded" :src="getImages(item.image)">
-        <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0 ">
+      <div
+        class="lg:w-4/5 mx-auto flex flex-wrap border-b-2 mt-5 border-gray-800"
+        v-for="item in showproducts"
+        :key="item.pid"
+      >
+        <img
+          alt="ecommerce"
+          class="bg-cover lg:w-80 w-full lg:h-80 h-32 object-cover object-center rounded"
+          :src="getImages(item.image)"
+        />
+        <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
           <h2 class="text-sm title-font text-gray-500 tracking-widest">{{ item.brand.name }}</h2>
           <h1 class="text-white text-3xl title-font font-medium mb-1 italic">{{ item.name }}</h1>
           <div class="flex mb-4">
             <span class="flex items-center">
-              
-              <span class="ml-3"><span class="font-semibold">Release Date:</span> {{ item.releaseDate }}</span>
+              <span class="ml-3">
+                <span class="font-semibold">Release Date:</span>
+                {{ item.releaseDate }}
+              </span>
             </span>
             <span class="flex ml-3 pl-3 py-2 border-l-2 border-gray-800 space-x-2">
-            <span class=""> <span class="font-semibold">Warranty: </span> {{ item.warranty }} years </span>
+              <span class>
+                <span class="font-semibold">Warranty:</span>
+                {{ item.warranty }} years
+              </span>
             </span>
           </div>
           <p class="leading-relaxed">{{ item.description }}</p>
           <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-800 mb-5 space-x-1">
-            <span class="mr-3 font-semibold">Color </span>
+            <span class="mr-3 font-semibold">Color</span>
             <div class="flex" v-for="c in item.productcolor" :key="c.color.cid">
-              <div class="border-2 border-gray-800 rounded-full w-6 h-6 focus:outline-none " :style="{'background-color': c.color.code}"></div>
+              <div
+                class="border-2 border-gray-800 rounded-full w-6 h-6 focus:outline-none"
+                :style="{ 'background-color': c.color.code }"
+              ></div>
             </div>
           </div>
           <div class="flex">
-            <span class="title-font font-medium text-2xl text-white">{{ pricenumber(item.price) }} THB.</span>
-            <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded duration-500">Add to Cart</button>
-            <button class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-red-500 duration-500"  @click="deleteProduct(item.pid)">
-              <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.151 17.943l-4.143-4.102-4.117 4.159-1.833-1.833 4.104-4.157-4.162-4.119 1.833-1.833 4.155 4.102 4.106-4.16 1.849 1.849-4.1 4.141 4.157 4.104-1.849 1.849z"
-            />
-          </svg>
-              
+            <span
+              class="title-font font-medium text-2xl text-white"
+            >{{ pricenumber(item.price) }} THB.</span>
+            <button
+              class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded duration-500"
+            >Add to Cart</button>
+            <button
+              class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-red-500 duration-500"
+              @click="deleteProduct(item.pid)"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path
+                  d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.151 17.943l-4.143-4.102-4.117 4.159-1.833-1.833 4.104-4.157-4.162-4.119 1.833-1.833 4.155 4.102 4.106-4.16 1.849 1.849-4.1 4.141 4.157 4.104-1.849 1.849z"
+                />
+              </svg>
             </button>
-            <router-link :to="{name: 'EditProduct', params: { editProduct: item.pid } }"><button class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-green-500 duration-500">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
-  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-  </svg>   
-            </button></router-link>
+            <router-link :to="{ name: 'EditProduct', params: { editProduct: item.pid } }">
+              <button
+                class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-green-500 duration-500"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+                  <path
+                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                  />
+                </svg>
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
     </div>
     <!-- Paging -->
-      <div id="paging" class="mb-5 -mt-8">
-          <div class="flex space-x-5 justify-center">
-            <button @click="fetchProduct(i)" v-for="i in pageTotal" :key="i" 
-                    class=" w-10 h-8 align-middle text-white border " 
-                    :class="{ 'bg-green-400': checkCurrentPage(i) }">{{i}}</button>
-          </div>   
-        </div>
-      <!-- End Paging -->
+    <div id="paging" class="mb-5 -mt-8">
+      <div class="flex space-x-5 justify-center">
+        <button
+          @click="fetchProduct(i)"
+          v-for="i in pageTotal"
+          :key="i"
+          class="w-10 h-8 align-middle text-white border"
+          :class="{ 'bg-green-400': checkCurrentPage(i) }"
+        >{{ i }}</button>
+      </div>
+    </div>
+    <!-- End Paging -->
   </section>
-   <footer-com />
+  <footer-com />
 </template>
 <script>
 
 
 export default {
   name: "showProducts",
-
+  props: ['searchProduct'],
   data() {
     return {
       urlproduct: "http://localhost:8083/api",
@@ -77,12 +106,17 @@ export default {
       brandCode: [],
       colorCode: [],
       pageTotal: null,
-      editingProduct: null
     };
   },
   methods: {
     async fetchProduct(pageNo = 1) {
-      const res = await fetch(`${this.urlproduct}/product?pageNo=${pageNo-1}&size=5`);
+      let res
+      if (this.searchProduct) {
+        res = await fetch(`${this.urlproduct}/product/query?searchValue=${this.searchProduct}&pageNo=${pageNo - 1}`);
+      }
+      else {
+        res = await fetch(`${this.urlproduct}/product?pageNo=${pageNo - 1}`);
+      }
       const data = await res.json();
       this.showproducts = data.content;
       this.pageInfo = data.pageable;
@@ -94,7 +128,14 @@ export default {
       // parses JSON response into native JavaScript objects
       return;
     },
-    async fetchBrands(){
+    async fetchSearch() {
+      const res = await fetch(`${this.urlproduct}/product/query?searchValue=${this.searchProduct}`)
+      const data = await res.json();
+      this.showproducts = data.content;
+      this.pageInfo = data.pageable;
+      this.pageTotal = data.totalPages;
+    },
+    async fetchBrands() {
       const res = await fetch(`${this.urlproduct}/brand`);
       const data = await res.json();
       this.brandCode = data;
@@ -102,7 +143,7 @@ export default {
       // parses JSON response into native JavaScript objects
       return;
     },
-      async fetchColors(){
+    async fetchColors() {
       const res = await fetch(`${this.urlproduct}/color`);
       const data = await res.json();
       this.colorCode = data;
@@ -110,13 +151,13 @@ export default {
       // parses JSON response into native JavaScript objects
       return;
     },
-    async deleteProduct(pid){
-      if(confirm("Do you really want to remove the product?")){
+    async deleteProduct(pid) {
+      if (confirm("Do you really want to remove the product?")) {
         try {
           const res = await fetch(`${this.urlproduct}/product/delete/${pid}`, {
             method: 'DELETE'
           });
-          if(res.status === 200){
+          if (res.status === 200) {
             this.showproducts = this.showproducts.filter((product) => product.pid !== pid)
             alert("Successfully Remove the product")
           } else {
@@ -127,24 +168,24 @@ export default {
         }
       } else {
         return
-      } 
+      }
     },
     // filterBrand(e){
     //   if(this.showproducts=e.brand.bid){
-        
+
     //   }
     // },
-    getImages(image){
+    getImages(image) {
       return `${this.urlproduct}/file/${image}`
-    }, 
-    sortColors(product){
+    },
+    sortColors(product) {
       product.forEach(p => {
-        p.productcolor.sort(function(a, b){return a.color.cid - b.color.cid});
+        p.productcolor.sort(function (a, b) { return a.color.cid - b.color.cid });
       });
     },
-    checkCurrentPage(i){
-    return this.pageInfo.pageNumber+1 == i 
-  },     
+    checkCurrentPage(i) {
+      return this.pageInfo.pageNumber + 1 == i
+    },
     // getBrandName(bid){
     //   for (let i = 0; i < this.brandCode.length; i++) {
     //     if(this.brandCode[i].brandid == bid){
@@ -152,18 +193,23 @@ export default {
     //     }
     //   }
     // },
-     pricenumber(price){
-     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    pricenumber(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   },
   async created() {
     await this.fetchBrands();
     await this.fetchColors();
-    await this.fetchProduct();
-  }, 
-  
- 
- 
+    if (this.searchProduct) {
+      await this.fetchSearch();
+
+    } else {
+      await this.fetchProduct();
+    }
+  }
+
+
+
 }
 </script>
 
