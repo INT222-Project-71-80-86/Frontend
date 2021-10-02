@@ -169,7 +169,6 @@ export default {
     data() {
         return {
             urlJson: "http://localhost:8083/api",
-
             product: {},
             colors: [],
             categoryDB: [],
@@ -191,7 +190,6 @@ export default {
     },
     methods: {
         getImageUrl(image) {
-
             return `${this.urlJson}/file/${image}`
         },
         loadFile(e) {
@@ -328,7 +326,6 @@ export default {
         this.brandsDB = await this.getAllBrands()
         this.colorsDB = await this.getAllColors()
         this.categoryDB = await this.getAllCategory()
-        await this.fillColor()
     },
    
 
