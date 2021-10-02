@@ -258,7 +258,7 @@
                         />
                         <button
                             @click="removeimg"
-                            class="md:mx-96 mx-48 lg:mx-44 sm:mx-56 2xl:mx-96 items-center justify-center bg-blue-600 hover:bg-red-500 text-white font-bold py-1 focus:outline-none px-4 rounded duration-300"
+                            class="md:mx-52 mx-48 lg:mx-48 sm:mx-56 xl:mx-60 2xl:mx-72 items-center justify-center bg-blue-600 hover:bg-red-500 text-white font-bold py-1 focus:outline-none px-4 rounded duration-300"
                         >Remove Photo</button>
                     </div>
                     <p
