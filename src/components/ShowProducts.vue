@@ -3,12 +3,13 @@
   <!-- test div -->
   <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
+      <p v-if="products.length == 0" class="text-center text-6xl font-bold" >Not have any Product.</p>
       <div
         class="lg:w-4/5 mx-auto flex flex-wrap border-b-2 mt-5 border-gray-800"
         v-for="item in products"
         :key="item.pid"
       >
-        <router-link to="singleProd"><img
+        <router-link :to=" {name: 'singleProduct', params: { singleProd: item.pid} } "><img
           alt="ecommerce"
           class="bg-cover lg:w-80 w-full lg:h-80 h-32 object-cover object-center rounded border hover:bg-white duration-500 p-2"
           :src="getImages(item.image)"
@@ -112,7 +113,7 @@ import axios from 'axios'
 
 export default {
   name: "showProducts",
-  props: ['searchProduct'],
+  props: ['type','value'],
   data() {
     return {
       backend_url: process.env.VUE_APP_BACKEND_URL,
@@ -120,9 +121,13 @@ export default {
   },
   methods: {
     fetchProduct(pageNo = 1) {
-      if(this.searchProduct){
-        this.$store.dispatch('fetchSearchProduct',{q:this.searchProduct,p:pageNo})
-      } else {
+      if(this.type=="query"){
+        this.$store.dispatch('fetchSearchProduct',{q:this.value,p:pageNo})
+      } else if(this.type>0 && this.type<=6){
+        this.$store.dispatch('fetchTypebyBrand',{type:this.type, value:this.value, page:pageNo})
+      } else if( this.type=='category'){
+      this.$store.dispatch('fetchProductByCategory',{cat:this.value,page:pageNo})
+    } else {
         this.$store.dispatch('fetchAllProducts', pageNo)
       }
       
@@ -161,8 +166,12 @@ export default {
   setup(props){
     const store = useStore();
     console.log(props)
-    if(props.searchProduct){
-      store.dispatch('fetchSearchProduct',{q:props.searchProduct,p:1})
+    if(props.type=='query'){
+      store.dispatch('fetchSearchProduct',{q:props.value,p:1})
+    } else if (props.type>0 && props.type <=6){
+      store.dispatch('fetchTypebyBrand',{type:props.type, value:props.value, page:1})
+    } else if (props.type=='category'){
+      store.dispatch('fetchProductByCategory',{cat:props.value,page:1})
     } else {
       store.dispatch('fetchAllProducts',1)
     }
@@ -178,7 +187,15 @@ export default {
       categories: computed(() => store.state.categories),
       currentPage: computed(() => store.state.currentPage)
     }
-  }
+  },
+  watch: {
+    "$route.params.value"() {
+      this.$router.go();
+    },
+    "$route.params.type"() {
+      this.$router.go();
+    },
+},
 }
 </script>
 
