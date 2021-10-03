@@ -52,6 +52,18 @@ export default createStore({
       const pages = search.p
       console.log(product)
       commit('setProducts',{product, pages})
+    },
+    async fetchTypebyBrand({commit},tb){
+      const res = await axios.get(`${backend_url}/product/brandcat?bid=${tb.value}&catid=${tb.type}&pageNo=${tb.page-1}`)
+      const product = res.data
+      const pages = tb.pageNo
+      commit('setProducts',{product,pages})
+    },
+    async fetchProductByCategory({commit},cats){
+      const res = await axios.get(`${backend_url}/product/cat?id=${cats.cat}&pageNo=${cats.page-1}`)
+      const product = res.data
+      const pages = cats.pageNo
+      commit('setProducts',{product,pages})
     }
   },
   modules: {
