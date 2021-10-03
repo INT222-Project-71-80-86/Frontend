@@ -8,11 +8,11 @@
         v-for="item in products"
         :key="item.pid"
       >
-        <img
+        <router-link to="singleProd"><img
           alt="ecommerce"
-          class="bg-cover lg:w-80 w-full lg:h-80 h-32 object-cover object-center rounded"
+          class="bg-cover lg:w-80 w-full lg:h-80 h-32 object-cover object-center rounded border hover:bg-white duration-500 p-2"
           :src="getImages(item.image)"
-        />
+        /></router-link>
         <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
           <div class="flex space-x-2">
           <h2 class="text-xl title-font text-white tracking-widest uppercase font-extrabold">{{ item.brand.name }}</h2>
@@ -42,13 +42,16 @@
                 :style="{ 'background-color': c.color.code }"
               ></div>
             </div>
+            
           </div>
+          
           <div class="flex">
             <span
               class="title-font font-medium text-2xl text-white"
             >{{ pricenumber(item.price) }} THB.</span>
+            
             <button
-              class="flex ml-auto rounded-full w-10 h-10 bg-gray-800 p-0 border-0  items-center justify-center  hover:bg-indigo-500 duration-500"
+              class="flex ml-auto rounded-full w-10 h-10 bg-gray-800 p-0 border-0  items-center justify-center  hover:bg-green-500 duration-500"
             >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
   <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
@@ -57,7 +60,7 @@
             </button>
                         <router-link :to="{ name: 'EditProduct', params: { editProduct: item.pid } }">
               <button
-                class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-green-500 duration-500"
+                class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-indigo-500 duration-500"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
                   <path

@@ -6,6 +6,7 @@ import ShowProducts from '../components/ShowProducts.vue'
 import EditProduct from '../components/EditProduct.vue'
 import Login from '../components/Login.vue'
 import About from '../views/About.vue'
+import singleProduct from '../views/singleProduct.vue'
 
 
 const routes = [
@@ -46,7 +47,12 @@ const routes = [
     name: 'EditProduct',
     component: EditProduct,
     props:true
-  }
+  },
+    {
+      path: '/singleProd',
+      name: 'singleProduct',
+      component: singleProduct
+    }
 ]
 
 const router = createRouter({
