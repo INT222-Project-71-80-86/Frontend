@@ -7,9 +7,9 @@
       <div class="flex justify-between flex-grow">
         <div class="flex justify-between ml-6 items-center">
           <div class="space-x-10 pr-6 font-bold">
-            <router-link to="/Showproducts">
+            <a :href="$router.resolve({ name: 'showproducts', params: { type: 'all', value: '1' } }).href">
               <span class="text-md font-bold hover:text-green-500">PRODUCTS</span>
-            </router-link>
+            </a>
             <dd-nav />
           </div>
         </div>
@@ -18,20 +18,17 @@
             <div class="bg-white flex items-center rounded-full shadow-sm -mt-3 border">
               <input
                 class="rounded-l-full w-full px-6 py-3 text-gray-700 leading-tight focus:outline-none"
-                @keyup.enter="this.$router.push('showproducts',{searchProduct: searchProduct})"
+                @keyup.enter="pushProduct('query')"
                 id="search"
                 type="text"
                 placeholder="Search"
                 v-model="searchProduct"
               />
-
               <div>
                 <button
                   class="bg-blue-500 text-white rounded-full mr-3 hover:bg-blue-400 focus:outline-none w-10 h-10 flex items-center justify-center"
+                  @click="pushProduct('query')"
                 >
-                  <router-link
-                    :to="{ name: 'showproducts', params: { searchProduct: searchProduct } }"
-                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -44,7 +41,6 @@
                         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
                       />
                     </svg>
-                  </router-link>
                 </button>
               </div>
             </div>
@@ -129,6 +125,11 @@ export default {
   data(){
     return {
       searchProduct:""
+    }
+  },
+  methods: {
+    pushProduct(searchType){
+      this.$router.push({ name: 'showproducts', params: {type: searchType , value: this.searchProduct}})
     }
   }
 }
