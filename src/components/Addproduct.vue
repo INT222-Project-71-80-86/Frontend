@@ -112,7 +112,9 @@
                                 :key="category.catid"
                                 :value="category"
                             >{{ category.name }}</option>
+                            
                         </select>
+                        
                         <p
                             v-if="invalidCategoryInput"
                             class="text-red-500 text-sm font-semibold uppercase"

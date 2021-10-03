@@ -2,7 +2,7 @@
   <nav class="sticky top-0 pl-6 pr-6 border-b shadow-md mb-4 bg-white w-screen">
     <div class="flex justify-between items-center">
       <router-link to="/">
-        <h1 class="pr-6 border-r-2 text-2xl font-bold text-black">NPN SHOP</h1>
+        <h1 class="ml-2 pr-6 border-r-2 text-2xl font-bold text-black">NPN SHOP</h1>
       </router-link>
       <div class="flex justify-between flex-grow">
         <div class="flex justify-between ml-6 items-center">
