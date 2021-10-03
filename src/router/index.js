@@ -32,7 +32,7 @@ const routes = [
     component: cart
   },
   {
-    path: '/showproducts',
+    path: '/showproducts/:type/:value',
     name: 'showproducts',
     component: ShowProducts,
     props:true
@@ -43,15 +43,16 @@ const routes = [
     component: Addproduct
   },
   {
-    path: '/edit',
+    path: '/edit/:editProduct',
     name: 'EditProduct',
     component: EditProduct,
     props:true
   },
     {
-      path: '/singleProd',
+      path: '/product/:singleProd',
       name: 'singleProduct',
-      component: singleProduct
+      component: singleProduct,
+      props:true
     }
 ]
 
