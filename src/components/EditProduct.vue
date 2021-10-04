@@ -154,6 +154,7 @@
                             <option value="0">None</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
+                            <option value="3">3</option>
                         </select>
                         <p
                             v-if="invalidWarrantyInput"
@@ -274,7 +275,7 @@
                     <button
                         type="submit"
                         class="w-auto bg-purple-500 hover:bg-green-500 rounded-lg shadow-xl font-medium text-white px-4 py-2 duration-300"
-                    >Success</button>
+                    >Confirm</button>
                 </div>
             </form>
         </div>
