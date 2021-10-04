@@ -1,6 +1,6 @@
 <template>
   <nav-bar class="z-50" />
-<body class="bg-gray-900">
+<body class="bg-gray-900 h-full">
   
 <div class="container-fluid mt-2 mb-3">
     <div class="row no-gutters">
@@ -10,40 +10,13 @@
                     <div class=""><img :src="getImageUrl(product.image)" /></div>
                 </div>
             </div>
-            <div class="card mt-2">
-                <h6>Reviews</h6>
-                <div class="d-flex flex-row">
-                    <div class="stars"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div> <span class="ml-1 font-weight-bold">4.6</span>
-                </div>
-                <hr>
-                <div class="badges"> <span class="badge bg-dark ">All (230)</span> <span class="badge bg-dark "> <i class="fa fa-image"></i> 23 </span> <span class="badge bg-dark "> <i class="fa fa-comments-o"></i> 23 </span> <span class="badge bg-warning"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <span class="ml-1">2,123</span> </span> </div>
-                <hr>
-                <div class="comment-section">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex flex-row align-items-center"> <img src="https://i.imgur.com/o5uMfKo.jpg" class="rounded-circle profile-image">
-                            <div class="d-flex flex-column ml-1 comment-profile">
-                                <div class="comment-ratings"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div> <span class="username">Lori Benneth</span>
-                            </div>
-                        </div>
-                        <div class="date"> <span class="text-muted">2 May</span> </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex flex-row align-items-center"> <img src="https://i.imgur.com/tmdHXOY.jpg" class="rounded-circle profile-image">
-                            <div class="d-flex flex-column ml-1 comment-profile">
-                                <div class="comment-ratings"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div> <span class="username">Timona Simaung</span>
-                            </div>
-                        </div>
-                        <div class="date"> <span class="text-muted">12 May</span> </div>
-                    </div>
-                </div>
-            </div>
+            <base-review :reviews="reviews"></base-review>
         </div>
         <div class="col-md-7">
             <div class="card mt-3 ">
             <div class="tracking-wider space-y-1">
                 <div class="d-flex flex-row align-items-center">
-                    <div >** Wating for Rating **</div>
+                    <div class="flex"><span class="mt-1 mr-2 text-xl tracking-wide">RATING:</span> <star-rating :rating="calAvgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating></div>
                 </div>
                 <div class="space-y-2 text-center "> <span class="font-bold text-xl italic">— {{ product.name }} —</span> <span> | </span> <span class="text-gray-600"> {{ product.category.name }} </span><span> | </span> <span class="text-gray-600"> {{ product.brand.name }} </span>
                     <h1 class="font-semibold text-right">{{ pricenumber(product.price) }} THB.-</h1>
@@ -63,11 +36,11 @@
                        
                     </div>
                     <div class="mt-2"> <span class="font-weight-bold">STORE</span> </div>
-                    <div class="d-flex flex-row align-items-center"> <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-arrow-left-square-fill duration-300" viewBox="0 0 16 16">
+                    <div class="d-flex flex-row align-items-center"> <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-arrow-left-square-fill duration-500" viewBox="0 0 16 16">
   <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
 </svg></router-link>
                         <div class="d-flex flex-column ml-1 comment-profile">
-                            <div class="shopping-more"> </div> <span class="username">NPN | SHOP</span> <small class="followers">Shopping more...</small>
+                            <div class="shopping-more"> </div> <span class="username">NPN | SHOP</span> <small class="followers animate-bounce">Shopping more...</small>
                         </div>
                     </div>
                     <div> <button class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-green-400 hover:text-white duration-500">Add to Cart</button>  </div>
@@ -105,17 +78,21 @@
             </div>
             <!-- end similar items -->
             <div class="card mt-2 mb-3">
-                <star-rating :rating="avgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating>
+                
             
-            <span class="mb-2 text-xl font-bold uppercase tracking-wide">Write Your Review:</span>
+            <span class="mb-2 text-xl font-bold uppercase tracking-wide">Share Your Review:</span>
+            <base-add-review @userreview="makeReview"></base-add-review>
             
             <div>
-                <base-review :pid="singleProd" @calculate="calRating"></base-review>
+                
+                
             </div>
           </div>
         </div>
       </div>
     </div>
+    
+<!-- <star-rating :rating="calAvgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating> -->
 <!--<div><p> name - {{product.name}} </p></div>
 <div><p> desc - {{product.description}} </p></div>
 <div><p> warranty - {{product.warranty}} </p></div>
@@ -135,15 +112,17 @@
 import axios from "axios";
 import StarRating from 'vue-star-rating';
 import BaseReview from '../components/BaseReview.vue';
+import BaseAddReview from '../components/BaseAddReview.vue'
 export default {
-  components: { BaseReview, StarRating },
+  components: { BaseReview, StarRating, BaseAddReview },
   name: "singleProduct",
   props: ["singleProd"],
   data() {
     return {
       backend_url: process.env.VUE_APP_BACKEND_URL,
       product: {},
-      avgRating: 0
+      avgRating: 0,
+      reviews: []
     };
   },
     methods: {
@@ -157,27 +136,50 @@ export default {
      pricenumber(price){
      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }, 
-    calRating(r){
-        let sum = 0.0
-        r.forEach(review => {
-            sum += review.rating
-        });
-        this.avgRating = sum/(r.length)
-
-    }
+    async fetchReviews(pid) {
+      const res = await axios.get(`${this.backend_url}/review/${pid}`);
+      this.reviews = res.data;
+    },
+    makeReview(review){
+        let newreview={reviewid:review.reviewid, review:review.review, rating:review.rating, product:{pid: this.singleProd} }
+        this.addReview(newreview)
+    },
+    async addReview(r) {
+            try {
+                const res = await axios.post(`${this.backend_url}/review/save`, r)
+                const review = res.data
+                if (res.status != 200) {
+                    alert("An Unexpected Error Occured. Response Status: " + res.status)
+                } else {
+                    this.reviews.push(review)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        },
   },
-  
+
   async created() {
     await this.fetchProduct(this.singleProd)
-    console.log(this.product)
+    await this.fetchReviews(this.singleProd);
   },
+  computed: {
+      calAvgRating(){
+          let filterReviews = this.reviews.filter( s => (s.rating != 0))
+          let sum = 0.0
+        filterReviews.forEach(review => {
+            sum += review.rating
+        });
+        return sum/filterReviews.length
+      }
+  }
    
   
   
 }
 </script>
 
-<style scoped>
+<style>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
 
 body {
@@ -233,9 +235,6 @@ hr {
     font-size: 12px
 }
 
-.comment-ratings i {
-    color: #f6d151
-}
 
 .followers {
     font-size: 9px;
