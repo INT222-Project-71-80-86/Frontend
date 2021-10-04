@@ -1,64 +1,57 @@
 <template>
-  <base-add-review @userreview="makeReview"></base-add-review>
-  <div class="border rounded-lg px-4 py-3" >
+  <!--<div class="border rounded-lg px-4 py-3" >
     <div v-for="review in reviews" :key="review">
-        <p>Anonymous</p> <!-- For Username -->
+        <p>Anonymous</p>
         <div>
           <star-rating :rating="review.rating" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating>
-          <!-- <span class="material-icons" v-for="i in 5" :key="i" :class="[i <= review.rating ? 'text-yellow-400': 'text-gray-500']">star</span> -->
+
         </div>
         <p>{{review.review}}</p>
         <div class="w-full border my-2"></div>
     </div>
-  </div>
+  </div> -->
+  <div class="card mt-2 h-auto" >
+                <h6 class="font-semibold tracking-wider">User Reviews</h6>
+                <div class="d-flex flex-row">
+                </div>
+                <hr class="mt-2 mb-2">
+                <div class="badges"> <span class="badge bg-dark ">All Comments (5)</span>  </div>
+                <hr class="mt-2 mb-2">
+                <div class="comment-section mt-2" v-for="review in reviews" :key="review">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex flex-row align-items-center"> <img src="https://i.imgur.com/NAGTvvz.png" class="rounded-circle profile-image">
+                            <div class="d-flex flex-column ml-1 comment-profile">
+                              <star-rating :rating="review.rating" :read-only="true" :star-size="18" :show-rating="false" :glow="1"></star-rating> 
+                                <div class="comment-ratings"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div> <span class="username">Anonymous</span>
+                                <p class="text-sm container w-96" >{{review.review}}</p>
+                            </div>
+                        </div>
+                      
+                        <div class="date"> <span class="text-muted">05/10/2564</span> </div>
+                    </div>
+                    <hr class="mt-3">
+                </div>
+            </div>
 </template>
 
 <script>
-import BaseAddReview from './BaseAddReview.vue';
 import StarRating from 'vue-star-rating';
-import axios from "axios";
 export default {  
   name: "BaseReview",
   components: {
     StarRating,
-    BaseAddReview
   },
-  props: ["pid"],
+  props: ["reviews"],
   data() {
     return {
       backend_url: process.env.VUE_APP_BACKEND_URL,
-      reviews: [],
     };
   },
   methods: {
-    async fetchReviews(pid) {
-      const res = await axios.get(`${this.backend_url}/review/${pid}`);
-      this.reviews = res.data;
-
-      this.$emit("calculate",this.reviews)
-    },
-    makeReview(review){
-        let newreview={reviewid:review.reviewid, review:review.review, rating:review.rating, product:{pid: this.pid} }
-        this.addReview(newreview)
-    },
-    async addReview(r) {
-            try {
-                const res = await axios.post(`${this.backend_url}/review/save`, r)
-                const review = res.data
-                if (res.status != 200) {
-                    alert("An Unexpected Error Occured. Response Status: " + res.status)
-                } else {
-                    alert("Successfully Review the Product.")
-                    this.reviews.push(review)
-                    this.$emit("calculate",this.reviews)
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        },
+    
   },
   created() {
-    this.fetchReviews(this.pid);
+    
     
   },
 };
