@@ -48,7 +48,7 @@
           <!-- dropdown button account -->
           <div class="md-flex dropdown mt-4">
             <button
-              class="dropdown-toggle"
+              class="dropdown-toggle mr-5"
               type="button"
               id="dropdownMenuButton1"
               data-bs-toggle="dropdown"
@@ -70,7 +70,7 @@
               </svg>
             </button>
             <ul
-              class="dropdown-menu dropdown-menu-dark p-2 transition ease-out duration-500 m-2 -mt-3"
+              class="dropdown-menu dropdown-menu-dark p-2 m-2 -mt-3"
               aria-labelledby="dropdownMenuButton1"
             >
               <router-link to="/">
