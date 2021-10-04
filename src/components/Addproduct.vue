@@ -311,7 +311,8 @@ export default {
             invalidWarrantyInput: false,
             invalidColorsInput: false,
             invalidCategoryInput: false,
-            uploadFile: null
+            uploadFile: null,
+            invalidQuantity: false,
         };
     },
     methods: {
@@ -337,6 +338,7 @@ export default {
             this.invalidDateInput = this.releaseDate === null ? true : false;
             this.invalidDescInput = (this.description === "" || this.description.trim() === '') ? true : false;
             this.invalidPriceInput = (this.price <= 0) ? true : false;
+            this.invalidQuantity = (this.Quantity <= 0) ? true : false;
             this.invalidBrandInput = this.brand === null ? true : false;
             this.invalidFileInput = this.image === null ? true : false;
             this.invalidWarrantyInput = (this.warranty === null || this.warranty < 0) ? true : false;
@@ -344,7 +346,7 @@ export default {
             this.invalidCategoryInput = this.category === null ? true : false;
             
             
-            if ((!this.invalidNameInput && !this.invalidDateInput && !this.invalidDescInput && !this.invalidPriceInput && !this.invalidBrandInput && !this.invalidFileInput && !this.invalidWarrantyInput && !this.invalidColorsInput && !this.invalidCategoryInput)) {
+            if ((!this.invalidNameInput && !this.invalidDateInput && !this.invalidDescInput && !this.invalidPriceInput && !this.invalidBrandInput && !this.invalidFileInput && !this.invalidWarrantyInput && !this.invalidColorsInput && !this.invalidCategoryInput && !this.invalidQuantity)) {
                 {
                     this.makeDataForm();
                 }
