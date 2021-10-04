@@ -3,15 +3,15 @@
     <form @submit.prevent="submitReview()">
       <p class="tracking-wide">Select Your Ratings:</p>
       <star-rating v-model:rating="rating" :star-size="36" :animate="true" :glow="2" active-color="#FFD500"></star-rating>
-      <p class="mt-2 mb-2 tracking-wide">Review:</p>
+      <p class="mt-2 mb-1 tracking-wide">Comments:</p>
       <textarea class="border-3 border-purple-100 w-96 py-1 px-2 hover:border-purple-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Review this product here." v-model="review" rows="5" maxlength="200"></textarea>
       <p
                         v-if="invalidreview"
-                        class="text-red-500 text-sm font-semibold uppercase"
+                        class="text-red-500 text-sm font-semibold uppercase mb-2"
                     >— &nbsp;&nbsp;Review can't blank on both field&nbsp;&nbsp; —</p>
-      <div>
-        <button class="px-3 border-2 bg-green-500 text-lg font-semibold rounded-lg">Submit</button>
-        <button class="px-3 border-2 bg-red-500 text-lg font-semibold rounded-lg" type="reset" @click="resetdata">Reset</button>
+      <div class="flex space-x-52">
+        <button class="px-3 border-1 border-indigo-900 bg-green-500 hover:bg-green-500 hover:text-white duration-500 text-lg font-semibold rounded-lg">Submit</button>
+        <button class="px-3 border-1 border-black hover:text-white bg-red-500 hover:bg-red-500 duration-500 text-lg font-semibold rounded-lg" type="reset" @click="resetdata">Reset</button>
       </div>
     </form>
   </div>
