@@ -7,9 +7,11 @@
       <div class="flex justify-between flex-grow">
         <div class="flex justify-between ml-6 items-center">
           <div class="space-x-10 pr-6 font-bold">
-            <a :href="$router.resolve({ name: 'showproducts', params: { type: 'all', value: '1' } }).href">
+            <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">
+            <a>
               <span class="text-md font-bold hover:text-green-500">PRODUCTS</span>
             </a>
+            </router-link>
             <dd-nav />
           </div>
         </div>

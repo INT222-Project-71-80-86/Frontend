@@ -38,6 +38,10 @@
                         v-if="invalidNameInput"
                         class="text-red-500 text-sm font-semibold uppercase"
                     >— &nbsp;&nbsp;Enter Product Name&nbsp;&nbsp; —</p>
+                    <p
+                        v-if="nameDuplicated"
+                        class="text-red-500 text-sm font-semibold uppercase"
+                    >— &nbsp;&nbsp;This product name is already exists in database.&nbsp;&nbsp; —</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 mt-5 mx-7">
@@ -304,6 +308,8 @@ export default {
       invalidWarrantyInput: false,
       invalidColorsInput: false,
       invalidCategoryInput: false,
+      invalidQuantity: false,
+      nameDuplicated: false,
       uploadFile: null,
     };
   },
@@ -346,6 +352,7 @@ export default {
           : false;
       this.invalidColorsInput = this.colors.length < 1 ? true : false;
       this.invalidCategoryInput = this.product.category === null ? true : false;
+      this.invalidQuantity = this.product.amount <= 0 ? true : false
 
       if (
         !this.invalidNameInput &&
@@ -356,15 +363,15 @@ export default {
         !this.invalidFileInput &&
         !this.invalidWarrantyInput &&
         !this.invalidColorsInput &&
-        !this.invalidCategoryInput
+        !this.invalidCategoryInput &&
+        !this.invalidQuantity
       ) {
         {
-          this.makeDataForm();
-          setTimeout(() => this.$router.push({ name: 'showproducts', params: { type: 'all', value: '1' } }), 1000);
+            this.makeDataForm();
         }
       }
     },
-    makeDataForm() {
+  async  makeDataForm() {
       // Make product object to send to backend
       let product = {
         pid: this.product.pid,
@@ -393,22 +400,32 @@ export default {
       let formData = new FormData();
       formData.append("photo", this.uploadFile); // Add image file
       formData.append("product", blob); // Add blob json file
-      this.saveEditProduct(formData);
+     await this.saveEditProduct(formData);
     },
     async saveEditProduct(formData) {
-      try {
+        let temp = false
         const res = await axios.put(
           `${this.backend_url}/product/edit`,
           formData
-        );
-        if (res.status != 200) {
-          alert("An Unexpected Error Occured. Response Status: " + res.status);
-        } else {
-          alert("Successfully Edit Product.");
-        }
-      } catch (error) {
-        console.log(error);
-      }
+        ).then(() => {
+            alert("Edit Product Successfully")
+            setTimeout(() => this.$router.push({ name: 'showproducts', params: { type: 'all', value: '1' } }), 1000);
+        }).catch(function (error) {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                if(error.response.data.errorCode == 'PRODUCT_ALREADY_EXIST') {
+                    temp = true
+                }
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+        })
+        this.nameDuplicated = temp
+        console.log(res)
     },
     async fetchProduct(pid) {
       const res = await axios.get(`${this.backend_url}/product/${pid}`);
