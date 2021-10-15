@@ -75,9 +75,9 @@
               class="dropdown-menu dropdown-menu-dark p-2 m-2 -mt-3"
               aria-labelledby="dropdownMenuButton1"
             >
-              <router-link to="/">
+              <router-link to="/register">
                 <li>
-                  <a class="text-white dropdown-item font-semibold" href="#">Register</a>
+                  <a class="text-white dropdown-item font-semibold" href="">Register</a>
                 </li>
               </router-link>
               <li>

@@ -7,6 +7,7 @@ import EditProduct from '../components/EditProduct.vue'
 import Login from '../components/Login.vue'
 import About from '../views/About.vue'
 import singleProduct from '../views/singleProduct.vue'
+import register from '../components/register.vue'
 
 
 const routes = [
@@ -53,6 +54,11 @@ const routes = [
       name: 'singleProduct',
       component: singleProduct,
       props:true
+    },
+    {
+      path:'/register',
+      name:'register',
+      component:register
     }
 ]
 

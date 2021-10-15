@@ -39,7 +39,7 @@
                         class="text-red-500 text-sm font-semibold uppercase"
                     >— &nbsp;&nbsp;Enter Product Name&nbsp;&nbsp; —</p>
                 </div>
-
+             
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 mt-5 mx-7">
                     <div class="grid grid-cols-1">
                         <label
