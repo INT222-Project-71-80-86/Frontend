@@ -7,9 +7,11 @@
       <div class="flex justify-between flex-grow">
         <div class="flex justify-between ml-6 items-center">
           <div class="space-x-10 pr-6 font-bold">
-            <a :href="$router.resolve({ name: 'showproducts', params: { type: 'all', value: '1' } }).href">
+            <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">
+            <a>
               <span class="text-md font-bold hover:text-green-500">PRODUCTS</span>
             </a>
+            </router-link>
             <dd-nav />
           </div>
         </div>
@@ -73,41 +75,61 @@
               class="dropdown-menu dropdown-menu-dark p-2 m-2 -mt-3"
               aria-labelledby="dropdownMenuButton1"
             >
-              <router-link to="/">
+              <router-link to="/" v-if="!user">
                 <li>
-                  <a class="text-white dropdown-item font-semibold" href="#">Register</a>
+                  <a class="text-white dropdown-item font-semibold"><span class="text-green-300 font-semibold">Register</span></a>
                 </li>
               </router-link>
               <li>
+                <hr class="dropdown-divider" v-if="!user"/>
+              </li>
+              <router-link to="/Login" v-if="!user">
+                <li>
+                  <a class="text-white dropdown-item font-semibold">Login</a>
+                </li>
+              </router-link>
+              <li v-if="!user">
                 <hr class="dropdown-divider" />
               </li>
-              <router-link to="/Login">
+              <router-link to="/Cart" v-if="role == 'ROLE_CUSTOMER'">
                 <li>
-                  <a class="text-white dropdown-item font-semibold" href="#">Login</a>
+                  <a class="text-white dropdown-item font-semibold">Cart</a>
+                </li>
+              </router-link>
+              <li v-if="role == 'ROLE_CUSTOMER'">
+                <hr class="dropdown-divider" />
+              </li>
+              <router-link to="/Addproduct" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
+                <li>
+                  <a class="text-white dropdown-item font-semibold">Addproduct</a>
+                </li>
+              </router-link>
+              <hr class="dropdown-divider" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'" />
+              <router-link to="/Addcolor" v-if="role == 'ROLE_ADMIN'">
+                <li>
+                  <a class="text-white dropdown-item font-semibold">Addcolor</a>
+                </li>
+              </router-link>
+              <hr class="dropdown-divider" v-if="role == 'ROLE_ADMIN'"/>
+              <router-link to="/Addbrand" v-if="role == 'ROLE_ADMIN'">
+                <li>
+                  <a class="text-white dropdown-item font-semibold">Addbrand</a>
                 </li>
               </router-link>
               <li>
-                <hr class="dropdown-divider" />
+                <hr class="dropdown-divider" v-if="role == 'ROLE_ADMIN'"/>
               </li>
-              <router-link to="/Cart">
+              <router-link to="/About" >
                 <li>
-                  <a class="text-white dropdown-item font-semibold" href="#">Cart</a>
+                  <a class="text-white dropdown-item font-semibold">About</a>
                 </li>
               </router-link>
-              <li>
-                <hr class="dropdown-divider" />
+              <li v-if="user">
+                <hr class="dropdown-divider"/>
               </li>
-              <router-link to="/Addproduct">
+              <router-link to="/Login" v-if="user" @click="logout" >
                 <li>
-                  <a class="text-white dropdown-item font-semibold" href="#">Addproduct</a>
-                </li>
-              </router-link>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <router-link to="/About">
-                <li>
-                  <a class="text-white dropdown-item font-semibold" href="#">About</a>
+                  <a class="dropdown-item font-semibold "><span class="text-red-500 font-semibold">Logout</span></a>
                 </li>
               </router-link>
             </ul>
@@ -120,6 +142,8 @@
 </template>
 
 <script>
+import { computed } from '@vue/reactivity'
+import { useStore } from 'vuex'
 export default {
   name: 'Navbar',
   data(){
@@ -130,7 +154,17 @@ export default {
   methods: {
     pushProduct(searchType){
       this.$router.push({ name: 'showproducts', params: {type: searchType , value: this.searchProduct}})
-    }
-  }
+    },
+    logout(){
+      this.$store.dispatch("removeUser")
+    },
+  },
+  setup(){
+          const store = useStore();
+          return {
+            user: computed(() => store.state.user),
+            role: computed(() => store.state.role)
+          }
+        }
 }
 </script>
