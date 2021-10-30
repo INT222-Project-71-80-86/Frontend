@@ -9,14 +9,15 @@ export default createStore({
     brands: [],
     colors: [],
     categories: [],
-    currentPage: 1
+    currentPage: 1,
+    user: null,
+    role: '',
+    expiryDate: null
   },
   mutations: {
     setProducts(state, p){
       state.products = p.product
       state.currentPage = p.pages
-      console.log(state.products)
-      console.log(p)
     },
     setBrands(state, brands){
       state.brands = brands
@@ -26,6 +27,11 @@ export default createStore({
     },
     setCategories(state, categories){
       state.categories = categories
+    },
+    setUser(state, user){
+      state.user = user.user
+      state.role = user.role
+      state.expiryDate = user.exp
     }
   },
   actions: {
@@ -64,6 +70,25 @@ export default createStore({
       const product = res.data
       const pages = cats.pageNo
       commit('setProducts',{product,pages})
+    },
+    async fetchUser({commit}, userTokenDetail){
+      const res = await axios.get(`${backend_url}/user/get`, { headers: { 'Authorization': `Bearer ${userTokenDetail.access_token}` }} ).catch(function (error) {
+        if(error){
+          console.log(error)
+        }
+      })
+      const user = res.data
+      const role = userTokenDetail.user.roles[0]
+      const exp = new Date(userTokenDetail.user.exp * 1000)
+      commit('setUser', {user,role,exp})
+    },
+    removeUser({commit}){
+      localStorage.removeItem("access_token")
+      localStorage.removeItem("refresh_token")
+      const user = null
+      const role = ''
+      const exp = null
+      commit('setUser', {user,role,exp})
     }
   },
   modules: {

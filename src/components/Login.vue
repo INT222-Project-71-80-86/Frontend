@@ -2,7 +2,8 @@
 
     <nav-bar></nav-bar>
     <div class="flex justify-center h-screen">
-        <form class="w-full md:w-1/3 bg-white rounded-lg border-t-2 border-b-2 border-green-500 shadow-md h-2/4 mt-32">
+        <form class="w-full md:w-1/3 bg-white rounded-lg border-t-2 border-b-2 border-green-500 shadow-md h-2/4 mt-32"
+                @submit.prevent="submitForm">
             <div class="flex font-bold justify-center mt-6">
                <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-person-check-fill" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
@@ -14,14 +15,14 @@
                 <div class="w-full mb-2">
                     <div class="flex items-center">
                         <i class='ml-3 fill-current text-gray-400 text-xs z-10 fas fa-user'></i>
-                        <input type='text' placeholder="Username"
+                        <input type='text' placeholder="Username" name="username" v-model="username"
                             class="-mx-6 w-full border rounded px-3 py-2 text-gray-700 focus:outline-none" />
                     </div>
                 </div>
                 <div class="w-full mb-2">
                     <div class="flex items-center">
                         <i class='ml-3 fill-current text-gray-400 text-xs z-10 fas fa-lock'></i>
-                        <input type='text' placeholder="Password"
+                        <input type='password' placeholder="Password" name="password" v-model="password"
                             class="-mx-6 w-full border rounded px-3 py-2 text-gray-700 focus:outline-none" />
                     </div>
                 </div>
@@ -35,9 +36,46 @@
 
 </template>
 <script>
-
+import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 export default {
   name: "login",
-
+data() {
+        return {
+            backend_url: process.env.VUE_APP_BACKEND_URL,
+            username: '',
+            password: ''
+        }
+    },
+    methods: {
+        async submitForm() {
+            const formData = this.makeFormData()
+            const res = await axios.post(`${this.backend_url}/login`, formData).catch(function (error) {
+            if (error.response) {
+                console.log(error)
+                console.log(error.response);
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+            })
+            const data = res.data   
+            const access_token = data.access_token
+            localStorage.setItem("access_token",access_token)  
+            localStorage.setItem("refresh_token",data.refresh_token) 
+            const user = jwt_decode(data.access_token)
+            this.$store.dispatch('fetchUser', {user, access_token})
+            
+            this.$router.push( { path: "/"} )
+            
+        },
+        makeFormData() {
+            let formData = new FormData()
+            formData.append("username", this.username)
+            formData.append("password", this.password)
+            return formData
+        }
+    }
 }
 </script>

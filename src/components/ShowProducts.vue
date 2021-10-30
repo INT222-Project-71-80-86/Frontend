@@ -161,8 +161,21 @@ export default {
   },     
      pricenumber(price){
      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    updateShowProduct(){
+    const type = this.$route.params.type
+    const value = this.$route.params.value
+    if(type=='query'){
+      this.$store.dispatch('fetchSearchProduct',{q:value,p:1})
+    } else if (type>0 && type <=6){
+      this.$store.dispatch('fetchTypebyBrand',{type:type, value:value, page:1})
+    } else if (type=='category'){
+      this.$store.dispatch('fetchProductByCategory',{cat:value,page:1})
+    } else {
+      this.$store.dispatch('fetchAllProducts',1)
     }
-  },
+  }
+},
   setup(props){
     const store = useStore();
     console.log(props)
@@ -190,10 +203,10 @@ export default {
   },
   watch: {
     "$route.params.value"() {
-      this.$router.go();
+      this.updateShowProduct()
     },
     "$route.params.type"() {
-      this.$router.go();
+     this.updateShowProduct()
     },
 },
 }

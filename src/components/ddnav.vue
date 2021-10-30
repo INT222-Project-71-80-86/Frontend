@@ -4,10 +4,11 @@
               <ul class="dropdown-menu dropdown-menu-dark p-2 m-2 -mt-3" aria-labelledby="dropdownMouse">
                 <span v-for="brand in brands" :key="brand.bid">
                     <li>
-                      <a class="text-white dropdown-item font-semibold" 
-                      :href="$router.resolve({ name: 'showproducts', params: { type: category.catid, value: brand.bid } }).href">
+                      <router-link :to="{ name: 'showproducts', params: { type: category.catid, value: brand.bid } }">
+                      <a class="text-white dropdown-item font-semibold">
                       {{ brand.name }}
                       </a>
+                      </router-link>
                     </li>
                   <li><hr class="dropdown-divider"></li>
                 </span>
