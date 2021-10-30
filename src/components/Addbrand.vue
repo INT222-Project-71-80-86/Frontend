@@ -15,7 +15,7 @@
         <br /><span v-if="invalidbrandname" class="text-red-500 text-sm font-semibold uppercase">— Require Brand Name —</span>
         <br /><span v-if="duplicatedbrandname" class="text-red-500 text-sm font-semibold uppercase">— Duplicate Brand Name —</span>
           </p>
-            <div><button class="text-white font-bold px-2 rounded bg-blue-500 hover:bg-blue-600 duration-300 buttonAdd py-2" @click="addBrand">Add</button></div>
+            <div><button class="text-white font-bold px-2 rounded bg-blue-500 hover:bg-blue-600 duration-300 buttonAdd py-2" @click="FilteraddBrand">Add</button></div>
             <div><button class="text-white font-bold px-2 rounded bg-green-500 hover:bg-green-600 duration-300 buttonAdd py-2" type="reset" @click="resetdata">Clear</button></div>
           </div>
   <div class="bg-white shadow-md rounded my-6">
@@ -70,10 +70,13 @@ export default {
   },
 
   methods:{
-    // invalidaddBrand(){
-    //     this.invalidbrandname = (this.brandname === null || this.brandname.trim() === '') ? true : false;
-    //     return
-    //  },
+     FilteraddBrand(){
+         this.invalidbrandname = (this.brandname === null || this.brandname.trim() === '') ? true : false;
+          if(!this.invalidbrandname){
+            this.addBrand()
+          }
+        
+      },
 
    resetdata(){
        this.invalidbrandname = false
