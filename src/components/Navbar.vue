@@ -1,21 +1,23 @@
 <template>
   <nav class="sticky top-0 pl-6 pr-6 border-b shadow-md mb-4 bg-white w-screen">
     <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center w-80">
       <router-link to="/">
         <h1 class="ml-2 pr-6 border-r-2 text-2xl font-bold text-black">NPN SHOP</h1>
       </router-link>
-      <div class="flex justify-between flex-grow">
-        <div class="flex justify-between ml-6 items-center">
-          <div class="space-x-10 pr-6 font-bold">
-            <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">
+      <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">
             <a>
-              <span class="text-md font-bold hover:text-green-500">PRODUCTS</span>
+              <span class="text-md font-semibold hover:text-green-500 ml-4 md:w-auto text-2xl">PRODUCTS</span>
             </a>
             </router-link>
-            <dd-nav />
-          </div>
+            </div>
+      <div class="flex justify-between flex-grow md:flex md:w-auto">
+        <div class="flex justify-between ml-6 items-center">
+          <ul class="space-x-10 pr-6 font-bold">
+           <ddnav />
+          </ul>
         </div>
-        <div class="md:flex space-x-6 hidden">
+        <div class="md:flex space-x-6 sm:flex">
           <div class="p-8">
             <div class="bg-white flex items-center rounded-full shadow-sm -mt-3 border">
               <input
@@ -48,7 +50,7 @@
             </div>
           </div>
           <!-- dropdown button account -->
-          <div class="md-flex dropdown mt-4">
+          <div class=" dropdown mt-4">
             <button
               class="dropdown-toggle mr-5"
               type="button"
@@ -144,7 +146,9 @@
 <script>
 import { computed } from '@vue/reactivity'
 import { useStore } from 'vuex'
+import ddnav from './ddnav.vue'
 export default {
+  components: { ddnav },
   name: 'Navbar',
   data(){
     return {
