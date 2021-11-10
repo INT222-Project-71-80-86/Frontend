@@ -32,6 +32,13 @@ export default createStore({
       state.user = user.user
       state.role = user.role
       state.expiryDate = user.exp
+    },
+    addColor(state, color){
+      state.colors.push(color)
+      state.colors.sort( (a,b) => (a.cid > b.cid) ? 1 : ((a.cid < b.cid) ? -1 : 0) ) //Sort color
+    },
+    removeColor(state, color){
+      state.colors = state.colors.filter(c => c.cid != color.cid)
     }
   },
   actions: {
@@ -89,6 +96,19 @@ export default createStore({
       const role = ''
       const exp = null
       commit('setUser', {user,role,exp})
+    },
+    changeColor({commit}, colorManage){
+      const color = colorManage.color
+      switch (colorManage.mode) {
+        case "add":
+          commit('addColor', color)
+        break;
+        case "remove":
+          commit('removeColor', color)
+        break;
+        default:
+          break;
+      }
     }
   },
   modules: {

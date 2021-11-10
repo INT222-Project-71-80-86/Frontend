@@ -9,9 +9,12 @@ import EditProduct from '../components/EditProduct.vue'
 import Login from '../components/Login.vue'
 import About from '../views/About.vue'
 import singleProduct from '../views/singleProduct.vue'
+import singleProductV2 from '../views/singleProductV2.vue'
 import store from '../store/index.js'
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
+import AddproductV2 from '../views/AddproductV2.vue'
+import EditProductV2 from '../views/EditProductV2.vue'
 
 
 const routes = [
@@ -48,6 +51,11 @@ const routes = [
     component: Addproduct
   },
   {
+    path: '/addproductv2',
+    name: 'AddproductV2',
+    component: AddproductV2
+  },
+  {
     path: '/Addcolor',
     name: 'Addcolor',
     component: Addcolor
@@ -61,14 +69,26 @@ const routes = [
     path: '/edit/:editProduct',
     name: 'EditProduct',
     component: EditProduct,
+    props: true
+  },
+  {
+    path: '/editproductv2/:editProduct',
+    name: 'EditProductV2',
+    component: EditProductV2,
+    props: true
+  },
+  {
+    path: '/product/:singleProd',
+    name: 'singleProduct',
+    component: singleProduct,
     props:true
   },
-    {
-      path: '/product/:singleProd',
-      name: 'singleProduct',
-      component: singleProduct,
-      props:true
-    }
+  {
+    path: '/productv2/:singleProd',
+    name: 'singleProductV2',
+    component: singleProductV2,
+    props:true
+  }
 ]
 
 const router = createRouter({
