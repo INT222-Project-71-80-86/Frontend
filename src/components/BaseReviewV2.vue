@@ -10,7 +10,7 @@
         <div class="w-full border my-2"></div>
     </div>
   </div> -->
-  <div class="card mt-2 h-auto" >
+  <div class="card mt-2 h-auto" > 
                 <h6 class="font-semibold tracking-wider">User Reviews</h6>
                 <div class="d-flex flex-row">
                 </div>
@@ -55,7 +55,7 @@ export default {
     }
   },
   created() {
-    
+
   },
   computed:{
     
