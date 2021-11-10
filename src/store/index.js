@@ -11,7 +11,7 @@ export default createStore({
     categories: [],
     currentPage: 1,
     user: null,
-    role: '',
+    role: null,
     expiryDate: null
   },
   mutations: {

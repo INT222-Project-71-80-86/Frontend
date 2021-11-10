@@ -82,7 +82,9 @@
             
             <span class="mb-2 text-xl font-bold uppercase tracking-wide">Share Your Review:</span>
             <base-add-review v-if="user && role && reviews" :reviews="reviews" :user="user" :role="role" @userreview="makeReview"></base-add-review>
-            
+            <div v-else> <!-- redesign this part tee kub --> 
+                <p>Please <router-link :to="{ name: 'login'}">Login</router-link> First</p>
+            </div>
             <div>
                 
                 
@@ -166,7 +168,7 @@ export default {
   }, 
 
   async created() {
-    await this.fetchProduct(this.singleProd)
+    await this.fetchProduct(this.singleProd);
     await this.fetchReviews(this.singleProd);
   },
   computed: {
@@ -181,6 +183,8 @@ export default {
   },
   setup(){
     const store = useStore();
+    console.log(store.state.user)
+    console.log(store.state.role)
     return {
     user: computed(() => store.state.user),
     role: computed(() => store.state.role)
