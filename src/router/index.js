@@ -7,6 +7,7 @@ import Addcolor from '../components/Addcolor.vue'
 import ShowProducts from '../components/ShowProducts.vue'
 import EditProduct from '../components/EditProduct.vue'
 import Login from '../components/Login.vue'
+import Profile from '../components/Profile.vue'
 import About from '../views/About.vue'
 import singleProduct from '../views/singleProduct.vue'
 import store from '../store/index.js'
@@ -68,6 +69,11 @@ const routes = [
       name: 'singleProduct',
       component: singleProduct,
       props:true
+    },
+    {
+      path:'/Profile',
+      name:'Profile',
+      component: Profile
     }
 ]
 
