@@ -77,6 +77,14 @@
               class="dropdown-menu dropdown-menu-dark p-2 m-2 -mt-3"
               aria-labelledby="dropdownMenuButton1"
             >
+            <router-link to="/Profile" v-if="user">
+                <li>
+                  <a class="text-white dropdown-item font-semibold"><span class="text-green-300 font-semibold">Profile</span></a>
+                </li>
+              </router-link>
+             <li>
+                <hr class="dropdown-divider" v-if="user"/>
+              </li>
               <router-link to="/" v-if="!user">
                 <li>
                   <a class="text-white dropdown-item font-semibold"><span class="text-green-300 font-semibold">Register</span></a>
