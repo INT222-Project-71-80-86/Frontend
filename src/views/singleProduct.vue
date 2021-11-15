@@ -2,7 +2,7 @@
   <nav-bar class="z-50" />
 <body class="bg-gray-900 h-full">
   
-<div class="container-fluid mt-2 mb-3">
+<div class="container-fluid mt-2 mb-3" v-if="product">
     <div class="row no-gutters">
         <div class="col-md-5 pr-2 mt-2 mb-3">
             <div class="card w-full">
@@ -10,13 +10,13 @@
                     <div class=""><img :src="getImageUrl(product.image)" /></div>
                 </div>
             </div>
-            <base-review :reviews="reviews"></base-review>
+            <base-review v-if="reviews" :reviews="reviews"></base-review>
         </div>
         <div class="col-md-7">
             <div class="card mt-3 ">
             <div class="tracking-wider space-y-1">
                 <div class="d-flex flex-row align-items-center">
-                    <div class="flex"><span class="mt-1 mr-2 text-xl tracking-wide">RATING:</span> <star-rating :rating="calAvgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating></div>
+                    <div class="flex"><span class="mt-1 mr-2 text-xl tracking-wide">RATING:</span> <star-rating v-if="reviews" :rating="calAvgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating></div>
                 </div>
                 <div class="space-y-2 text-center "> <span class="font-bold text-xl italic">— {{ product.name }} —</span> <span> | </span> <span class="text-gray-600"> {{ product.category.name }} </span><span> | </span> <span class="text-gray-600"> {{ product.brand.name }} </span>
                     <h1 class="font-semibold text-right">{{ pricenumber(product.price) }} THB.-</h1>
@@ -81,8 +81,10 @@
                 
             
             <span class="mb-2 text-xl font-bold uppercase tracking-wide">Share Your Review:</span>
-            <base-add-review @userreview="makeReview"></base-add-review>
-            
+            <base-add-review v-if="user && role && reviews" :reviews="reviews" :user="user" :role="role" @userreview="makeReview"></base-add-review>
+            <div v-else> <!-- redesign this part tee kub --> 
+                <p>Please <router-link :to="{ name: 'login'}">Login</router-link> First</p>
+            </div>
             <div>
                 
                 
@@ -111,8 +113,11 @@
 <script>
 import axios from "axios";
 import StarRating from 'vue-star-rating';
-import BaseReview from '../components/BaseReview.vue';
-import BaseAddReview from '../components/BaseAddReview.vue'
+import BaseReview from '../components/BaseReviewV2.vue';
+import BaseAddReview from '../components/BaseAddReviewV2.vue'
+import { useStore } from 'vuex';
+import { computed } from '@vue/reactivity';
+
 export default {
   components: { BaseReview, StarRating, BaseAddReview },
   name: "singleProduct",
@@ -120,9 +125,9 @@ export default {
   data() {
     return {
       backend_url: process.env.VUE_APP_BACKEND_URL,
-      product: {},
+      product: null,
       avgRating: 0,
-      reviews: []
+      reviews: null
     };
   },
     methods: {
@@ -145,22 +150,25 @@ export default {
         this.addReview(newreview)
     },
     async addReview(r) {
-            try {
-                const res = await axios.post(`${this.backend_url}/review/save`, r)
+                r.id = {uid: this.user.uid, pid: this.singleProd}
+                const access_token = localStorage.getItem("access_token")
+                const res = await axios.post(`${this.backend_url}/review/save`, r, { headers: { 'Authorization': `Bearer ${access_token}` } } ).catch(function (error) {
+                    if (error) {
+                        alert("Unexpected Error occur. Cannot add new review.")
+                        return
+                    }
+                })
                 const review = res.data
                 if (res.status != 200) {
                     alert("An Unexpected Error Occured. Response Status: " + res.status)
                 } else {
                     this.reviews.push(review)
                 }
-            } catch (error) {
-                console.log(error)
-            }
         },
-  },
+  }, 
 
   async created() {
-    await this.fetchProduct(this.singleProd)
+    await this.fetchProduct(this.singleProd);
     await this.fetchReviews(this.singleProd);
   },
   computed: {
@@ -172,10 +180,16 @@ export default {
         });
         return sum/filterReviews.length
       }
-  }
-   
-  
-  
+  },
+  setup(){
+    const store = useStore();
+    console.log(store.state.user)
+    console.log(store.state.role)
+    return {
+    user: computed(() => store.state.user),
+    role: computed(() => store.state.role)
+    }
+  } 
 }
 </script>
 
