@@ -13,6 +13,7 @@
     "axios": "^0.21.4",
     "core-js": "^3.6.5",
     "jwt-decode": "^3.1.2",
+    "one-colorpicker": "^1.0.12",
     "postcss": "^7",
     "tailwind": "^4.0.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
