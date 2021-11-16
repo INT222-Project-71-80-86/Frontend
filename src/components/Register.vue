@@ -195,6 +195,15 @@ export default {
             if (!this.invalidFname && !this.invalidLname && !this.invalidEmail && !this.invalidDob && !this.invalidTel && !this.invalidAddress) {
                 this.makeForm()
             }
+            this.username= '',
+            this.password= '',
+            this.confirmPassword= '',
+            this.fname= '',
+            this.lname= '',
+            this.email= '',
+            this.tel= '',
+            this.dob= '',
+            this.address= ''
         },
         async makeForm() {
             let user = {
