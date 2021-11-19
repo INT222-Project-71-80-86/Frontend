@@ -13,8 +13,6 @@ import singleProduct from '../views/singleProduct.vue'
 import store from '../store/index.js'
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
-import AddproductV2 from '../views/AddproductV2.vue'
-import EditProductV2 from '../views/EditProductV2.vue'
 
 
 const routes = [
@@ -51,11 +49,6 @@ const routes = [
     component: Addproduct
   },
   {
-    path: '/addproductv2',
-    name: 'AddproductV2',
-    component: AddproductV2
-  },
-  {
     path: '/Addcolor',
     name: 'Addcolor',
     component: Addcolor
@@ -72,23 +65,11 @@ const routes = [
     props: true
   },
   {
-    path: '/editproductv2/:editProduct',
-    name: 'EditProductV2',
-    component: EditProductV2,
-    props: true
-  },
-  {
     path: '/product/:singleProd',
     name: 'singleProduct',
     component: singleProduct,
     props:true
   },
-    {
-      path: '/product/:singleProd',
-      name: 'singleProduct',
-      component: singleProduct,
-      props:true
-    },
     {
       path:'/Profile',
       name:'Profile',
@@ -107,7 +88,7 @@ const routes = [
 // Each role access components name
 const staff = ["Addproduct", "EditProduct", "Profile"]
 const customer = ["cart", "Profile", "Order"]
-const admin = ["Addbrand", "Addproduct", "EditProduct", "Profile"]
+const admin = ["Addbrand", "Addcolor", "Addproduct", "EditProduct", "Profile"]
 const all = ["Home", "About", "showproducts", "singleProduct"]
 
 const router = createRouter({
