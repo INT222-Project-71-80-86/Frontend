@@ -11,8 +11,9 @@ export default createStore({
     categories: [],
     currentPage: 1,
     user: null,
-    role: null,
-    expiryDate: null
+    role: '',
+    expiryDate: null,
+    cart: []
   },
   mutations: {
     setProducts(state, p){
@@ -39,6 +40,15 @@ export default createStore({
     },
     removeColor(state, color){
       state.colors = state.colors.filter(c => c.cid != color.cid)
+    },
+    addToCart(state, product){
+      state.cart.push(product)
+    },
+    clearCart(state){
+      state.cart = []
+    },
+    removeFromCart(state, rmid){
+      state.cart = state.cart.filter(item => !(item.productColor.id.pid == rmid.pid && item.productColor.id.cid == rmid.cid))
     }
   },
   actions: {
@@ -63,7 +73,6 @@ export default createStore({
       const res = await axios.get(`${backend_url}/product/query?searchValue=${search.q}&pageNo=${search.p-1}`)
       const product = res.data
       const pages = search.p
-      console.log(product)
       commit('setProducts',{product, pages})
     },
     async fetchTypebyBrand({commit},tb){
@@ -109,6 +118,20 @@ export default createStore({
         default:
           break;
       }
+    },
+    addItemToCart({commit}, addProduct){
+      const productColor = addProduct.productColor
+      const item = this.state.cart.filter(item => (item.productColor.id.pid == productColor.id.pid && item.productColor.id.cid == productColor.id.cid))
+      if(item.length > 0){
+        return
+      }
+      commit('addToCart', addProduct)
+    },
+    clearCart({commit}){
+      commit('clearCart')
+    },
+    removeCartItem({commit},id){
+      commit('removeFromCart', id)
     }
   },
   modules: {
