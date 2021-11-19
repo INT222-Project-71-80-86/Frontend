@@ -15,51 +15,47 @@
           :src="getImages(item.image)"
         /></router-link>
         <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-          <div class="flex space-x-2">
-          <h2 class="text-xl title-font text-white tracking-widest uppercase font-extrabold">{{ item.brand.name }}</h2>
-          <h2 class="text-xl title-font text-white tracking-widest uppercase font-light">— {{ item.category.name }}</h2>
+          <h1 class="text-white text-3xl font-medium mb-1 -ml-1">{{ item.name }}</h1>
+                    <div class="flex space-x-2">
+          <h2 class="text-sm text-white tracking-widest uppercase font-extrabold">{{ item.brand.name }}</h2>
+          <h2 class="text-sm text-white tracking-widest uppercase font-light">— {{ item.category.name }}</h2>
           </div>
-          <h1 class="text-white text-3xl title-font font-medium mb-1 italic">{{ item.name }}</h1>
-          <div class="flex mb-4">
+          <div class="flex mb-4 text-sm">
             <span class="flex items-center">
-              <span class="">
-                <span class="font-semibold">Release Date:</span>
+              <span>
+                <span class="">Release Date:</span>
                 {{ item.releaseDate }}
               </span>
             </span>
             <span class="flex ml-3 pl-3 py-2 border-l-2 border-gray-800 space-x-2">
               <span class>
-                <span class="font-semibold">Warranty:</span>
+                <span class="">Warranty:</span>
                 {{ item.warranty }} years
               </span>
             </span>
+
           </div>
-          <p class="leading-relaxed">{{ item.description }}</p>
-          <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-800 mb-5 space-x-1">
-            <span class="mr-1 font-semibold italic text-white">Color —</span>
+          <div class="flex items-center pb-1 -mt-6 border-b-2 border-gray-800 space-x-1">
+          
+            <span class="mr-1 font-semibold text-white">Color —</span>
             <div class="flex" v-for="c in item.productcolor" :key="c.color.cid">
               <div
                 class="border-2 border-gray-800 rounded-full w-6 h-6 focus:outline-none"
                 :style="{ 'background-color': c.color.code }"
               ></div>
             </div>
-            
+           
           </div>
+           <p class="leading-relaxed">{{ item.description }}</p>
           
-          <div class="flex">
+          
+          <div class="flex justify-end mt-5">
             <span
               class="title-font font-medium text-2xl text-white"
             >{{ pricenumber(item.price) }} THB.</span>
             
-            <button
-              class="flex ml-auto rounded-full w-10 h-10 bg-gray-800 p-0 border-0  items-center justify-center  hover:bg-white duration-500"
-            >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
-  <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
-  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-</svg>
-            </button>
-                        <router-link :to="{ name: 'EditProduct', params: { editProduct: item.pid } }">
+           
+                        <router-link :to="{ name: 'EditProduct', params: { editProduct: item.pid } }" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
               <button
                 class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-white duration-500"
               >
@@ -76,7 +72,7 @@
             </router-link>
             <button
               class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-white duration-500"
-              @click="deleteProduct(item.pid)"
+              @click="deleteModal = true" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path
@@ -101,6 +97,7 @@
         >{{ i }}</button>
       </div>
     </div>
+    
     <!-- End Paging -->
   </section>
   <footer-com />
@@ -191,14 +188,16 @@ export default {
     
     store.dispatch('fetchAllBrands')
     store.dispatch('fetchAllCategories')
-
+  
     return {
       products: computed(() => store.state.products.content),
       pageInfo: computed(() => store.state.products.pageable),
       pageTotal: computed(() => store.state.products.totalPages),
       brands: computed(() => store.state.brands),
       categories: computed(() => store.state.categories),
-      currentPage: computed(() => store.state.currentPage)
+      currentPage: computed(() => store.state.currentPage),
+      user: computed(() => store.state.user),
+      role: computed(() => store.state.role)
     }
   },
   watch: {

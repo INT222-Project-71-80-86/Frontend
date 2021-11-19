@@ -212,12 +212,14 @@
                                     <th class="w-3/12">{{ color.name }}</th>
                                     <th class="w-2/12">{{ color.code }}</th>
                                     <th class="w-2/12" v-if="isEdit != color.cid">x{{ color.amount }}</th>
-                                    <th class="w-2/12" v-else><input v-model="editQuantity" class="p-1 w-24" type="number" min="0" placeholder="Amount"></th>
+                                    <th class="w-2/12" v-else><input v-model="editQuantity" class="p-1 w-24" type="number" min="1" placeholder="Amount"></th>
+
                                     <th class="w-2/12" v-if="isEdit != color.cid"><button type="button" class="w-full" @click="editColor(color)"><div class="p-1 border rounded bg-green-400">Edit</div></button></th>
                                     <th class="w-2/12" v-else><button type="button" class="w-full" @click="saveColor(color)"><div class="p-1 border rounded bg-green-400">Save</div></button></th>
                                     <th class="w-2/12" v-if="isEdit != color.cid"><button type="button" class="w-full" @click="removeColor(color)"><div class="p-1 border rounded bg-red-400">Remove</div></button></th>
                                     <th class="w-2/12" v-else><button type="button" class="w-full" @click="cancelEdit"><div class="p-1 border rounded bg-red-400">Cancel</div></button></th>
                                 </tr>
+                                 <tr v-if="invalidEditQuantity" ><th colspan="5" class="text-red-500 text-sm font-semibold uppercase">— &nbsp;&nbsp;Product Quantity Must More Than 0&nbsp;&nbsp; —</th></tr> 
                             </table>
                         </div>
                     </div>
@@ -369,6 +371,7 @@ export default {
             invalidCategoryInput: false,
             uploadFile: null,
             invalidQuantity: false,
+            invalidEditQuantity: false,
         };
     },
     methods: {
@@ -384,6 +387,7 @@ export default {
         cancelEdit(){
             this.isEdit = -1;
             this.editQuantity = 0;
+            this.invalidEditQuantity = false;
         },
         addColor(){
             this.invalidQuantity = false
@@ -398,6 +402,8 @@ export default {
             this.clearColor();
         },
         editColor(color){
+            this.invalidEditQuantity = false;
+
             this.editQuantity = color.amount;
             this.isEdit = color.cid;
         },
@@ -407,10 +413,15 @@ export default {
             this.$store.dispatch('changeColor',{color, mode:"add"})
         },
         saveColor(color){
-            let colorIndex = this.colors.findIndex( c => c.cid == color.cid)
-            color.amount = this.editQuantity
-            this.colors[colorIndex] = color
-            this.cancelEdit()
+            if(this.editQuantity < 1){
+            this.invalidEditQuantity = true
+                return
+        }
+        let colorIndex = this.colors.findIndex( c => c.cid == color.cid)
+        color.amount = this.editQuantity
+        this.colors[colorIndex] = color
+        this.cancelEdit()
+        this.invalidEditQuantity = false;
         },
         getImageUrl(filename) {
             if (this.isLocal) {

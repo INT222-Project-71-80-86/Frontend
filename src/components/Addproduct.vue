@@ -263,7 +263,6 @@
                         class="text-red-500 text-sm font-semibold uppercase"
                     >— &nbsp;&nbsp;Upload Photo of the Product&nbsp;&nbsp; —</p>
                 </div>
-
                 <div class="flex items-center justify-center md:gap-8 gap-4 pt-5 pb-5">
                     <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">
                         <button

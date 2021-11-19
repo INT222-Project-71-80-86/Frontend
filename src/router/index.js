@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import cart from '../components/cart.vue'
-import Addproduct from '../components/Addproduct.vue'
+import Addproduct from '../views/AddproductV2.vue'
 import Addbrand from '../components/Addbrand.vue'
 import Addcolor from '../components/Addcolor.vue'
 import ShowProducts from '../components/ShowProducts.vue'
-import EditProduct from '../components/EditProduct.vue'
+import EditProduct from '../views/EditProductV2.vue'
 import Login from '../components/Login.vue'
+import Profile from '../components/Profile.vue'
 import About from '../views/About.vue'
 import singleProduct from '../views/singleProduct.vue'
 import singleProductV2 from '../views/singleProductV2.vue'
@@ -83,12 +84,17 @@ const routes = [
     component: singleProduct,
     props:true
   },
-  {
-    path: '/productv2/:singleProd',
-    name: 'singleProductV2',
-    component: singleProductV2,
-    props:true
-  }
+    {
+      path: '/product/:singleProd',
+      name: 'singleProduct',
+      component: singleProduct,
+      props:true
+    },
+    {
+      path:'/Profile',
+      name:'Profile',
+      component: Profile
+    }
 ]
 
 const router = createRouter({
