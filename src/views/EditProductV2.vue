@@ -548,10 +548,12 @@ export default {
     },
     fillColor(){
         this.product.productcolor.forEach( c => {
-            let color = c.color
-            let amount = c.amount
-            color.amount = amount
-            this.addColor(color)
+            if(c.amount > -1){
+                let color = c.color
+                let amount = c.amount
+                color.amount = amount
+                this.addColor(color)
+            }
         })
     }
   },
