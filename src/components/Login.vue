@@ -51,13 +51,9 @@ data() {
         async submitForm() {
             const formData = this.makeFormData()
             const res = await axios.post(`${this.backend_url}/login`, formData).catch(function (error) {
-            if (error.response) {
-                console.log(error)
-                console.log(error.response);
-            } else if (error.request) {
-                console.log(error.request);
-            } else {
-                console.log('Error', error.message);
+            if (error) {
+                alert("Login unsuccessfully")
+                return
             }
             })
             const data = res.data   
