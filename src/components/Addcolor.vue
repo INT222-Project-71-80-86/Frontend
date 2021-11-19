@@ -32,6 +32,7 @@
                     />
                 </svg>
             </button>
+
             <p>
                 <input
                     v-model="this.colorname"
@@ -41,6 +42,7 @@
                     class="py-1 px-1 border-2 mt-4 border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
                 <br />
+                
                 <span
                     v-if="invalidcolorname"
                     class="text-red-500 text-sm font-semibold uppercase"
@@ -51,6 +53,7 @@
                     class="text-red-500 text-sm font-semibold uppercase"
                 >— Duplicate color Name —</span>
             </p>
+            <input type="color" id="colorInput" v-model="colorpicker"  class="bg-white colorbutton">
             <div>
                 <button
                     class="text-white font-bold px-2 rounded bg-blue-500 hover:bg-blue-600 duration-300 buttonAdd py-2"
@@ -64,8 +67,10 @@
                     @click="resetdata"
                 >Clear</button>
             </div>
+            
         </div>
-        <div class="bg-white shadow-md rounded my-6">
+
+        <div class="bg-white shadow-md roundewd my-6">
             <table class="text-left w-full border-collapse">
                 <thead>
                     <tr>
@@ -80,11 +85,13 @@
                 <tr class="hover:bg-grey-lighter"></tr>
                 <tbody v-for="item in colors" :key="item.cid">
                     <tr v-if="editing != item.cid" class="hover:bg-grey-lighter">
-                        <td class="py-4 px-6 border-b border-grey-light font-bold">{{ item.name }}</td>
+                        
+                        <td class="py-4 px-6 border-b border-grey-light font-bold flex space-x-2">
+                            <div class="w-7 h-7 border-2 border-transparent" :style="{ backgroundColor: item.code }"></div><span>{{ item.name }}</span></td>
                         <td class="py-4 px-6 border-b border-grey-light space-x-2 text-white">
                             <button
                                 class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-600 duration-300"
-                                @click="enableEditing(item.cid, item.name)"
+                                @click="enableEditing(item)"
                             >Edit</button>
                             <button
                                 href="#"
@@ -94,7 +101,9 @@
                         </td>
                     </tr>
                     <tr v-if="editing == item.cid" class="hover:bg-grey-lighter">
-                        <td class="py-4 px-6 border-b border-grey-light font-bold">
+                        <td class="py-4 px-6 border-b border-grey-light font-bold flex space-x-3">
+                            <input type="color" v-model="editcolorpicker" class="mt-2 w-7 h-7 border-2 border-transparent" :style="{ backgroundColor: item.code }">
+                           
                             <input
                                 v-model="editcolor"
                                 require
@@ -105,7 +114,7 @@
                         <td class="py-4 px-6 border-b border-grey-light space-x-2 text-white">
                             <button
                                 class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-600 duration-300"
-                                @click="editColor(item.cid)"
+                                @click="editColor"
                             >Save</button>
                             <button
                                 href="#"
@@ -140,25 +149,29 @@ export default {
             editing: -1,
             editcolor: null,
             viewADD: false,
+            colorpicker: '#FFFFFF',
+            editcolorpicker: '#FFFFFF'
+            
         };
     },
-
     methods: {
         FilteraddColor() {
             this.invalidcolorname = (this.colorname === null || this.colorname.trim() === '') ? true : false;
             if (!this.invalidcolorname) {
                 this.addColor()
             }
-
         },
 
         resetdata() {
             this.invalidcolorname = false
             this.colorname = ''
+            this.duplicatedcolorname = false
+            document.getElementById('colorInput').value = '#FFFFFF'
         },
-        enableEditing(pid, name) {
-            this.editing = pid
-            this.editcolor = name
+        enableEditing(color) {
+            this.editing = color.cid
+            this.editcolor = color.name
+            this.editcolorpicker = color.code
         },
         disableEditing() {
             this.editcolor = '';
@@ -172,15 +185,15 @@ export default {
             this.viewADD = false
         },
         async addColor() {
-            let color = { cid: 0, name: this.colorname, deleted: 0 }
+            let color = { cid: 0, name: this.colorname,code: this.colorpicker, deleted: 0 }
             let check = false;
             let access_token = localStorage.getItem("access_token")
             const res = await axios.post(`${this.backend_url}/color/save`, color, { headers: { 'Authorization': `Bearer ${access_token}` } }).catch(function (error) {
                 if (error) {
                     console.log("ERROR HERE")
-                    console.log(error)
-                    console.log(error.response);
-                    alert("An Unexpected Error Occured. Response Status: " + error.response.status)
+                    console.log(error.request)
+                    console.log(error.response.data.message);
+                    alert(error.response.data.message)
                     check = true;
                 }
             })
@@ -191,8 +204,8 @@ export default {
             }
             this.duplicatedcolorname = check
         },
-        async editColor(colorId) {
-            let color = { cid: colorId, name: this.editcolor, deleted: 0 }
+        async editColor() {
+            let color = { cid: this.editing, name: this.editcolor, code: this.editcolorpicker, deleted: 0 }
             let check = false;
             let access_token = localStorage.getItem("access_token")
             const res = await axios.put(`${this.backend_url}/color/edit`, color, { headers: { 'Authorization': `Bearer ${access_token}` } }).catch(function (error) {
@@ -247,5 +260,11 @@ export default {
 <style scoped>
 .buttonAdd {
     margin-top: 22px;
+}
+.colorbutton {
+    position: relative;
+    margin-top: 28px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 </style>

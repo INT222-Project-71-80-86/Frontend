@@ -572,4 +572,5 @@ export default {
     };
   },
 };
+
 </script>
