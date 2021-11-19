@@ -213,6 +213,7 @@
                                     <th class="w-2/12">{{ color.code }}</th>
                                     <th class="w-2/12" v-if="isEdit != color.cid">x{{ color.amount }}</th>
                                     <th class="w-2/12" v-else><input v-model="editQuantity" class="p-1 w-24" type="number" min="1" placeholder="Amount"></th>
+
                                     <th class="w-2/12" v-if="isEdit != color.cid"><button type="button" class="w-full" @click="editColor(color)"><div class="p-1 border rounded bg-green-400">Edit</div></button></th>
                                     <th class="w-2/12" v-else><button type="button" class="w-full" @click="saveColor(color)"><div class="p-1 border rounded bg-green-400">Save</div></button></th>
                                     <th class="w-2/12" v-if="isEdit != color.cid"><button type="button" class="w-full" @click="removeColor(color)"><div class="p-1 border rounded bg-red-400">Remove</div></button></th>
@@ -402,6 +403,7 @@ export default {
         },
         editColor(color){
             this.invalidEditQuantity = false;
+
             this.editQuantity = color.amount;
             this.isEdit = color.cid;
         },
