@@ -28,7 +28,7 @@
                         <div class="col">{{calTotal(c.amount, c.product.price)}}</div>
                         <div class="col">
                             <button @click="removeFromCart(c)">
-                                <span class="material-icons">
+                                <span class="material-icons text-red-500">
                                     delete
                                 </span>
                             </button>

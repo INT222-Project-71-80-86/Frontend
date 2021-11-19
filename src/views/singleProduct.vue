@@ -19,10 +19,6 @@
                 <div class="d-flex flex-row align-items-center">
                    <div class="space-y-2 text-center "> <span class="font-bold text-3xl italic">— {{ product.name }} —</span> 
                    </div>
-                    <div class="flex"><span class="mt-1 mr-2 text-xl tracking-wide">RATING:</span> <star-rating v-if="reviews" :rating="calAvgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating></div>
-                </div>
-                <div class="space-y-2 text-center "> <span class="font-bold text-xl italic">— {{ product.name }} —</span> <span> | </span> <span class="text-gray-600"> {{ product.category.name }} </span><span> | </span> <span class="text-gray-600"> {{ product.brand.name }} </span>
-                    <h1 class="font-semibold text-right">{{ pricenumber(product.price) }} THB.-</h1>
                 </div>
                 <h1 class="font-semibold text-xl">{{ pricenumber(product.price) }} THB.-</h1>
                  <div class="flex"><span class="mt-1 mr-2 text-xl tracking-wide">RATING:</span> <star-rating v-if="reviews && calAvgRating > 0" :rating="calAvgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating><p v-else class="pt-1 text-xl">No Rating</p></div>     

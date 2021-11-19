@@ -128,7 +128,6 @@ import { computed } from '@vue/reactivity'
 import { useStore } from 'vuex'
 import axios from 'axios';
 export default {
-
   name: "Addbrand",
   data() {
     return {
@@ -142,16 +141,13 @@ export default {
       viewADD: false,
     };
   },
-
   methods: {
     FilteraddBrand() {
       this.invalidbrandname = (this.brandname === null || this.brandname.trim() === '') ? true : false;
       if (!this.invalidbrandname) {
         this.addBrand()
       }
-
     },
-
     resetdata() {
       this.invalidbrandname = false
       this.brandname = ''
@@ -230,7 +226,6 @@ export default {
         console.log(res.data)
         this.$store.dispatch('fetchAllBrands')
       }
-
     }
   },
   setup() {
