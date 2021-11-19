@@ -49,6 +49,15 @@
               </div>
             </div>
           </div>
+          <div class="mt-4 pt-2">
+            <div id="cart">
+              <div id="cartIcon" v-if="role == 'ROLE_CUSTOMER' && currentRoute != 'Order'" style="width:50px ;">
+                  <!-- <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#cartDetailModal"><img src="@/assets/images/icons/shopping_cart_black_24dp.svg"/></button> -->
+                  <button type="button" class="btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-target="#cartDetailDropdown"><img src="@/assets/images/icons/shopping_cart_black_24dp.svg"/></button>
+                  <the-cart-dropdown /> 
+              </div>
+            </div>
+          </div>
           <!-- dropdown button account -->
           <div class=" dropdown mt-4">
             <button
@@ -101,9 +110,9 @@
               <li v-if="!user">
                 <hr class="dropdown-divider" />
               </li>
-              <router-link to="/Cart" v-if="role == 'ROLE_CUSTOMER'">
+              <router-link to="/order" v-if="role == 'ROLE_CUSTOMER'">
                 <li>
-                  <a class="text-white dropdown-item font-semibold">Cart</a>
+                  <a class="text-white dropdown-item font-semibold">Order</a>
                 </li>
               </router-link>
               <li v-if="role == 'ROLE_CUSTOMER'">
@@ -155,8 +164,13 @@
 import { computed } from '@vue/reactivity'
 import { useStore } from 'vuex'
 import ddnav from './ddnav.vue'
+import TheCartDropdown from './TheCartDropdown.vue'
+
 export default {
-  components: { ddnav },
+  components: { 
+    ddnav,
+    TheCartDropdown
+  },
   name: 'Navbar',
   data(){
     return {
@@ -172,11 +186,16 @@ export default {
     },
   },
   setup(){
-          const store = useStore();
-          return {
-            user: computed(() => store.state.user),
-            role: computed(() => store.state.role)
-          }
-        }
+    const store = useStore();
+    return {
+      user: computed(() => store.state.user),
+      role: computed(() => store.state.role)
+    }
+  },
+  computed: {
+    currentRoute(){
+      return this.$route.name
+    }
+  }
 }
 </script>

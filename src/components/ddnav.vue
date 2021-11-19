@@ -1,6 +1,6 @@
 <template>
 
-<span v-for="category in categories" :key="category.catid" class="ml-10">
+<span v-for="category in categories" :key="category.catid" class="ml-5 md:flex-row items-center text-sm">
     <button  class="dropdown-toggle hover:text-green-500" type="button" id="dropdownMouse" data-bs-toggle="dropdown" aria-expanded="false"><span class="hover:text-green-500 text-md font-bold">{{ category.name }}</span></button>
               <ul class="dropdown-menu dropdown-menu-dark p-2 m-2 -mt-3" aria-labelledby="dropdownMouse">
                 <span v-for="brand in brands" :key="brand.bid">
