@@ -16,48 +16,38 @@
             <div class="card mt-3 ">
             <div class="tracking-wider space-y-1">
                 <div class="d-flex flex-row align-items-center">
-                   <div class="space-y-2 text-center "> <span class="font-bold text-3xl italic">— {{ product.name }} —</span> 
-                   </div>
                     <div class="flex"><span class="mt-1 mr-2 text-xl tracking-wide">RATING:</span> <star-rating v-if="reviews" :rating="calAvgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating></div>
                 </div>
                 <div class="space-y-2 text-center "> <span class="font-bold text-xl italic">— {{ product.name }} —</span> <span> | </span> <span class="text-gray-600"> {{ product.category.name }} </span><span> | </span> <span class="text-gray-600"> {{ product.brand.name }} </span>
                     <h1 class="font-semibold text-right">{{ pricenumber(product.price) }} THB.-</h1>
                 </div>
-                <h1 class="font-semibold text-xl">{{ pricenumber(product.price) }} THB.-</h1>
-                 <div class="flex"><span class="mt-1 mr-2 text-xl tracking-wide">RATING:</span> <star-rating v-if="reviews" :rating="calAvgRating" :increment="0.01" :read-only="true" :star-size="24" :show-rating="false" :glow="1"></star-rating></div>     
                 <hr class="mt-3 mb-2" />
                 </div>
                 
                 <div class="product-description tracking-wider">
-                                <div class="mt-2"> <span class="font-semibold">— Description —</span>
-                        <p class="mt-1">{{ product.description }}</p>
-                    </div>
-                     <div class="flex space-x-2 space-y-1"><span class="font-semibold mt-2">Color — </span> 
+                    <div class="flex space-x-2 space-y-1"><span class="font-semibold mt-2">Color — </span> 
                         <div class="flex items-center" v-for="c in product.productcolor" :key="c.cid">
-                                <button class=" w-7 h-7 border-2 border-transparent duration-300 focus:ring-2 focus:ring-red-600 focus:border-transparent" :style="{ backgroundColor: c.color.code }"></button>
+                                <div class="color-circle rounded-full w-7 h-7 border-2 border-transparent hover:border-gray-900 duration-300" :style="{ backgroundColor: c.color.code }"></div>
                             </div>
                                 </div>
-                    <div class="flex-row align-items-center mt-2"> 
-                    <span class="text-xs font-semibold">Category: </span> <span class="text-xs"> {{ product.category.name }} </span><br />
-                    <span class="text-xs font-semibold">Brand: </span> <span class="text-xs"> {{ product.brand.name }} </span> <br />
-                    <span class="text-xs font-semibold">Release Date:</span> <span class="text-xs tracking-widest">{{product.releaseDate}}</span> <br /> 
-                    <span class="text-xs font-semibold">Warranty:</span> <span class="tracking-widest text-xs">{{product.warranty}} year</span>
-                   
+                    <div class="flex-row align-items-center mt-2"> <span class="font-semibold">Release Date:</span> <span class="text-sm tracking-widest">{{product.releaseDate}}</span> <span> | </span> <span class="font-semibold">Warranty:</span> <span class="tracking-widest text-sm">{{product.warranty}} year</span></div>
+                    <div class="mt-2"> <span class="font-semibold">— Description —</span>
+                        <p class="text-center">{{ product.description }}</p>
+                       
                     </div>
-                    
-                     <div v-if="role == 'ROLE_CUSTOMER'"> <button class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-red-600 hover:text-white font-bold duration-500 uppercase">Add to Cart</button>  </div>
-                    <div class="d-flex flex-row align-items-center mt-3"> <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-arrow-left-square-fill duration-500" viewBox="0 0 16 16">
+                    <div class="mt-2"> <span class="font-weight-bold">STORE</span> </div>
+                    <div class="d-flex flex-row align-items-center"> <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-arrow-left-square-fill duration-500" viewBox="0 0 16 16">
   <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
 </svg></router-link>
-                        <div class="d-flex flex-column ml-1 comment-profile ">
+                        <div class="d-flex flex-column ml-1 comment-profile">
                             <div class="shopping-more"> </div> <span class="username">NPN | SHOP</span> <small class="followers animate-bounce">Shopping more...</small>
                         </div>
                     </div>
-                   
+                    <div> <button class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-green-400 hover:text-white duration-500">Add to Cart</button>  </div>
                 </div>
             </div>
-            <!-- Similar item-->
-            <!-- <div class="card mt-2 border text-center"> <span>Similar items:</span>
+            <!--Similar item-->
+            <div class="card mt-2 border text-center"> <span>Similar items:</span>
                 <div class="similar-products mt-2 d-flex flex-row justify-center space-x-3">
                     <div class="card border p-1" style="width: 9rem;margin-right: 3px;"> <img src="https://i.imgur.com/KZpuufK.jpg" class="card-img-top" alt="...">
                         <div class="card-body">
@@ -85,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <!-- end similar items -->
             <div class="card mt-2 mb-3">
                 
@@ -121,12 +111,13 @@
 </body>
 </template>
 <script>
-import { computed } from '@vue/reactivity'
-import { useStore } from 'vuex'
 import axios from "axios";
 import StarRating from 'vue-star-rating';
 import BaseReview from '../components/BaseReviewV2.vue';
 import BaseAddReview from '../components/BaseAddReviewV2.vue'
+import { useStore } from 'vuex';
+import { computed } from '@vue/reactivity';
+
 export default {
   components: { BaseReview, StarRating, BaseAddReview },
   name: "singleProduct",
@@ -159,7 +150,7 @@ export default {
         this.addReview(newreview)
     },
     async addReview(r) {
-          r.id = {uid: this.user.uid, pid: this.singleProd}
+                r.id = {uid: this.user.uid, pid: this.singleProd}
                 const access_token = localStorage.getItem("access_token")
                 const res = await axios.post(`${this.backend_url}/review/save`, r, { headers: { 'Authorization': `Bearer ${access_token}` } } ).catch(function (error) {
                     if (error) {
@@ -190,13 +181,15 @@ export default {
         return sum/filterReviews.length
       }
   },
-    setup(){
-          const store = useStore();
-            return {
-                    user: computed(() => store.state.user),
-                    role: computed(() => store.state.role)
-                    }
-        }
+  setup(){
+    const store = useStore();
+    console.log(store.state.user)
+    console.log(store.state.role)
+    return {
+    user: computed(() => store.state.user),
+    role: computed(() => store.state.role)
+    }
+  } 
 }
 </script>
 
