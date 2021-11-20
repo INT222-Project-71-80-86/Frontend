@@ -49,6 +49,9 @@ export default createStore({
     },
     removeFromCart(state, rmid){
       state.cart = state.cart.filter(item => !(item.productColor.id.pid == rmid.pid && item.productColor.id.cid == rmid.cid))
+    },
+    saveCart(state, cart){
+      state.cart = cart
     }
   },
   actions: {
@@ -132,6 +135,9 @@ export default createStore({
     },
     removeCartItem({commit},id){
       commit('removeFromCart', id)
+    },
+    saveCart({commit}, cart){
+      commit('saveCart', cart)
     }
   },
   modules: {
