@@ -9,6 +9,7 @@ export default createStore({
     brands: [],
     colors: [],
     categories: [],
+    orders: [],
     currentPage: 1,
     user: null,
     role: '',
@@ -33,6 +34,10 @@ export default createStore({
       state.user = user.user
       state.role = user.role
       state.expiryDate = user.exp
+    },
+    setOrder(state, orders){
+      state.orders = orders.orders
+      state.currentPage = orders.page
     },
     addColor(state, color){
       state.colors.push(color)
@@ -101,6 +106,16 @@ export default createStore({
       const exp = new Date(userTokenDetail.user.exp * 1000)
       commit('setUser', {user,role,exp})
     },
+    async fetchOrder({commit}, detail){
+      const response = await axios.get(`${backend_url}/order/get/username?size=5&pageNo=${detail.pageNo - 1}`, { headers: { 'Authorization': `Bearer ${detail.token}` } }).catch( function (error) {
+          if (error) {
+              alert(`status: ${error.response.status} \nmessage: ${error.response.data.message}`)
+          }
+      })
+      let orders = response.data
+      console.log(orders)
+      commit('setOrder', {orders, page: detail.pageNo})
+  },
     removeUser({commit}){
       localStorage.removeItem("access_token")
       localStorage.removeItem("refresh_token")
