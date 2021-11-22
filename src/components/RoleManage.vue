@@ -1,4 +1,6 @@
 <template>
+
+    <div v-if="users">
     <div
         class="border-2 border-blue-200 lg:w-4/5 mx-auto flex flex-wrap border-b-2 mt-5"
         v-for="user in users.content"
@@ -46,17 +48,20 @@
             </div>
         </div>
     </div>
+    </div>
 </template>
 <script>import axios from "axios"
+
 export default {
     name: 'RoleManage',
+
     data() {
         return {
             backend_url: process.env.VUE_APP_BACKEND_URL,
-            users: {},
             edit: false,
             newRole: '',
-            editID: 0
+            editID: 0,
+            users: null
         }
     },
     methods: {
@@ -87,11 +92,15 @@ export default {
                 role: this.newRole,
                 deleted: user.deleted
             };
+
             await this.saveEditRole(newuser)
+
             this.edit = false,
             this.newRole = '',
             this.editID = 0
+
         },
+
         async saveEditRole(newuser) {
             let temp = localStorage.getItem("access_token")
             const res = axios.put(`${this.backend_url}/user/roleedit`, newuser, { headers: { 'Authorization': `Bearer ${temp}` } }).then(() => {
@@ -103,6 +112,7 @@ export default {
                     alert(error.response.data.message)
                     console.log(error.response.status);
                     console.log(error.response.headers);
+
                 } else if (error.request) {
                     console.log(error.request);
                 } else {
@@ -111,10 +121,12 @@ export default {
             })
             console.log(res)  
            
-        }
+        },
+       
     },
     async created() {
         await this.getallusers();
     },
 }
+
 </script>

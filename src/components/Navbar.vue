@@ -56,7 +56,7 @@
             >
             <router-link to="/Profile" v-if="user">
                 <li>
-                  <a class="text-white dropdown-item font-semibold"><span class="text-green-300 font-semibold">My Profile</span></a>
+                  <a class="text-white dropdown-item font-semibold"><span class="font-semibold">My Profile</span></a>
                 </li>
               </router-link>
              <li>
@@ -78,34 +78,18 @@
               <li v-if="!user">
                 <hr class="dropdown-divider" />
               </li>
-              <router-link to="/Cart" v-if="role == 'ROLE_CUSTOMER'">
+              <router-link to="/AdminPage" v-if="role == 'ROLE_ADMIN'">
                 <li>
-                  <a class="text-white dropdown-item font-semibold">Cart</a>
+                  <a class="dropdown-item font-semibold"><span class="text-white">ShopManage</span></a>
                 </li>
               </router-link>
-              <li v-if="role == 'ROLE_CUSTOMER'">
-                <hr class="dropdown-divider" />
-              </li>
-              <router-link to="/Addproduct" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
+              <hr class="dropdown-divider" v-if="role == 'ROLE_ADMIN'" />
+              <router-link to="/Addproduct" v-if="role == 'ROLE_ADMIN' || role == 'ROLE_STAFF'">
                 <li>
-                  <a class="text-white dropdown-item font-semibold">Addproduct</a>
+                  <a class="text-white dropdown-item font-semibold">AddProduct</a>
                 </li>
               </router-link>
-              <hr class="dropdown-divider" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'" />
-              <router-link to="/Addcolor" v-if="role == 'ROLE_ADMIN'">
-                <li>
-                  <a class="text-white dropdown-item font-semibold">Addcolor</a>
-                </li>
-              </router-link>
-              <hr class="dropdown-divider" v-if="role == 'ROLE_ADMIN'"/>
-              <router-link to="/Addbrand" v-if="role == 'ROLE_ADMIN'">
-                <li>
-                  <a class="text-white dropdown-item font-semibold">Addbrand</a>
-                </li>
-              </router-link>
-              <li v-if="user">
-                <hr class="dropdown-divider"/>
-              </li>
+              <hr class="dropdown-divider" v-if="role == 'ROLE_ADMIN' || role == 'ROLE_STAFF'"/>
               <router-link to="/Login" v-if="user" @click="logout" >
                 <li>
                   <a class="dropdown-item font-semibold "><span class="text-red-500 font-semibold">Logout</span></a>

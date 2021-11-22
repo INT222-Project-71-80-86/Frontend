@@ -67,8 +67,8 @@ export default {
             console.log(this.case)
             if (this.case == 1) { this.stage = 'addbrand' }
             else if (this.case == 2) { this.stage = 'addcolor' }
-            else if (this.case ==3){ this.stage = 'rolemanage'}
-            else if (this.case ==4){ this.stage = 'couponmanage'}
+            else if (this.case == 3){ this.stage = 'rolemanage'}
+            else if (this.case == 4){ this.stage = 'couponmanage'}
             return this.stage
         }
 
