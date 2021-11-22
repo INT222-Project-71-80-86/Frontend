@@ -175,7 +175,9 @@ export default {
             let formData = new FormData();
             formData.append("profile", blob);
             formData.append("username", this.profile.username)
-            await this.saveEditProfile(formData);
+            // await this.saveEditProfile(formData);
+            await this.saveEditProfile(profile);
+
         },
         async saveEditProfile(formData) {
             const res = axios.put(`${this.backend_url}/user/edit`, formData).then(() => {

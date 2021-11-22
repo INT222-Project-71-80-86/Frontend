@@ -1,5 +1,4 @@
 <template>
-
     <div v-if="users">
     <div
         class="border-2 border-blue-200 lg:w-4/5 mx-auto flex flex-wrap border-b-2 mt-5"
@@ -120,9 +119,7 @@ export default {
                 }
             })
             console.log(res)  
-           
         },
-       
     },
     async created() {
         await this.getallusers();

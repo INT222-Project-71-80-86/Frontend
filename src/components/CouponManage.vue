@@ -417,10 +417,7 @@ export default {
                 }
             })
             console.log(res)
-
         }
-
-
     },
     setup() {
         const store = useStore();

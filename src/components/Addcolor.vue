@@ -136,7 +136,6 @@ import { computed } from '@vue/reactivity'
 import { useStore } from 'vuex'
 import axios from 'axios';
 export default {
-
     name: "Addcolor",
     data() {
         return {
@@ -160,7 +159,6 @@ export default {
                 this.addColor()
             }
         },
-
         resetdata() {
             this.invalidcolorname = false
             this.colorname = ''
@@ -242,7 +240,6 @@ export default {
                 console.log(res.data)
                 this.$store.dispatch('fetchAllColors')
             }
-
         }
     },
     setup() {
