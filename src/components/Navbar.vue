@@ -144,6 +144,18 @@
 					<router-link to="/Profile" v-if="user"><li class="mb-1">
 						<a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">My Profile</a>
 					</li></router-link>
+         <router-link to="/AdminPage" v-if="role == 'ROLE_ADMIN'">
+					<li class="-mt-3">
+						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">ShopManage</a>
+					</li></router-link>
+          <router-link to="/Addproduct" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
+					<li class="mb-1">
+						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" 
+            width="16" height="16" fill="currentColor" class="bi bi-plus plus-sign" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>Add Product</a>
+					</li></router-link>
 					<ul class="mb-1 dropdown">
 						<li class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded cursor-pointer">Category
                           <ul>
@@ -158,30 +170,6 @@
 					</ul>
 					<router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }"><li class="mb-1">
 						<a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">Collections</a>
-					</li></router-link>
-          <router-link to="/Addproduct" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
-					<li class="mb-1">
-						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" 
-            width="16" height="16" fill="currentColor" class="bi bi-plus plus-sign" viewBox="0 0 16 16">
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>Add Product</a>
-					</li></router-link>
-          <router-link to="/Addcolor" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
-					<li class="mb-1">
-						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"><svg xmlns="http://www.w3.org/2000/svg" 
-            width="16" height="16" fill="currentColor" class="bi bi-plus plus-sign" viewBox="0 0 16 16">
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>Add Color</a>
-					</li></router-link>
-          <router-link to="/Addbrand" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
-					<li class="mb-1">
-						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" 
-            width="16" height="16" fill="currentColor" class="bi bi-plus plus-sign" viewBox="0 0 16 16">
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>
-              Add Brand</a>
 					</li></router-link>
           <router-link to="/About">
 					<li class="mb-1">
