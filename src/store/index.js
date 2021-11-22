@@ -12,7 +12,8 @@ export default createStore({
     currentPage: 1,
     user: null,
     role: '',
-    expiryDate: null
+    expiryDate: null,
+    coupons:[]
   },
   mutations: {
     setProducts(state, p){
@@ -32,6 +33,9 @@ export default createStore({
       state.user = user.user
       state.role = user.role
       state.expiryDate = user.exp
+    },
+    setCoupons(state,coupon){
+      state.coupons = coupon
     }
   },
   actions: {
@@ -89,6 +93,11 @@ export default createStore({
       const role = ''
       const exp = null
       commit('setUser', {user,role,exp})
+    },
+    async fetchCoupons({commit}){
+      const res = await axios.get(`${backend_url}/coupon/allcoupons`,{ headers: { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }})
+      const coupons = res.data
+      commit('setCoupons',coupons)
     }
   },
   modules: {

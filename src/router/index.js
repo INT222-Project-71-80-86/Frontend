@@ -13,7 +13,10 @@ import singleProduct from '../views/singleProduct.vue'
 import store from '../store/index.js'
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
-
+import AdminPage from '../components/AdminPage.vue'
+import RoleManage from '../components/RoleManage.vue'
+import CouponManage from '../components/CouponManage.vue'
+import Register from '../components/Register.vue'
 
 const routes = [
 
@@ -74,7 +77,27 @@ const routes = [
       path:'/Profile',
       name:'Profile',
       component: Profile
-    }
+    },
+    {
+      path:'/AdminPage',
+      name:'AdminPage',
+      component: AdminPage
+     },
+     {
+       path:'/RoleManage',
+       name:'RoleManage',
+       component: RoleManage
+     },
+     {
+       path:'/CouponManage',
+       name:'CouponManage',
+       component: CouponManage
+     },
+     {
+       path:'/Register',
+       name:'Register',
+       component: Register
+      }
 ]
 
 const router = createRouter({

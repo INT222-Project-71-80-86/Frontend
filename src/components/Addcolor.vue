@@ -1,5 +1,4 @@
 <template>
-    <nav-bar />
     <div class="w-1/2 mx-auto">
         <div v-if="!viewADD" class="flex mt-5 justify-end">
             <button @click="enableviewADD()">

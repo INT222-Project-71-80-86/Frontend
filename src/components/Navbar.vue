@@ -210,7 +210,7 @@
 			<div class="mt-auto">
 				<div class="pt-6">
 					<router-link to="/Login" v-if="!user"><a class="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold bg-gray-50 hover:bg-gray-100 rounded-xl">Sign In</a></router-link>
-					<router-link to="/" v-if="!user"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl">Sign Up</a></router-link>
+					<router-link to="/Register" v-if="!user"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl">Sign Up</a></router-link>
 					<router-link to="/Login" v-if="user"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-red-600 hover:bg-red-700  rounded-xl">LOGOUT</a></router-link>
 				</div>
 				<p class="my-4 text-xs text-center text-gray-400">
