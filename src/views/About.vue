@@ -1,13 +1,11 @@
 <template>
-
 <nav-bar class="z-50"></nav-bar>
  <div class="h-screen flex justify-center items-center body" id="bodyAbout" >
     <div class=" text-white p-3 w-full md:w-1/2 lg:w-1/4 lg:h-2/4 rounded text-center py-8 hover:shadow-md cursor-pointer ml-10 mb-20 zoom"
          v-for="members in member" :key="members.id">
-
          <div class="container">
 			<div class="avatar">
-				<img :src="members.img" alt="Members picture" />
+				<img :src="getImage(members.img)" alt="Members picture" />
 			</div>
 			<div class="content">
 				<h1>{{members.duty}}</h1>
@@ -31,21 +29,26 @@
                 fullname:'Paksawat Rakthai',
                 duty:'Front-End / Dev-op / Database',
                 studentcode:'62130500071',
-                img:'https://scontent.fkdt1-1.fna.fbcdn.net/v/t1.6435-9/90089361_2512863312361212_6000451341263044608_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=8bfeb9&_nc_ohc=zq_GIfJLD9MAX-F8onO&_nc_ht=scontent.fkdt1-1.fna&oh=f121692c0d1212b4466a849742dc9b92&oe=617E6183'},
+                img:'Nice.jpg'},
                 {
                 id:2,
                 fullname:'Varot Tirakhuntorn',
                 duty:'Back-End / Dev-op / Database',
                 studentcode:'62130500080',
-                img:'https://scontent.fkdt1-1.fna.fbcdn.net/v/t1.6435-9/67694126_2293753384007480_1202710230085926912_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=174925&_nc_eui2=AeHmYh1wIbfV4PeUYcT8bzlsWXzrTQIKTupZfOtNAgpO6klggnGyyCD0OxTLpAfHPZw0oJraLPgmjHR9fViIdvWM&_nc_ohc=O5t2mb5rDYcAX9aVLWl&tn=diNgUOlrg_wiu_IV&_nc_ht=scontent.fkdt1-1.fna&oh=7db1a7485970481db7f193bb9da7daa0&oe=61746FFC'},
+                img:'Non.jpg'},
                 {
                 id:3,
                 fullname:'Wuttichai Arayasook',
                 duty:'Front-End / Dev-op / Database',
                 studentcode:'62130500086',
-                img:'https://scontent.fkdt1-1.fna.fbcdn.net/v/t1.18169-9/19105912_1961574670743588_5869076407858633935_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=174925&_nc_ohc=-X00mlvYD2kAX-bfeQm&_nc_ht=scontent.fkdt1-1.fna&oh=421755a7ef11d3eb2fb2a73ae230f476&oe=617F166B'}]
+                img:'Pao.jpg'}]
     }
-    }
+    },
+	methods: {
+		getImage(name){
+			return require(`@/assets/teams-pic/${name}`)
+		}
+	}
   }
 </script>
 <style scoped>

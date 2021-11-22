@@ -14,6 +14,7 @@ export default createStore({
     user: null,
     role: '',
     expiryDate: null,
+    coupons:[],
     cart: []
   },
   mutations: {
@@ -34,6 +35,9 @@ export default createStore({
       state.user = user.user
       state.role = user.role
       state.expiryDate = user.exp
+    },
+    setCoupons(state,coupon){
+      state.coupons = coupon
     },
     setOrder(state, orders){
       state.orders = orders.orders
@@ -123,6 +127,11 @@ export default createStore({
       const role = ''
       const exp = null
       commit('setUser', {user,role,exp})
+    },
+    async fetchCoupons({commit}){
+      const res = await axios.get(`${backend_url}/coupon/allcoupons`,{ headers: { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }})
+      const coupons = res.data
+      commit('setCoupons',coupons)
     },
     changeColor({commit}, colorManage){
       const color = colorManage.color

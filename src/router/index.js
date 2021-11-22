@@ -15,6 +15,12 @@ import EditProduct from '../views/EditProductV2.vue'
 import Login from '../components/Login.vue'
 import Profile from '../components/Profile.vue'
 import store from '../store/index.js'
+import jwt_decode from 'jwt-decode'
+import axios from 'axios'
+import AdminPage from '../components/AdminPage.vue'
+import RoleManage from '../components/RoleManage.vue'
+import CouponManage from '../components/CouponManage.vue'
+import Register from '../components/Register.vue'
 // Test Import
 import UserOrder from '../components/UserOrder.vue'
 
@@ -79,6 +85,26 @@ const routes = [
       component: Profile
     },
     {
+      path:'/AdminPage',
+      name:'AdminPage',
+      component: AdminPage
+     },
+     {
+       path:'/RoleManage',
+       name:'RoleManage',
+       component: RoleManage
+     },
+     {
+       path:'/CouponManage',
+       name:'CouponManage',
+       component: CouponManage
+     },
+     {
+       path:'/Register',
+       name:'Register',
+       component: Register
+      },
+      {
       path: "/:catchAll(.*)",
       name: "NotFound",
       component: Home,

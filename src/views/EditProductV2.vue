@@ -574,4 +574,5 @@ export default {
     };
   },
 };
+
 </script>
