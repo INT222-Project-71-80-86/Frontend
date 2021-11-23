@@ -58,7 +58,7 @@
                          <div v-if="invalidQuantity" class="text-red-500">The amount must be <span v-if="selectedProductColor.amount == 1">1</span><span v-else>in range of 1-{{selectedProductColor.amount}}</span></div>
                      </div>
                      <div v-if="role == 'ROLE_CUSTOMER' && !inCart"> <button @click="addToCart" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-red-600 hover:text-white font-bold duration-500 uppercase">Add to Cart</button>  </div>
-                     <div v-else-if="role == 'ROLE_CUSTOMER' && inCart"> <button class="border-2 border-gray-300 pl-5 pr-5 pt-2 pb-2 cart mt-3 font-bold uppercase bg-gray-300 text-gray-500">Already in cart</button>  </div>
+                     <div v-else-if="role == 'ROLE_CUSTOMER' && inCart"> <button disabled class="border-2 cursor-not-allowed border-gray-300 pl-5 pr-5 pt-2 pb-2 cart mt-3 font-bold uppercase bg-gray-300 text-gray-500">Already in cart</button>  </div>
                     <div v-if="invalidColor" class="text-red-500">Please select the color</div>
                     <div class="d-flex flex-row align-items-center mt-3"> 
                         <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">
@@ -237,7 +237,7 @@ export default {
                 }
         },
     productColorFilter(productColor){
-        return productColor.filter( pc => pc.amount > -1)
+        return productColor.filter( pc => pc.amount > 0)
     },
     checkAlreadyInCart(){
         let check = false
@@ -281,7 +281,10 @@ export default {
         },
     watch: {
         "$route.params.singleProd"() {
-            this.updateShowProduct()
+            if(this.$route.name == "singleProduct"){
+                this.updateShowProduct()
+            }
+            
         },
         "$store.state.cart"(){
             this.checkAlreadyInCart()
@@ -359,4 +362,5 @@ hr {
 .card-body {
     padding: 0.3rem 0.3rem 0.2rem
 }
+
 </style>

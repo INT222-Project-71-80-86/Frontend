@@ -1,19 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import jwt_decode from 'jwt-decode'
+import axios from 'axios'
+// Import Views
 import Home from '../views/Home.vue'
 import Order from '../views/Order.vue'
 import Addproduct from '../views/AddproductV2.vue'
+import About from '../views/About.vue'
+import singleProduct from '../views/singleProduct.vue'
+// Import Components
 import Addbrand from '../components/Addbrand.vue'
 import Addcolor from '../components/Addcolor.vue'
 import ShowProducts from '../components/ShowProducts.vue'
 import EditProduct from '../views/EditProductV2.vue'
 import Login from '../components/Login.vue'
 import Profile from '../components/Profile.vue'
-import About from '../views/About.vue'
-import singleProduct from '../views/singleProduct.vue'
 import store from '../store/index.js'
-import jwt_decode from 'jwt-decode'
-import axios from 'axios'
-
+import AdminPage from '../components/AdminPage.vue'
+import RoleManage from '../components/RoleManage.vue'
+import CouponManage from '../components/CouponManage.vue'
+import Register from '../components/Register.vue'
+// Test Import
+import UserOrder from '../components/UserOrder.vue'
 
 const routes = [
 
@@ -76,12 +83,37 @@ const routes = [
       component: Profile
     },
     {
+      path:'/AdminPage',
+      name:'AdminPage',
+      component: AdminPage
+     },
+     {
+       path:'/RoleManage',
+       name:'RoleManage',
+       component: RoleManage
+     },
+     {
+       path:'/CouponManage',
+       name:'CouponManage',
+       component: CouponManage
+     },
+     {
+       path:'/Register',
+       name:'Register',
+       component: Register
+      },
+      {
       path: "/:catchAll(.*)",
       name: "NotFound",
       component: Home,
       meta: {
         requiresAuth: false
       }
+    },
+    {
+      path: "/test/order",
+      name: "UserOrder",
+      component: UserOrder
     }
 ]
 
@@ -89,7 +121,7 @@ const routes = [
 const staff = ["Addproduct", "EditProduct", "Profile"]
 const customer = ["cart", "Profile", "Order"]
 const admin = ["Addbrand", "Addcolor", "Addproduct", "EditProduct", "Profile"]
-const all = ["Home", "About", "showproducts", "singleProduct"]
+const all = ["Home", "About", "showproducts", "singleProduct", "UserOrder"]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

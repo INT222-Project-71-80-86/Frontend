@@ -176,7 +176,7 @@ export default {
     }
   },
   productColorFilter(productColor){
-    return productColor.filter( pc => pc.amount > -1)
+    return productColor.filter( pc => pc.amount > 0)
   }
 },
   setup(props){

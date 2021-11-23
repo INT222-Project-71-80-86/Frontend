@@ -136,7 +136,6 @@
 </template>
 <script>
 import axios from "axios";
-
 export default {
     name: "Register",
     data() {
@@ -151,9 +150,7 @@ export default {
             tel: '',
             dob: '',
             address: '',
-
             Form: 1,
-
             // password condition
             passwordLength: 0,
             minlength: false,
@@ -161,7 +158,6 @@ export default {
             invalidDuplicateUsername: false,
             invalidPassword: false,
             samePassword: false,
-
             invalidFname: false,
             invalidLname: false,
             invalidEmail: false,
@@ -181,8 +177,6 @@ export default {
             if (!this.invalidUsername && !this.invalidDuplicateUsername && !this.invalidPassword && !this.samePassword) {
                this.nextForm()
             }
-
-
         },
         ValidateForm2() {
             this.invalidFname = this.fname == null || this.fname.trim() === '' ? true : false
@@ -191,7 +185,6 @@ export default {
             this.invalidtel = this.tel == null || this.tel.trim() === '' ? true : false
             this.invalidDob = this.dob == null || this.email === '' ? true : false
             this.invalidAddress = this.address == null || this.address.trim() === '' ? true : false
-
             if (!this.invalidFname && !this.invalidLname && !this.invalidEmail && !this.invalidDob && !this.invalidTel && !this.invalidAddress) {
                 this.makeForm()
             }
@@ -219,7 +212,6 @@ export default {
                 role: 'ROLE_ADMIN',
                 deleted: 0
             }
-
             const res = await axios.post(`${this.backend_url}/user/save`, user).then(() => {
                 alert(" Register Successfully")
             }).catch(function (error) {
@@ -227,7 +219,6 @@ export default {
                     console.log(error.response.data);
                     console.log(error.response.status);
                     console.log(error.response.headers);
-
                 } else if (error.request) {
                     console.log(error.request);
                 } else {
@@ -243,9 +234,7 @@ export default {
             } else {
                 this.minlength = true;
             }
-
         },
-
         nextForm() {
             console.log(this.Form)
             if (this.Form > 1) {
@@ -254,9 +243,7 @@ export default {
                 this.Form = this.Form + 1
             }
             console.log(this.Form)
-
         },
-
         backForm() {
             console.log(this.Form)
             if (this.Form == 1) {
@@ -264,14 +251,12 @@ export default {
             } else
                 this.Form = this.Form - 1
         },
-
         async checkUsername(username) {
             const res = await axios.get(`${this.backend_url}/user/check/${username}`).catch(function (error) {
                 if (error.response) {
                     console.log(error.response.data);
                     console.log(error.response.status);
                     console.log(error.response.headers);
-
                 } else if (error.request) {
                     console.log(error.request);
                 } else {
@@ -281,11 +266,6 @@ export default {
             this.invalidDuplicateUsername = res.data
             console.log(res)
         }
-
     }
 }
-
-
-
-
 </script>
