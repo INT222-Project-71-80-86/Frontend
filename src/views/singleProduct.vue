@@ -203,7 +203,11 @@ export default {
         this.checkAlreadyInCart()
     },
     async fetchProduct(pid) {
-      const res = await axios.get(`${this.backend_url}/product/${pid}`);
+        let self = this
+      const res = await axios.get(`${this.backend_url}/product/${pid}`).catch(function (error) {
+          alert(error.response.data.message)
+          self.$router.push({ name: 'showproducts', params: { type: 'all', value: '1' } })
+      })
       this.product = res.data;
     },
       getImageUrl(image) {
