@@ -88,15 +88,21 @@ export default createStore({
       commit('setProducts',{product, pages})
     },
     async fetchTypebyBrand({commit},tb){
-      const res = await axios.get(`${backend_url}/product/brandcat?bid=${tb.value}&catid=${tb.type}&pageNo=${tb.page-1}`)
+      let res
+      if ( tb.value == 0 ) {
+        res = await axios.get(`${backend_url}/product/cat?id=${tb.type}&pageNo=${tb.page-1}`)
+      } else {
+        res = await axios.get(`${backend_url}/product/brandcat?bid=${tb.value}&catid=${tb.type}&pageNo=${tb.page-1}`)
+      }
+      
       const product = res.data
       const pages = tb.pageNo
       commit('setProducts',{product,pages})
     },
-    async fetchProductByCategory({commit},cats){
-      const res = await axios.get(`${backend_url}/product/cat?id=${cats.cat}&pageNo=${cats.page-1}`)
+    async fetchProductByBrand({commit},brand){
+      const res = await axios.get(`${backend_url}/product/brand?id=${brand.id}&pageNo=${brand.page-1}`)
       const product = res.data
-      const pages = cats.pageNo
+      const pages = brand.pageNo
       commit('setProducts',{product,pages})
     },
     async fetchUser({commit}, userTokenDetail){

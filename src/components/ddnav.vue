@@ -28,24 +28,36 @@
     </ul>
   </div>
 </div> -->
-<ul class="dropdown">
-        <li ><a href="#" class=" text-white "><span class=" duration-300">Category</span></a>
-            <ul>
-                <li v-for="category in categories" :key="category.catid" class="hover:bg-gray-500"><a href="#">{{category.name}}</a>
-                    <ul >
-                        <li v-for="brand in brands" :key="brand.bid" class="hover:bg-gray-500">
-                          <router-link :to="{name: 'showproducts', params: {type: category.catid, value: brand.bid}}">{{brand.name}}</router-link></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-    </ul>
+<ul class="dropdown" v-if="categories && mode == 'cat'">
+  <li ><a href="#" class=" text-white "><span class=" duration-300">Category</span></a>
+      <ul>
+          <li v-for="category in categories" :key="category.catid" class="hover:bg-gray-500">
+            <router-link :to="{name: 'showproducts', params: {type: category.catid, value: 0}}">{{category.name}}</router-link>
+              <ul >
+                  <li v-for="brand in brands" :key="brand.bid" class="hover:bg-gray-500">
+                    <router-link :to="{name: 'showproducts', params: {type: category.catid, value: brand.bid}}">{{brand.name}}</router-link></li>
+              </ul>
+          </li>
+      </ul>
+  </li>
+</ul>
+
+<ul class="dropdown" v-if="brands && mode == 'brand'">
+  <li ><a href="#" class=" text-white "><span class=" duration-300">Brand</span></a>
+      <ul>
+          <li v-for="brand in brands" :key="brand.bid" class="hover:bg-gray-500">
+            <router-link :to="{name: 'showproducts', params: {type: 'brand', value: brand.bid}}">{{brand.name}}</router-link>
+          </li>
+      </ul>
+  </li>
+</ul>
 </template>
 <script>
 import { computed } from '@vue/reactivity';
 import { useStore } from 'vuex';
     export default{
         name: 'ddnav',
+        props: ['mode'],
         data(){
           return{
           openCat: false,

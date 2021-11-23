@@ -125,9 +125,9 @@ export default {
         this.$store.dispatch('fetchSearchProduct',{q:this.value,p:pageNo})
       } else if(this.type>0 && this.type<=6){
         this.$store.dispatch('fetchTypebyBrand',{type:this.type, value:this.value, page:pageNo})
-      } else if( this.type=='category'){
-      this.$store.dispatch('fetchProductByCategory',{cat:this.value,page:pageNo})
-    } else {
+      } else if (this.type=='brand'){
+      this.$store.dispatch('fetchProductByBrand',{id:this.value,page:pageNo})
+      } else {
         this.$store.dispatch('fetchAllProducts', pageNo)
       }
       
@@ -169,8 +169,8 @@ export default {
       this.$store.dispatch('fetchSearchProduct',{q:value,p:1})
     } else if (type>0 && type <=6){
       this.$store.dispatch('fetchTypebyBrand',{type:type, value:value, page:1})
-    } else if (type=='category'){
-      this.$store.dispatch('fetchProductByCategory',{cat:value,page:1})
+    } else if (type=='brand'){
+      this.$store.dispatch('fetchProductByBrand',{id:value,page:1})
     } else {
       this.$store.dispatch('fetchAllProducts',1)
     }
@@ -185,8 +185,8 @@ export default {
       store.dispatch('fetchSearchProduct',{q:props.value,p:1})
     } else if (props.type>0 && props.type <=6){
       store.dispatch('fetchTypebyBrand',{type:props.type, value:props.value, page:1})
-    } else if (props.type=='category'){
-      store.dispatch('fetchProductByCategory',{cat:props.value,page:1})
+    } else if (props.type=='brand'){
+      store.dispatch('fetchProductByBrand',{id:props.value,page:1})
     } else {
       store.dispatch('fetchAllProducts',1)
     }
