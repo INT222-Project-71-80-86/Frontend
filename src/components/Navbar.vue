@@ -101,17 +101,22 @@
         </div>
       </div>
       <!-- Responsive navbar -->
-      <a class="xl:hidden flex mr-6 items-center" href="#">
-        <router-link to="/Cart">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg></router-link>
-        <span class="flex absolute -mt-5 ml-4">
-          <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
+      <button v-if="role == 'ROLE_CUSTOMER' && currentRoute != 'Order'" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-target="#cartDetailDropdown">
+        <a class="xl:hidden flex mr-6 items-center" href="#">
+          <router-link to="/Cart">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          </router-link>
+          <span class="flex absolute -mt-5 ml-4">
+            <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
+            </span>
           </span>
-        </span>
-      </a>
+        </a>
+      </button>
+      <the-cart-dropdown />
+          
       <button class="self-center mr-12 xl:hidden cursor-pointer" @click="BurgerOpen">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -185,7 +190,7 @@
 				<div class="pt-6">
 					<router-link to="/Login" v-if="!user"><a class="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold bg-gray-50 hover:bg-gray-100 rounded-xl">Sign In</a></router-link>
 					<router-link to="/Register" v-if="!user"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl">Sign Up</a></router-link>
-					<router-link to="/Login" v-if="user"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-red-600 hover:bg-red-700  rounded-xl">LOGOUT</a></router-link>
+					<router-link to="/Login" v-if="user" @click="logout"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-red-600 hover:bg-red-700  rounded-xl">LOGOUT</a></router-link>
 				</div>
 				<p class="my-4 text-xs text-center text-gray-400">
 					
