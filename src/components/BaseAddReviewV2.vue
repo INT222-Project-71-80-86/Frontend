@@ -27,6 +27,7 @@
 </template>
 
 <script>
+
 import StarRating from 'vue-star-rating';
 export default {
   name: "BaseAddReview",
@@ -70,6 +71,14 @@ export default {
   async created() {
     await this.checkSameUser()
   },
+  watch: {
+    reviews: {
+      deep: true,
+      handler: function(){
+        this.checkSameUser()
+      }
+    }
+  }
 }
 </script>
 

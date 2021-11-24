@@ -1,5 +1,5 @@
 <template>
-  <nav-bar class="z-50" />
+  <nav-bar />
 <body class="bg-gray-900 h-full">
   
 <div class="container-fluid mt-2 mb-3" v-if="product">
@@ -113,7 +113,7 @@
                 <p>Please <router-link :to="{ name: 'login'}">Login</router-link> First</p>
             </div>
             <div>
-                <base-review v-if="reviews" :reviews="reviews"></base-review>
+                <base-review v-if="reviews" :reviews="reviews" :user="user" @delete="deleteReview"></base-review>
             </div>
           </div>
         </div>
@@ -203,7 +203,11 @@ export default {
         this.checkAlreadyInCart()
     },
     async fetchProduct(pid) {
-      const res = await axios.get(`${this.backend_url}/product/${pid}`);
+        let self = this
+      const res = await axios.get(`${this.backend_url}/product/${pid}`).catch(function (error) {
+          alert(error.response.data.message)
+          self.$router.push({ name: 'showproducts', params: { type: 'all', value: '1' } })
+      })
       this.product = res.data;
     },
       getImageUrl(image) {
@@ -221,21 +225,36 @@ export default {
         this.addReview(newreview)
     },
     async addReview(r) {
-          r.id = {uid: this.user.uid, pid: this.singleProd}
-                const access_token = localStorage.getItem("access_token")
-                const res = await axios.post(`${this.backend_url}/review/save`, r, { headers: { 'Authorization': `Bearer ${access_token}` } } ).catch(function (error) {
-                    if (error) {
-                        alert("Unexpected Error occur. Cannot add new review.")
-                        return
-                    }
-                })
-                const review = res.data
-                if (res.status != 200) {
-                    alert("An Unexpected Error Occured. Response Status: " + res.status)
-                } else {
-                    this.reviews.push(review)
+        r.id = {uid: this.user.uid, pid: this.singleProd}
+            const access_token = localStorage.getItem("access_token")
+            const res = await axios.post(`${this.backend_url}/review/save`, r, { headers: { 'Authorization': `Bearer ${access_token}` } } ).catch(function (error) {
+                if (error) {
+                    alert("Unexpected Error occur. Cannot add new review.")
+                    return
                 }
-        },
+            })
+            const review = res.data
+            if (res.status != 200) {
+                alert("An Unexpected Error Occured. Response Status: " + res.status)
+            } else {
+                this.reviews.push(review)
+            }
+    },
+    async deleteReview(r){
+            const access_token = localStorage.getItem("access_token")
+            const res = await axios.delete(`${this.backend_url}/review/delete`, { headers: { 'Authorization': `Bearer ${access_token}` } , data: { pid: r.pid, uid: r.uid}} ).catch(function (error) {
+                if (error) {
+                    alert(error.response.data.message)
+                    console.log(error.response)
+                    return
+                }
+            })
+            if (res != undefined && res.status == 200) {
+                const data = res.data
+                alert("Successfully delete review.")
+                this.reviews = this.reviews.filter(r => !(r.id.pid == data.id.pid && r.id.uid == data.id.uid))
+            } 
+    },
     productColorFilter(productColor){
         return productColor.filter( pc => pc.amount > 0)
     },

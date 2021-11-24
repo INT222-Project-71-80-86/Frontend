@@ -1,7 +1,7 @@
 <template >
 
     <nav-bar />
-    <div class="w-full h-screen bg-scroll" :style="{backgroundImage: 'url('+getLocalImage('order_bg.jpg')+')'}">
+    <div class="w-full h-full bg-scroll bg-repeat" :style="{backgroundImage: 'url('+getLocalImage('order_bg.jpg')+')'}">
         <div class="flex justify-center my-6 pt-4 pb-4">
             <div class="flex flex-col p-8 text-gray-800 bg-white shadow-lg pin-r pin-y md:w-4/5 lg:w-4/5 rounded-2xl mt-14">
                 <div class="flex-1">

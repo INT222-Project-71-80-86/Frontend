@@ -120,7 +120,7 @@ const routes = [
 // Each role access components name
 const staff = ["Addproduct", "EditProduct", "Profile"]
 const customer = ["cart", "Profile", "Order"]
-const admin = ["Addbrand", "Addcolor", "Addproduct", "EditProduct", "Profile"]
+const admin = ["Addbrand", "Addcolor", "Addproduct", "EditProduct", "Profile", "AdminPage"]
 const all = ["Home", "About", "showproducts", "singleProduct", "UserOrder"]
 
 const router = createRouter({
@@ -143,7 +143,7 @@ router.beforeEach(async (to, from, next) => {
 
   if(access_token == null){
     // Check list of path whether user can route to or not
-    if (all.includes(to.name) || to.name == "login") {
+    if (all.includes(to.name) || to.name == "login" || to.name == "Register") {
       console.log("access token is null")
       next()
     } else {

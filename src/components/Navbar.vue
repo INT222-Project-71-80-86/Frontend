@@ -12,7 +12,8 @@
         <!-- Nav Links -->
         <ul class="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
           <router-link to="/"><li><a class="hover:text-gray-200" href="#">Home</a></li></router-link>
-          <li><a class="hover:text-gray-200" href="#"><dd-nav /></a></li>
+          <li><a class="hover:text-gray-200" href="#"><dd-nav :mode="'cat'" /></a></li>
+          <li><a class="hover:text-gray-200" href="#"><dd-nav :mode="'brand'"/></a></li>
           <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }"><li><a class="hover:text-gray-200" href="#">Collections</a></li></router-link>
           <router-link to="/About"><li><a class="hover:text-gray-200" href="#">Team</a></li></router-link>
         </ul>
@@ -29,16 +30,16 @@
               <div>
                
               </div>
-        <button type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-target="#cartDetailDropdown">
-          <a class="flex items-center hover:text-gray-200"  href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span class="flex absolute -mt-5 ml-4">
-              <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
-            </span>
-          </a>
+          <button v-if="role == 'ROLE_CUSTOMER' && currentRoute != 'Order'" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-target="#cartDetailDropdown">
+            <a class="flex items-center hover:text-gray-200"  href="#">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <span class="flex absolute -mt-5 ml-4">
+                <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+              </span>
+            </a>
           </button>
           <the-cart-dropdown />
           <!-- Sign In / Register      -->
@@ -100,17 +101,22 @@
         </div>
       </div>
       <!-- Responsive navbar -->
-      <a class="xl:hidden flex mr-6 items-center" href="#">
-        <router-link to="/Cart">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg></router-link>
-        <span class="flex absolute -mt-5 ml-4">
-          <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
+      <button v-if="role == 'ROLE_CUSTOMER' && currentRoute != 'Order'" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-target="#cartDetailDropdown">
+        <a class="xl:hidden flex mr-6 items-center" href="#">
+          <router-link to="/Cart">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          </router-link>
+          <span class="flex absolute -mt-5 ml-4">
+            <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
+            </span>
           </span>
-        </span>
-      </a>
+        </a>
+      </button>
+      <the-cart-dropdown />
+          
       <button class="self-center mr-12 xl:hidden cursor-pointer" @click="BurgerOpen">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -145,6 +151,18 @@
 					<router-link to="/Profile" v-if="user"><li class="mb-1">
 						<a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">My Profile</a>
 					</li></router-link>
+         <router-link to="/AdminPage" v-if="role == 'ROLE_ADMIN'">
+					<li class="-mt-3">
+						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">ShopManage</a>
+					</li></router-link>
+          <router-link to="/Addproduct" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
+					<li class="mb-1">
+						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">
+              <svg xmlns="http://www.w3.org/2000/svg" 
+            width="16" height="16" fill="currentColor" class="bi bi-plus plus-sign" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>Add Product</a>
+					</li></router-link>
 					<ul class="mb-1 dropdown">
 						<li class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded cursor-pointer">Category
                           <ul>
@@ -160,30 +178,6 @@
 					<router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }"><li class="mb-1">
 						<a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">Collections</a>
 					</li></router-link>
-          <router-link to="/Addproduct" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
-					<li class="mb-1">
-						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" 
-            width="16" height="16" fill="currentColor" class="bi bi-plus plus-sign" viewBox="0 0 16 16">
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>Add Product</a>
-					</li></router-link>
-          <router-link to="/Addcolor" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
-					<li class="mb-1">
-						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"><svg xmlns="http://www.w3.org/2000/svg" 
-            width="16" height="16" fill="currentColor" class="bi bi-plus plus-sign" viewBox="0 0 16 16">
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>Add Color</a>
-					</li></router-link>
-          <router-link to="/Addbrand" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
-					<li class="mb-1">
-						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" 
-            width="16" height="16" fill="currentColor" class="bi bi-plus plus-sign" viewBox="0 0 16 16">
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>
-              Add Brand</a>
-					</li></router-link>
           <router-link to="/About">
 					<li class="mb-1">
 						<a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">Team</a>
@@ -196,7 +190,7 @@
 				<div class="pt-6">
 					<router-link to="/Login" v-if="!user"><a class="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold bg-gray-50 hover:bg-gray-100 rounded-xl">Sign In</a></router-link>
 					<router-link to="/Register" v-if="!user"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl">Sign Up</a></router-link>
-					<router-link to="/Login" v-if="user"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-red-600 hover:bg-red-700  rounded-xl">LOGOUT</a></router-link>
+					<router-link to="/Login" v-if="user" @click="logout"><a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-red-600 hover:bg-red-700  rounded-xl">LOGOUT</a></router-link>
 				</div>
 				<p class="my-4 text-xs text-center text-gray-400">
 					
