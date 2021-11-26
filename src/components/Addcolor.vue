@@ -128,6 +128,19 @@
                     >Duplicate color name</p>
                 </tbody>
             </table>
+
+            <div id="paging" class="mt-8 pb-3">
+                <div class="flex space-x-5 justify-center">
+                <button
+                    @click="fetchColors(i)"
+                    v-for="i in pageTotal"
+                    :key="i"
+                    class="w-10 h-8 align-middle text-black border"
+                    :class="{ 'bg-green-400': checkCurrentPage(i) }"
+                >{{ i }}</button>
+                </div>
+            </div>  
+
         </div>
     </div>
 </template>
@@ -181,6 +194,15 @@ export default {
         disableviewADD() {
             this.viewADD = false
         },
+        checkCurrentPage(i){
+            return this.pageInfo.pageNumber+1 == i 
+        },
+        fetchColors(pageNo = 1) {
+            this.$store.dispatch('fetchAllColorsPaging', pageNo)
+            return {
+                colors: computed(() => this.$store.state.pagingItems.content)
+            }
+        },
         async addColor() {
             let color = { cid: 0, name: this.colorname,code: this.colorpicker, deleted: 0 }
             let check = false;
@@ -194,10 +216,10 @@ export default {
                     check = true;
                 }
             })
-            if (res) {
+            if (res != undefined && res.status == 200) {
                 alert("Successfully Add color.")
-                console.log(res.data)
-                this.$store.dispatch('fetchAllColors')
+                let page = this.allSize%5 == 0 ? this.pageTotal + 1 : this.pageTotal
+                this.$store.dispatch('fetchAllColorsPaging', page)
             }
             this.duplicatedcolorname = check
         },
@@ -214,10 +236,9 @@ export default {
                     check = true;
                 }
             })
-            if (res) {
+            if (res != undefined && res.status == 200) {
                 alert("Successfully Edit color.")
-                console.log(res.data)
-                this.$store.dispatch('fetchAllColors')
+                this.$store.dispatch('fetchAllColorsPaging', this.currentPage)
                 this.disableEditing()
             }
             this.editDuplicatedcolorName = check
@@ -235,18 +256,23 @@ export default {
                     check = true;
                 }
             })
-            if (res) {
+            if (res != undefined && res.status == 200) {
                 alert("Successfully Delete color.")
-                console.log(res.data)
-                this.$store.dispatch('fetchAllColors')
+                let page = this.pageSize <= 1 ? this.currentPage-1 : this.currentPage
+                this.$store.dispatch('fetchAllColorsPaging', page)
             }
         }
     },
     setup() {
         const store = useStore();
-        store.dispatch('fetchAllColors')
+        store.dispatch('fetchAllColorsPaging', 1)
         return {
-            colors: computed(() => store.state.colors),
+            colors: computed(() => store.state.pagingItems.content),
+            pageInfo: computed(() => store.state.pagingItems.pageable),
+            pageTotal: computed(() => store.state.pagingItems.totalPages),
+            currentPage: computed(() => store.state.currentPage),
+            pageSize: computed(() => store.state.pagingItems.numberOfElements),
+            allSize: computed(() => store.state.pagingItems.totalElements),
             user: computed(() => store.state.user),
             role: computed(() => store.state.role)
         }

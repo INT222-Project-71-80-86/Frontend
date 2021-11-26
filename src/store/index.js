@@ -15,7 +15,8 @@ export default createStore({
     role: '',
     expiryDate: null,
     coupons:[],
-    cart: []
+    cart: [],
+    pagingItems: []
   },
   mutations: {
     setProducts(state, p){
@@ -61,6 +62,14 @@ export default createStore({
     },
     saveCart(state, cart){
       state.cart = cart
+    },
+    setBrandsPaging(state, brands){
+      state.pagingItems = brands
+      state.currentPage = (brands.pageable.pageNumber) + 1
+    },
+    setColorsPaging(state, colors){
+      state.pagingItems = colors
+      state.currentPage = (colors.pageable.pageNumber) + 1
     }
   },
   actions: {
@@ -73,9 +82,19 @@ export default createStore({
       const res = await axios.get(`${backend_url}/brand`)
       commit('setBrands', res.data)
     },
+    async fetchAllBrandsPaging({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/brand/get?pageNo=${pageNo-1}&size=5`)
+      const brands = res.data
+      commit('setBrandsPaging', brands)
+    },
     async fetchAllColors({commit}){
       const res = await axios.get(`${backend_url}/color`)
       commit('setColors', res.data)
+    },
+    async fetchAllColorsPaging({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/color/get?pageNo=${pageNo-1}&size=5`)
+      const colors = res.data
+      commit('setColorsPaging', colors)
     },
     async fetchAllCategories({commit}){
       const res = await axios.get(`${backend_url}/cats`)

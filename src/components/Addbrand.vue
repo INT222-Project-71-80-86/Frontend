@@ -65,7 +65,7 @@
       </div>
     </div>
     <div class="bg-white shadow-md rounded my-6">
-      <table class="text-left w-full border-collapse">
+      <table class="text-left w-full border-collapse" v-if="brands">
         <thead>
           <tr>
             <th
@@ -77,48 +77,61 @@
           </tr>
         </thead>
         <tr class="hover:bg-grey-lighter"></tr>
-        <tbody v-for="item in brands" :key="item.bid">
-          <tr v-if="editing != item.bid" class="hover:bg-grey-lighter">
-            <td class="py-4 px-6 border-b border-grey-light font-bold">{{ item.name }}</td>
-            <td class="py-4 px-6 border-b border-grey-light space-x-2 text-white">
-              <button
-                class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-600 duration-300"
-                @click="enableEditing(item.bid, item.name)"
-              >Edit</button>
-              <button
-                href="#"
-                class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-red-600 duration-300"
-                @click="deleteBrand(item.bid)"
-              >Delete</button>
-            </td>
-          </tr>
-          <tr v-if="editing == item.bid" class="hover:bg-grey-lighter">
-            <td class="py-4 px-6 border-b border-grey-light font-bold">
-              <input
-                v-model="editbrand"
-                require
-                type="text"
-                class="py-1 px-1 rounded-lg border-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent duration-200"
-              />
-            </td>
-            <td class="py-4 px-6 border-b border-grey-light space-x-2 text-white">
-              <button
-                class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-600 duration-300"
-                @click="editBrand(item.bid)"
-              >Save</button>
-              <button
-                href="#"
-                class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-red-600 duration-300"
-                @click="disableEditing"
-              >Cancel</button>
-            </td>
-          </tr>
-          <p
-            v-if="editing == item.bid && editDuplicatedBrandName"
-            class="text-red-600"
-          >Duplicate Brand name</p>
-        </tbody>
+          <tbody v-for="item in brands" :key="item.bid">
+            <tr v-if="editing != item.bid" class="hover:bg-grey-lighter">
+              <td class="py-4 px-6 border-b border-grey-light font-bold">{{ item.name }}</td>
+              <td class="py-4 px-6 border-b border-grey-light space-x-2 text-white">
+                <button
+                  class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-600 duration-300"
+                  @click="enableEditing(item.bid, item.name)"
+                >Edit</button>
+                <button
+                  href="#"
+                  class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-red-600 duration-300"
+                  @click="deleteBrand(item.bid)"
+                >Delete</button>
+              </td>
+            </tr>
+            <tr v-if="editing == item.bid" class="hover:bg-grey-lighter">
+              <td class="py-4 px-6 border-b border-grey-light font-bold">
+                <input
+                  v-model="editbrand"
+                  require
+                  type="text"
+                  class="py-1 px-1 rounded-lg border-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent duration-200"
+                />
+              </td>
+              <td class="py-4 px-6 border-b border-grey-light space-x-2 text-white">
+                <button
+                  class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-600 duration-300"
+                  @click="editBrand(item.bid)"
+                >Save</button>
+                <button
+                  href="#"
+                  class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-red-600 duration-300"
+                  @click="disableEditing"
+                >Cancel</button>
+              </td>
+            </tr>
+            <p
+              v-if="editing == item.bid && editDuplicatedBrandName"
+              class="text-red-600"
+            >Duplicate Brand name</p>
+          </tbody>
       </table>
+
+      <div id="paging" class="mt-8 pb-3">
+        <div class="flex space-x-5 justify-center">
+          <button
+            @click="fetchBrand(i)"
+            v-for="i in pageTotal"
+            :key="i"
+            class="w-10 h-8 align-middle text-black border"
+            :class="{ 'bg-green-400': checkCurrentPage(i) }"
+          >{{ i }}</button>
+        </div>
+      </div>  
+
     </div>
   </div>
 </template>
@@ -166,6 +179,15 @@ export default {
     disableviewADD() {
       this.viewADD = false
     },
+    checkCurrentPage(i){
+      return this.pageInfo.pageNumber+1 == i 
+    },
+    fetchBrand(pageNo = 1) {
+        this.$store.dispatch('fetchAllBrandsPaging', pageNo)
+      return {
+        brands: computed(() => this.$store.state.pagingItems.content)
+      }
+    },
     async addBrand() {
       let brand = { bid: 0, name: this.brandname, deleted: 0 }
       let check = false;
@@ -179,9 +201,10 @@ export default {
           check = true;
         }
       })
-      if (res) {
+      if (res != undefined && res.status == 200) {
         alert("Successfully Add brand.")
-        console.log(res.data)
+        let page = this.allSize%5 == 0 ? this.pageTotal + 1 : this.pageTotal
+        this.$store.dispatch('fetchAllBrandsPaging', page)
         this.$store.dispatch('fetchAllBrands')
       }
       this.duplicatedbrandname = check
@@ -192,16 +215,13 @@ export default {
       let access_token = localStorage.getItem("access_token")
       const res = await axios.put(`${this.backend_url}/brand/edit`, brand, { headers: { 'Authorization': `Bearer ${access_token}` } }).catch(function (error) {
         if (error) {
-          console.log("ERROR HERE")
-          console.log(error)
-          console.log(error.response);
-          alert("An Unexpected Error Occured. Response Status: " + error.response.status)
+          alert("An Unexpected Error Occured. " + error.response.data.message)
           check = true;
         }
       })
-      if (res) {
+      if (res != undefined && res.status == 200) {
         alert("Successfully Edit brand.")
-        console.log(res.data)
+        this.$store.dispatch('fetchAllBrandsPaging', this.currentPage)
         this.$store.dispatch('fetchAllBrands')
         this.disableEditing()
       }
@@ -220,20 +240,26 @@ export default {
           check = true;
         }
       })
-      if (res) {
+      if (res != undefined && res.status == 200) {
         alert("Successfully Delete brand.")
-        console.log(res.data)
+        let page = this.pageSize <= 1 ? this.currentPage-1 : this.currentPage
+        this.$store.dispatch('fetchAllBrandsPaging', page)
         this.$store.dispatch('fetchAllBrands')
       }
     }
   },
   setup() {
     const store = useStore();
-    store.dispatch('fetchAllBrands')
+    store.dispatch('fetchAllBrandsPaging', 1)
     return {
-      brands: computed(() => store.state.brands),
+      brands: computed(() => store.state.pagingItems.content),
+      pageInfo: computed(() => store.state.pagingItems.pageable),
+      pageTotal: computed(() => store.state.pagingItems.totalPages),
+      currentPage: computed(() => store.state.currentPage),
+      pageSize: computed(() => store.state.pagingItems.numberOfElements),
+      allSize: computed(() => store.state.pagingItems.totalElements),
       user: computed(() => store.state.user),
-      role: computed(() => store.state.role)
+      role: computed(() => store.state.role),
     }
   },
 }
