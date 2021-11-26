@@ -42,7 +42,7 @@
 import addbrand from "@/components/Addbrand"
 import addcolor from "@/components/Addcolor"
 import rolemanage from "@/components/RoleManage"
-import couponmanage from "@/components/CouponManage"
+import couponmanage from "@/components/CouponManageV2"
 
 export default {
     name: 'AdminPage',
@@ -63,8 +63,6 @@ export default {
     methods: {
 
         selectedComponent() {
-            console.log('test')
-            console.log(this.case)
             if (this.case == 1) { this.stage = 'addbrand' }
             else if (this.case == 2) { this.stage = 'addcolor' }
             else if (this.case == 3){ this.stage = 'rolemanage'}
