@@ -1,5 +1,6 @@
 <template>
-    <div id="addEditCoupon" class="px-5 py-3 border rounded-xl space-y-3">
+    <div id="addEditCoupon" class="px-5 py-3 border rounded-xl space-y-3 bg-gray-200 shadow-lg text-black">
+        <div class="font-bold text-3xl uppercase text-center">-&nbsp;Add&nbsp;Coupon&nbsp;-</div>
         <div class="row">
             <div class="col-4">
                 <label for="couponCode">Coupon&nbsp;Code: </label>

@@ -37,8 +37,9 @@ export default createStore({
       state.role = user.role
       state.expiryDate = user.exp
     },
-    setCoupons(state,coupon){
-      state.coupons = coupon
+    setCoupons(state,coupons){
+      state.pagingItems = coupons
+      state.currentPage = (coupons.pageable.pageNumber) + 1
     },
     setOrder(state, orders){
       state.orders = orders.orders
@@ -153,8 +154,8 @@ export default createStore({
       const exp = null
       commit('setUser', {user,role,exp})
     },
-    async fetchCoupons({commit}){
-      const res = await axios.get(`${backend_url}/coupon/allcoupons`,{ headers: { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }})
+    async fetchCoupons({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/coupon/allcoupons/paging?pageNo=${pageNo-1}&size=5`,{ headers: { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }})
       const coupons = res.data
       commit('setCoupons',coupons)
     },
