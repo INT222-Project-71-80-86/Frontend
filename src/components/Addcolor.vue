@@ -126,6 +126,10 @@
                         v-if="editing == item.cid && editDuplicatedcolorName"
                         class="text-red-600"
                     >Duplicate color name</p>
+                    <p
+                        v-if="editing == item.cid && invalidEditColorName"
+                        class="text-red-600"
+                    >Invalid color name</p>
                 </tbody>
             </table>
 
@@ -156,6 +160,7 @@ export default {
             invalidcolorname: false,
             duplicatedcolorname: false,
             editDuplicatedcolorName: false,
+            invalidEditColorName: false,
             backend_url: process.env.VUE_APP_BACKEND_URL,
             editing: -1,
             editcolor: null,
@@ -178,7 +183,12 @@ export default {
             this.duplicatedcolorname = false
             document.getElementById('colorInput').value = '#FFFFFF'
         },
+        resetEditInvalid(){
+            this.invalidEditColorName = false
+            this.editDuplicatedcolorName = false
+        },
         enableEditing(color) {
+            this.resetEditInvalid()
             this.editing = color.cid
             this.editcolor = color.name
             this.editcolorpicker = color.code
@@ -186,7 +196,7 @@ export default {
         disableEditing() {
             this.editcolor = '';
             this.editing = -1;
-            this.editDuplicatedcolorName = false;
+            this.resetEditInvalid()
         },
         enableviewADD() {
             this.viewADD = true
@@ -224,6 +234,10 @@ export default {
             this.duplicatedcolorname = check
         },
         async editColor() {
+            this.invalidEditColorName = this.editcolor == null || this.editcolor.trim() == '' ? true : false
+            if(this.invalidEditColorName){
+                return
+            }
             let color = { cid: this.editing, name: this.editcolor, code: this.editcolorpicker, deleted: 0 }
             let check = false;
             let access_token = localStorage.getItem("access_token")

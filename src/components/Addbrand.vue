@@ -117,6 +117,10 @@
               v-if="editing == item.bid && editDuplicatedBrandName"
               class="text-red-600"
             >Duplicate Brand name</p>
+            <p
+              v-if="editing == item.bid && invalidEditBrandName"
+              class="text-red-600"
+            >Invalid Brand name</p>
           </tbody>
       </table>
 
@@ -147,9 +151,10 @@ export default {
       invalidbrandname: false,
       duplicatedbrandname: false,
       editDuplicatedBrandName: false,
+      invalidEditBrandName: false,
       backend_url: process.env.VUE_APP_BACKEND_URL,
       editing: -1,
-      editbrand: null,
+      editbrand: '',
       viewADD: false,
     };
   },
@@ -164,14 +169,19 @@ export default {
       this.invalidbrandname = false
       this.brandname = ''
     },
+    resetInvalidEdit(){
+      this.invalidEditBrandName = false
+      this.editDuplicatedBrandName = false
+    },
     enableEditing(pid, name) {
+      this.resetInvalidEdit()
       this.editing = pid
       this.editbrand = name
     },
     disableEditing() {
       this.editbrand = '';
       this.editing = -1;
-      this.editDuplicatedBrandName = false;
+      this.resetInvalidEdit()
     },
     enableviewADD() {
       this.viewADD = true
@@ -210,6 +220,11 @@ export default {
       this.duplicatedbrandname = check
     },
     async editBrand(brandId) {
+      this.resetInvalidEdit()
+      this.invalidEditBrandName = (this.editbrand === '' || this.editbrand.trim() === '') ? true : false;
+      if(this.invalidEditBrandName){
+        return
+      }
       let brand = { bid: brandId, name: this.editbrand, deleted: 0 }
       let check = false;
       let access_token = localStorage.getItem("access_token")
