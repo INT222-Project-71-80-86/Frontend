@@ -12,7 +12,7 @@
             <div class="row py-2" v-for="(u,index) in users" :key="u.uid"  :class="{'bg-gray-200': index%2 == 0}">
                 <div class="col-3">{{ u.username }}</div>
                 <div class="col-4">{{ u.fname }} {{ u.lname }}</div>
-                <div v-if="isEdit!=u.uid" class="col">{{ u.role.substr(5) }}</div>
+                <div v-if="u.role && isEdit!=u.uid" class="col">{{ toSubString(u.role) }}</div>
                 <div class="col" v-else>
                     <select v-model="editedRole">
                         <option value="ROLE_ADMIN" :disabled="u.role == 'ROLE_ADMIN'" :class="{'bg-gray-300': u.role == 'ROLE_ADMIN'}">ADMIN</option>
@@ -63,6 +63,9 @@ export default {
         }
     },
     methods: {
+        toSubString(role){
+            return role.substr(5)
+        },
         checkCurrentPage(i){
             return this.pageInfo.pageNumber+1 == i 
         },
