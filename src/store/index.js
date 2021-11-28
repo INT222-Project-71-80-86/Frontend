@@ -71,6 +71,10 @@ export default createStore({
     setColorsPaging(state, colors){
       state.pagingItems = colors
       state.currentPage = (colors.pageable.pageNumber) + 1
+    },
+    setAllUsers(state, users){
+      state.pagingItems = users
+      state.currentPage = (users.pageable.pageNumber) + 1
     }
   },
   actions: {
@@ -188,6 +192,12 @@ export default createStore({
     },
     saveCart({commit}, cart){
       commit('saveCart', cart)
+    },
+    async fetchAllUsers({commit}, pageNo){
+      const access_token = localStorage.getItem("access_token")
+      const res = await axios.get(`${backend_url}/user/allusers?pageNo=${pageNo-1}&size=10`,{ headers: { 'Authorization': `Bearer ${access_token}` }})
+      const users = res.data
+      commit('setAllUsers', users)
     }
   },
   modules: {

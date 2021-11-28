@@ -1,6 +1,6 @@
 <template>
     <div class="mx-auto w-5/6 space-y-3 ">
-        <div id="couponHeader" class="flex justify-end">
+        <div id="couponHeader" class="flex justify-end mt-5">
             <button @click="toggleAdd" type="button" class="m-2 px-2 py-1 transition duration-200 rounded-lg border "
                 :class="{'bg-green-300 hover:bg-green-400': !isAddEdit, 'bg-red-300 hover:bg-red-400': isAddEdit}">
                 <span v-if="!isAddEdit">Add Coupon</span>
@@ -14,9 +14,9 @@
 
         <div id="couponList" v-if="coupons">
             <div id="couponListHeader" class="row bg-gray-600 py-2 text-white rounded-t-lg">
-                <div class="col-1">Coupon Code</div>
+                <div class="col-2">Coupon Code</div>
                 <div class="col-2">Name</div>
-                <div class="col-3">Description</div>
+                <div class="col">Description</div>
                 <div class="col-1">Expire Date</div>
                 <div class="col-1">Discount</div>
                 <div class="col-1">Max Discount</div>
@@ -25,9 +25,9 @@
                 <div class="col-1">Actions</div>
             </div>
             <div class="row py-2" v-for="(coupon,index) in coupons" :key="coupon.couponcode" :class="{'text-red-500': (calExpireDate(coupon.expdate) || coupon.maxusage == -1), 'bg-gray-200': index%2 == 0}">
-                <div class="col-1 uppercase">{{ coupon.couponcode }}</div>
+                <div class="col-2 uppercase">{{ coupon.couponcode }}</div>
                 <div class="col-2">{{ coupon.name }}</div>
-                <div class="col-3">{{ coupon.description }}</div>
+                <div class="col">{{ coupon.description }}</div>
                 <div class="col-1" :class="{'text-red-500': calExpireDate(coupon.expdate)}">{{ coupon.expdate }}</div>
                 <div class="col-1">{{ coupon.value }}{{ coupon.ispercent ? '%': '' }}</div>
                 <div class="col-1">{{ coupon.maxdiscount ? coupon.maxdiscount : 'N/A' }}</div>

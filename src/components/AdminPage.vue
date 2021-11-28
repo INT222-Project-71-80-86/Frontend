@@ -1,35 +1,39 @@
 <template>
   <nav-bar></nav-bar>
-    <ul class=" list-reset flex border-b justify-center items-center">      
+    <ul class=" list-reset flex justify-center items-center space-x-2">     
+
         <li class="mr-1">
-           
             <button 
                 @click="this.case=1"
-                class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold"
-                
-            >Add Brand</button>
+                class="inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold border hover:shadow-inner" 
+                :class="{'bg-green-500': this.case == 1, 'bg-white': this.case != 1}"
+            >Brand Manage</button>
         </li>
+
          <li class="mr-1">
             <button
             @click="this.case=2"
-                class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold"
-                
-            >Add Color</button>
+                class="inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold border hover:shadow-inner"
+                :class="{'bg-green-500': this.case == 2, 'bg-white': this.case != 2}"
+            >Color Manage</button>
         </li>
+
         <li class="mr-1">
             <button
             @click="this.case=3"
-                class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold"
-                
+                class="inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold border hover:shadow-inner"
+                :class="{'bg-green-500': this.case == 3, 'bg-white': this.case != 3}"
             >Role Manage</button>
+
         </li>
         <li class="mr-1">
             <button
             @click="this.case=4"
-                class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold"
-                
+                class="inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold border hover:shadow-inner"
+                :class="{'bg-green-500': this.case == 4, 'bg-white': this.case != 4}"
             >Coupon Manage</button>
         </li>
+
     </ul>
 
   
