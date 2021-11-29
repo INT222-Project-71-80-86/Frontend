@@ -25,6 +25,8 @@ jobs:
         context: .
         push: true
         tags: varotsk137/int222-vue3:latest
+        build-args: |
+          backend_url: ${{ secrets.BACKEND_URL }}
 
   deploy:
     name: Deploy
