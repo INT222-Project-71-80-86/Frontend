@@ -1,6 +1,6 @@
 <template>
 
-  <div class="flex flex-wrap place-items-center sticky top-0 z-10 shadow-md mb-3">
+  <div class="flex flex-wrap place-items-center sticky top-0 shadow-md mb-3 z-50">
   <section class="mx-auto ">
       <!-- navbar -->
     <nav class="flex justify-between bg-gray-900 text-white w-screen">
@@ -30,6 +30,7 @@
               <div>
                
               </div>
+              <span v-if="user">HI, {{ user.fname }}</span>
           <button v-if="role == 'ROLE_CUSTOMER' && currentRoute != 'Order'" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-target="#cartDetailDropdown">
             <a class="flex items-center hover:text-gray-200"  href="#">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,7 +65,7 @@
              <li>
                 <hr class="dropdown-divider" v-if="user"/>
               </li>
-              <router-link to="/" v-if="!user">
+              <router-link to="/Register" v-if="!user">
                 <li>
                   <a class="text-white dropdown-item font-semibold"><span class="text-green-300 font-semibold">Register</span></a>
                 </li>
