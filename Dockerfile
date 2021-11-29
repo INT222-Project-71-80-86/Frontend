@@ -3,6 +3,7 @@ WORKDIR /app
 ARG backend_url
 ENV VUE_APP_BACKEND_URL=$backend_url
 COPY package*.json ./
+ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN npm install
 COPY ./ .
 RUN npm run build
