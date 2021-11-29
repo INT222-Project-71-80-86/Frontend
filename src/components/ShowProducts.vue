@@ -1,7 +1,7 @@
 <template>
   <nav-bar></nav-bar>
   <!-- test div -->
-  <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+  <section v-if="products" class="text-gray-400 bg-gray-900 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
       <p v-if="products.length == 0" class="text-center text-6xl font-bold" >Not have any Product.</p>
       <div
@@ -38,12 +38,15 @@
           <div class="flex items-center pb-1 -mt-6 border-b-2 border-gray-800 space-x-1">
           
             <span class="mr-1 font-semibold text-white">Color —</span>
-            <div class="flex" v-for="c in item.productcolor" :key="c.color.cid">
-              <div
-                class="border-2 border-gray-800 rounded-full w-6 h-6 focus:outline-none"
-                :style="{ 'background-color': c.color.code }"
-              ></div>
-            </div>
+            <span v-for="c in productColorFilter(item.productcolor)" :key="c.color.cid">
+                <div class="flex">
+                    <div
+                        class="border-2 border-gray-800 rounded-full w-6 h-6 focus:outline-none"
+                        :style="{ 'background-color': c.color.code }"
+                    >
+                    </div>
+                </div>
+            </span>
            
           </div>
            <p class="leading-relaxed">{{ item.description }}</p>
@@ -55,7 +58,7 @@
             >{{ pricenumber(item.price) }} THB.</span>
             
            
-                        <router-link :to="{ name: 'EditProduct', params: { editProduct: item.pid } }" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
+              <router-link :to="{ name: 'EditProduct', params: { editProduct: item.pid } }" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'">
               <button
                 class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-white duration-500"
               >
@@ -72,7 +75,7 @@
             </router-link>
             <button
               class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center ml-4 hover:bg-white duration-500"
-              @click="deleteModal = true" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'"
+              @click="deleteProduct(item.pid)" v-if="role == 'ROLE_STAFF' || role == 'ROLE_ADMIN'"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path
@@ -114,6 +117,7 @@ export default {
   data() {
     return {
       backend_url: process.env.VUE_APP_BACKEND_URL,
+      deleteModal: false
     };
   },
   methods: {
@@ -122,9 +126,9 @@ export default {
         this.$store.dispatch('fetchSearchProduct',{q:this.value,p:pageNo})
       } else if(this.type>0 && this.type<=6){
         this.$store.dispatch('fetchTypebyBrand',{type:this.type, value:this.value, page:pageNo})
-      } else if( this.type=='category'){
-      this.$store.dispatch('fetchProductByCategory',{cat:this.value,page:pageNo})
-    } else {
+      } else if (this.type=='brand'){
+      this.$store.dispatch('fetchProductByBrand',{id:this.value,page:pageNo})
+      } else {
         this.$store.dispatch('fetchAllProducts', pageNo)
       }
       
@@ -136,8 +140,9 @@ export default {
     async deleteProduct(pid){
       if(confirm("Do you really want to remove the product?")){
         try {
-          const res = await axios.delete(`${this.backend_url}/product/delete/${pid}`)
-          if(res.status === 200){
+          const access_token = localStorage.getItem("access_token")
+          const res = await axios.delete(`${this.backend_url}/product/delete/${pid}`, { headers: { 'Authorization': `Bearer ${access_token}` } })
+          if(res != undefined && res.status == 200){
             this.$store.dispatch('fetchAllProducts', this.currentPage)
             alert("Successfully Remove the product")
           } else {
@@ -166,22 +171,24 @@ export default {
       this.$store.dispatch('fetchSearchProduct',{q:value,p:1})
     } else if (type>0 && type <=6){
       this.$store.dispatch('fetchTypebyBrand',{type:type, value:value, page:1})
-    } else if (type=='category'){
-      this.$store.dispatch('fetchProductByCategory',{cat:value,page:1})
+    } else if (type=='brand'){
+      this.$store.dispatch('fetchProductByBrand',{id:value,page:1})
     } else {
       this.$store.dispatch('fetchAllProducts',1)
     }
+  },
+  productColorFilter(productColor){
+    return productColor.filter( pc => pc.amount > 0)
   }
 },
   setup(props){
     const store = useStore();
-    console.log(props)
     if(props.type=='query'){
       store.dispatch('fetchSearchProduct',{q:props.value,p:1})
     } else if (props.type>0 && props.type <=6){
       store.dispatch('fetchTypebyBrand',{type:props.type, value:props.value, page:1})
-    } else if (props.type=='category'){
-      store.dispatch('fetchProductByCategory',{cat:props.value,page:1})
+    } else if (props.type=='brand'){
+      store.dispatch('fetchProductByBrand',{id:props.value,page:1})
     } else {
       store.dispatch('fetchAllProducts',1)
     }

@@ -211,6 +211,7 @@ export default {
                 role: this.profile.role,
                 deleted: this.profile.deleted
             };
+
         this.saveEditProfile(profile)
         },
         async saveEditProfile(formData) {

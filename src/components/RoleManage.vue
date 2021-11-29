@@ -1,67 +1,56 @@
 <template>
-    <div v-if="users">
-        <div
-            class="border-2 border-blue-200 lg:w-4/5 mx-auto flex flex-wrap border-b-2 mt-5"
-            v-for="user in users.content"
-            :key="user.uid"
-        >
-            <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                <h1 class="text-black text-3xl font-medium mb-1 -ml-1">{{ user.username }}</h1>
-                <div class="flex space-x-2">
-                    <h2
-                        class="text-sm text-black tracking-widest uppercase font-extrabold"
-                    >{{ user.fname }} {{ user.lname }}</h2>
-
-                    <!-- set new role for user -->
-                    <input
-                        v-if="editID == user.uid"
-                        v-model="newRole"
-                        require
-                        type="text"
-                        class="py-1 px-1 rounded-lg border-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent duration-200"
-                    />
-
-                    <h2
-                        v-if="editID != user.uid"
-                        class="text-sm text-black tracking-widest uppercase font-light"
-                    >— {{ user.role }}</h2>
+    <div id="roleManage" class="mx-auto w-4/6 mt-5 pt-5">
+        <div id="roleManageHeader" class="my-2">
+        </div>
+        <div id="roleManageUserList" class="mx-auto w-5/6" v-if="users">
+            <div id="roleManagerListHeader" class="row bg-gray-600 py-2 text-white rounded-t-lg">
+                <div class="col-3">Username</div>
+                <div class="col-4">Name</div>
+                <div class="col">Role</div>
+                <div class="col">Actions</div>
+            </div>
+            <div class="row py-2" v-for="(u,index) in users" :key="u.uid"  :class="{'bg-gray-200': index%2 == 0}">
+                <div class="col-3">{{ u.username }}</div>
+                <div class="col-4">{{ u.fname }} {{ u.lname }}</div>
+                <div v-if="u.role && isEdit!=u.uid" class="col">{{ toSubString(u.role) }}</div>
+                <div class="col" v-else>
+                    <select v-model="editedRole">
+                        <option value="ROLE_ADMIN" :disabled="u.role == 'ROLE_ADMIN'" :class="{'bg-gray-300': u.role == 'ROLE_ADMIN'}">ADMIN</option>
+                        <option value="ROLE_STAFF" :disabled="u.role == 'ROLE_STAFF'" :class="{'bg-gray-300': u.role == 'ROLE_STAFF'}" >STAFF</option>
+                        <option value="ROLE_CUSTOMER" :disabled="u.role == 'ROLE_CUSTOMER'"  :class="{'bg-gray-300': u.role == 'ROLE_CUSTOMER'}">CUSTOMER</option>
+                    </select>
                 </div>
-
-                <!-- edit -->
-                <button
-                    v-if="!edit"
-                    class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 flex float-right"
-                    @click="editing(user.uid, user.role)"
-                >Edit</button>
-
-                <!-- action when editing -->
-                <div v-if="editID == user.uid">
-                    <button
-                        class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 flex float-right"
-                        @click="makeEditForm(user)"
-                    >Save</button>
-                    <button
-                        class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-red-500 flex float-right"
-                        @click="cancel"
-                    >Cancel</button>
+                <div class="col">    
+                    <button @click="toggleRoleEdit(u)" v-if="isEdit != u.uid && u.uid != user.uid">
+                        <span class="material-icons transition duration-200 text-green-400 hover:text-green-500">edit</span>
+                    </button>
+                    <button @click="saveRoleEdit(u)" v-if="isEdit == u.uid">
+                        <span class="material-icons transition duration-200 text-blue-500 hover:text-blue-700">save</span>
+                    </button>
+                    <button @click="cancelRoleEdit" v-if="isEdit == u.uid">
+                        <span class="material-icons transition duration-200 text-red-400 hover:text-red-500">cancel</span>
+                    </button>
                 </div>
             </div>
-            <!-- Paging -->
         </div>
-        <div id="paging" class="mb-5 -mt-8 mt-5">
+        <div id="roleManagePaging" class="mt-8 pb-4">
             <div class="flex space-x-5 justify-center">
-                <button
-                    @click="getallusers(i)"
-                    v-for="i in pageTotal"
-                    :key="i"
-                    class="w-10 h-8 align-middle bg-gray-400"
-                    :class="{ 'bg-green-400': checkCurrentPage(i) }"
-                >{{ i }}</button>
+            <button
+                @click="fetchUsers(i)"
+                v-for="i in pageTotal"
+                :key="i"
+                class="w-10 h-8 align-middle text-black border"
+                :class="{ 'bg-green-400': checkCurrentPage(i) }"
+            >{{ i }}</button>
             </div>
         </div>
     </div>
+
 </template>
-<script>import axios from "axios"
+<script>
+import { computed } from '@vue/reactivity';
+import { useStore } from 'vuex';
+import axios from 'axios';
 
 export default {
     name: 'RoleManage',
@@ -69,84 +58,68 @@ export default {
     data() {
         return {
             backend_url: process.env.VUE_APP_BACKEND_URL,
-            edit: false,
-            newRole: '',
-            editID: 0,
-            users: null,
-            pageInfo: null,
-            pageTotal: null,
+            isEdit: -1,
+            editedRole: null,
         }
     },
     methods: {
-        async getallusers(pageno=1) {
-            let temp = localStorage.getItem('access_token')
-            const res = await axios.get(`${this.backend_url}/user/allusers?pageNo=${pageno-1}`, { headers: { 'Authorization': `Bearer ${temp}` } })
-            this.users = res.data
-            this.pageInfo = res.data.pageable
-            this.pageTotal = res.data.totalPages
-            console.log(this.pageInfo);
-            console.log(this.pageTotal);
-            console.log(res);
+        toSubString(role){
+            return role.substr(5)
         },
         checkCurrentPage(i){
-            return this.pageInfo.pageNumber+1 == i
+            return this.pageInfo.pageNumber+1 == i 
         },
-        editing(editID, role) {
-            this.edit = true
-            this.editID = editID
-            this.newRole = role
+        fetchUsers(pageNo = 1) {
+            this.$store.dispatch('fetchAllUsers', pageNo)
+            return {
+                users: computed(() => this.$store.state.pagingItems.content)
+            }
         },
-        cancel() {
-            this.edit = false
-            this.editID = 0
+        toggleRoleEdit(user){
+            this.isEdit = user.uid
+            this.editedRole = user.role
         },
-        async makeEditForm(user) {
-            let newuser = {
-                uid: user.uid,
-                username: user.username,
-                fname: user.fname,
-                lname: user.lname,
-                dob: user.dob,
-                address: user.address,
-                email: user.email,
-                tel: user.tel,
-                role: this.newRole,
-                deleted: user.deleted
-            };
-
-            await this.saveEditRole(newuser)
-
-            this.edit = false,
-                this.newRole = '',
-                this.editID = 0
-
+        cancelRoleEdit(){
+            this.isEdit = -1 
+            this.editedRole = null
         },
-
-        async saveEditRole(newuser) {
-            let temp = localStorage.getItem("access_token")
-            const res = axios.put(`${this.backend_url}/user/roleedit`, newuser, { headers: { 'Authorization': `Bearer ${temp}` } }).then(() => {
-                alert("Edit Role Successfully")
-
-            }).catch(function (error) {
-                if (error.response) {
-                    console.log(error.response.data);
+        saveRoleEdit(user){
+            if(this.editedRole == null || this.editedRole == user.role){
+                return
+            }
+            let editedUser = Object.assign({}, user)
+            editedUser.role = this.editedRole
+            if(confirm(`Do you want to change role of user "${user.username}"\nfrom ${user.role.substr(5)} to ${this.editedRole.substr(5)}?`)){
+                this.saveRoleUser(editedUser)
+            }
+            this.cancelRoleEdit()
+        },
+        async saveRoleUser(user){
+            const access_token = localStorage.getItem("access_token")
+            const response = await axios.put(`${this.backend_url}/user/roleedit`, user, {headers: {"Authorization": `Bearer ${access_token}`}}).catch(function (error) {
+                if(error){
                     alert(error.response.data.message)
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-
-                } else if (error.request) {
-                    console.log(error.request);
-                } else {
-                    console.log('Error', error.message);
                 }
             })
-            console.log(res)
 
-        },
-
+            if(response != undefined && response.status == 200){
+                alert("Successfully changed role")
+                this.$store.dispatch("fetchAllUsers", this.currentPage)
+            }
+        }
     },
-    async created() {
-        await this.getallusers();
+    setup() {
+        const store = useStore();
+        store.dispatch("fetchAllUsers", 1);
+        return {
+            users: computed(() => store.state.pagingItems.content),
+            pageInfo: computed(() => store.state.pagingItems.pageable),
+            pageTotal: computed(() => store.state.pagingItems.totalPages),
+            currentPage: computed(() => store.state.currentPage),
+            pageSize: computed(() => store.state.pagingItems.numberOfElements),
+            allSize: computed(() => store.state.pagingItems.totalElements),
+            user: computed(() => store.state.user),
+        }
     },
 }
 

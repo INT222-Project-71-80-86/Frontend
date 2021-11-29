@@ -9,11 +9,14 @@ export default createStore({
     brands: [],
     colors: [],
     categories: [],
+    orders: [],
     currentPage: 1,
     user: null,
     role: '',
     expiryDate: null,
-    coupons:[]
+    coupons:[],
+    cart: [],
+    pagingItems: []
   },
   mutations: {
     setProducts(state, p){
@@ -34,8 +37,44 @@ export default createStore({
       state.role = user.role
       state.expiryDate = user.exp
     },
-    setCoupons(state,coupon){
-      state.coupons = coupon
+    setCoupons(state,coupons){
+      state.pagingItems = coupons
+      state.currentPage = (coupons.pageable.pageNumber) + 1
+    },
+    setOrder(state, orders){
+      state.orders = orders.orders
+      state.currentPage = orders.page
+    },
+    addColor(state, color){
+      state.colors.push(color)
+      state.colors.sort( (a,b) => (a.cid > b.cid) ? 1 : ((a.cid < b.cid) ? -1 : 0) ) //Sort color
+    },
+    removeColor(state, color){
+      state.colors = state.colors.filter(c => c.cid != color.cid)
+    },
+    addToCart(state, product){
+      state.cart.push(product)
+    },
+    clearCart(state){
+      state.cart = []
+    },
+    removeFromCart(state, rmid){
+      state.cart = state.cart.filter(item => !(item.productColor.id.pid == rmid.pid && item.productColor.id.cid == rmid.cid))
+    },
+    saveCart(state, cart){
+      state.cart = cart
+    },
+    setBrandsPaging(state, brands){
+      state.pagingItems = brands
+      state.currentPage = (brands.pageable.pageNumber) + 1
+    },
+    setColorsPaging(state, colors){
+      state.pagingItems = colors
+      state.currentPage = (colors.pageable.pageNumber) + 1
+    },
+    setAllUsers(state, users){
+      state.pagingItems = users
+      state.currentPage = (users.pageable.pageNumber) + 1
     }
   },
   actions: {
@@ -48,9 +87,19 @@ export default createStore({
       const res = await axios.get(`${backend_url}/brand`)
       commit('setBrands', res.data)
     },
+    async fetchAllBrandsPaging({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/brand/get?pageNo=${pageNo-1}&size=5`)
+      const brands = res.data
+      commit('setBrandsPaging', brands)
+    },
     async fetchAllColors({commit}){
       const res = await axios.get(`${backend_url}/color`)
       commit('setColors', res.data)
+    },
+    async fetchAllColorsPaging({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/color/get?pageNo=${pageNo-1}&size=5`)
+      const colors = res.data
+      commit('setColorsPaging', colors)
     },
     async fetchAllCategories({commit}){
       const res = await axios.get(`${backend_url}/cats`)
@@ -60,19 +109,24 @@ export default createStore({
       const res = await axios.get(`${backend_url}/product/query?searchValue=${search.q}&pageNo=${search.p-1}`)
       const product = res.data
       const pages = search.p
-      console.log(product)
       commit('setProducts',{product, pages})
     },
     async fetchTypebyBrand({commit},tb){
-      const res = await axios.get(`${backend_url}/product/brandcat?bid=${tb.value}&catid=${tb.type}&pageNo=${tb.page-1}`)
+      let res
+      if ( tb.value == 0 ) {
+        res = await axios.get(`${backend_url}/product/cat?id=${tb.type}&pageNo=${tb.page-1}`)
+      } else {
+        res = await axios.get(`${backend_url}/product/brandcat?bid=${tb.value}&catid=${tb.type}&pageNo=${tb.page-1}`)
+      }
+      
       const product = res.data
       const pages = tb.pageNo
       commit('setProducts',{product,pages})
     },
-    async fetchProductByCategory({commit},cats){
-      const res = await axios.get(`${backend_url}/product/cat?id=${cats.cat}&pageNo=${cats.page-1}`)
+    async fetchProductByBrand({commit},brand){
+      const res = await axios.get(`${backend_url}/product/brand?id=${brand.id}&pageNo=${brand.page-1}`)
       const product = res.data
-      const pages = cats.pageNo
+      const pages = brand.pageNo
       commit('setProducts',{product,pages})
     },
     async fetchUser({commit}, userTokenDetail){
@@ -86,6 +140,16 @@ export default createStore({
       const exp = new Date(userTokenDetail.user.exp * 1000)
       commit('setUser', {user,role,exp})
     },
+    async fetchOrder({commit}, detail){
+      const response = await axios.get(`${backend_url}/order/get/username?size=5&pageNo=${detail.pageNo - 1}`, { headers: { 'Authorization': `Bearer ${detail.token}` } }).catch( function (error) {
+          if (error) {
+              alert(`status: ${error.response.status} \nmessage: ${error.response.data.message}`)
+          }
+      })
+      let orders = response.data
+      console.log(orders)
+      commit('setOrder', {orders, page: detail.pageNo})
+  },
     removeUser({commit}){
       localStorage.removeItem("access_token")
       localStorage.removeItem("refresh_token")
@@ -94,10 +158,46 @@ export default createStore({
       const exp = null
       commit('setUser', {user,role,exp})
     },
-    async fetchCoupons({commit}){
-      const res = await axios.get(`${backend_url}/coupon/allcoupons`,{ headers: { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }})
+    async fetchCoupons({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/coupon/allcoupons/paging?pageNo=${pageNo-1}&size=5`,{ headers: { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }})
       const coupons = res.data
       commit('setCoupons',coupons)
+    },
+    changeColor({commit}, colorManage){
+      const color = colorManage.color
+      switch (colorManage.mode) {
+        case "add":
+          commit('addColor', color)
+        break;
+        case "remove":
+          commit('removeColor', color)
+        break;
+        default:
+          break;
+      }
+    },
+    addItemToCart({commit}, addProduct){
+      const productColor = addProduct.productColor
+      const item = this.state.cart.filter(item => (item.productColor.id.pid == productColor.id.pid && item.productColor.id.cid == productColor.id.cid))
+      if(item.length > 0){
+        return
+      }
+      commit('addToCart', addProduct)
+    },
+    clearCart({commit}){
+      commit('clearCart')
+    },
+    removeCartItem({commit},id){
+      commit('removeFromCart', id)
+    },
+    saveCart({commit}, cart){
+      commit('saveCart', cart)
+    },
+    async fetchAllUsers({commit}, pageNo){
+      const access_token = localStorage.getItem("access_token")
+      const res = await axios.get(`${backend_url}/user/allusers?pageNo=${pageNo-1}&size=10`,{ headers: { 'Authorization': `Bearer ${access_token}` }})
+      const users = res.data
+      commit('setAllUsers', users)
     }
   },
   modules: {
