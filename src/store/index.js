@@ -15,7 +15,8 @@ export default createStore({
     role: '',
     expiryDate: null,
     coupons:[],
-    cart: []
+    cart: [],
+    pagingItems: []
   },
   mutations: {
     setProducts(state, p){
@@ -36,8 +37,9 @@ export default createStore({
       state.role = user.role
       state.expiryDate = user.exp
     },
-    setCoupons(state,coupon){
-      state.coupons = coupon
+    setCoupons(state,coupons){
+      state.pagingItems = coupons
+      state.currentPage = (coupons.pageable.pageNumber) + 1
     },
     setOrder(state, orders){
       state.orders = orders.orders
@@ -61,6 +63,18 @@ export default createStore({
     },
     saveCart(state, cart){
       state.cart = cart
+    },
+    setBrandsPaging(state, brands){
+      state.pagingItems = brands
+      state.currentPage = (brands.pageable.pageNumber) + 1
+    },
+    setColorsPaging(state, colors){
+      state.pagingItems = colors
+      state.currentPage = (colors.pageable.pageNumber) + 1
+    },
+    setAllUsers(state, users){
+      state.pagingItems = users
+      state.currentPage = (users.pageable.pageNumber) + 1
     }
   },
   actions: {
@@ -73,9 +87,19 @@ export default createStore({
       const res = await axios.get(`${backend_url}/brand`)
       commit('setBrands', res.data)
     },
+    async fetchAllBrandsPaging({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/brand/get?pageNo=${pageNo-1}&size=5`)
+      const brands = res.data
+      commit('setBrandsPaging', brands)
+    },
     async fetchAllColors({commit}){
       const res = await axios.get(`${backend_url}/color`)
       commit('setColors', res.data)
+    },
+    async fetchAllColorsPaging({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/color/get?pageNo=${pageNo-1}&size=5`)
+      const colors = res.data
+      commit('setColorsPaging', colors)
     },
     async fetchAllCategories({commit}){
       const res = await axios.get(`${backend_url}/cats`)
@@ -134,8 +158,8 @@ export default createStore({
       const exp = null
       commit('setUser', {user,role,exp})
     },
-    async fetchCoupons({commit}){
-      const res = await axios.get(`${backend_url}/coupon/allcoupons`,{ headers: { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }})
+    async fetchCoupons({commit}, pageNo){
+      const res = await axios.get(`${backend_url}/coupon/allcoupons/paging?pageNo=${pageNo-1}&size=5`,{ headers: { 'Authorization': `Bearer ${localStorage.getItem("access_token")}` }})
       const coupons = res.data
       commit('setCoupons',coupons)
     },
@@ -168,6 +192,12 @@ export default createStore({
     },
     saveCart({commit}, cart){
       commit('saveCart', cart)
+    },
+    async fetchAllUsers({commit}, pageNo){
+      const access_token = localStorage.getItem("access_token")
+      const res = await axios.get(`${backend_url}/user/allusers?pageNo=${pageNo-1}&size=10`,{ headers: { 'Authorization': `Bearer ${access_token}` }})
+      const users = res.data
+      commit('setAllUsers', users)
     }
   },
   modules: {

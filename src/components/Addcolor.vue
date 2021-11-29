@@ -126,8 +126,25 @@
                         v-if="editing == item.cid && editDuplicatedcolorName"
                         class="text-red-600"
                     >Duplicate color name</p>
+                    <p
+                        v-if="editing == item.cid && invalidEditColorName"
+                        class="text-red-600"
+                    >Invalid color name</p>
                 </tbody>
             </table>
+
+            <div id="paging" class="mt-8 pb-3">
+                <div class="flex space-x-5 justify-center">
+                <button
+                    @click="fetchColors(i)"
+                    v-for="i in pageTotal"
+                    :key="i"
+                    class="w-10 h-8 align-middle text-black border"
+                    :class="{ 'bg-green-400': checkCurrentPage(i) }"
+                >{{ i }}</button>
+                </div>
+            </div>  
+
         </div>
     </div>
 </template>
@@ -143,6 +160,7 @@ export default {
             invalidcolorname: false,
             duplicatedcolorname: false,
             editDuplicatedcolorName: false,
+            invalidEditColorName: false,
             backend_url: process.env.VUE_APP_BACKEND_URL,
             editing: -1,
             editcolor: null,
@@ -165,7 +183,12 @@ export default {
             this.duplicatedcolorname = false
             document.getElementById('colorInput').value = '#FFFFFF'
         },
+        resetEditInvalid(){
+            this.invalidEditColorName = false
+            this.editDuplicatedcolorName = false
+        },
         enableEditing(color) {
+            this.resetEditInvalid()
             this.editing = color.cid
             this.editcolor = color.name
             this.editcolorpicker = color.code
@@ -173,13 +196,22 @@ export default {
         disableEditing() {
             this.editcolor = '';
             this.editing = -1;
-            this.editDuplicatedcolorName = false;
+            this.resetEditInvalid()
         },
         enableviewADD() {
             this.viewADD = true
         },
         disableviewADD() {
             this.viewADD = false
+        },
+        checkCurrentPage(i){
+            return this.pageInfo.pageNumber+1 == i 
+        },
+        fetchColors(pageNo = 1) {
+            this.$store.dispatch('fetchAllColorsPaging', pageNo)
+            return {
+                colors: computed(() => this.$store.state.pagingItems.content)
+            }
         },
         async addColor() {
             let color = { cid: 0, name: this.colorname,code: this.colorpicker, deleted: 0 }
@@ -194,14 +226,18 @@ export default {
                     check = true;
                 }
             })
-            if (res) {
+            if (res != undefined && res.status == 200) {
                 alert("Successfully Add color.")
-                console.log(res.data)
-                this.$store.dispatch('fetchAllColors')
+                let page = this.allSize%5 == 0 ? this.pageTotal + 1 : this.pageTotal
+                this.$store.dispatch('fetchAllColorsPaging', page)
             }
             this.duplicatedcolorname = check
         },
         async editColor() {
+            this.invalidEditColorName = this.editcolor == null || this.editcolor.trim() == '' ? true : false
+            if(this.invalidEditColorName){
+                return
+            }
             let color = { cid: this.editing, name: this.editcolor, code: this.editcolorpicker, deleted: 0 }
             let check = false;
             let access_token = localStorage.getItem("access_token")
@@ -214,10 +250,9 @@ export default {
                     check = true;
                 }
             })
-            if (res) {
+            if (res != undefined && res.status == 200) {
                 alert("Successfully Edit color.")
-                console.log(res.data)
-                this.$store.dispatch('fetchAllColors')
+                this.$store.dispatch('fetchAllColorsPaging', this.currentPage)
                 this.disableEditing()
             }
             this.editDuplicatedcolorName = check
@@ -235,18 +270,23 @@ export default {
                     check = true;
                 }
             })
-            if (res) {
+            if (res != undefined && res.status == 200) {
                 alert("Successfully Delete color.")
-                console.log(res.data)
-                this.$store.dispatch('fetchAllColors')
+                let page = this.pageSize <= 1 ? this.currentPage-1 : this.currentPage
+                this.$store.dispatch('fetchAllColorsPaging', page)
             }
         }
     },
     setup() {
         const store = useStore();
-        store.dispatch('fetchAllColors')
+        store.dispatch('fetchAllColorsPaging', 1)
         return {
-            colors: computed(() => store.state.colors),
+            colors: computed(() => store.state.pagingItems.content),
+            pageInfo: computed(() => store.state.pagingItems.pageable),
+            pageTotal: computed(() => store.state.pagingItems.totalPages),
+            currentPage: computed(() => store.state.currentPage),
+            pageSize: computed(() => store.state.pagingItems.numberOfElements),
+            allSize: computed(() => store.state.pagingItems.totalElements),
             user: computed(() => store.state.user),
             role: computed(() => store.state.role)
         }
