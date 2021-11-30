@@ -58,14 +58,20 @@ export default {
         this.review = ''
     },
     checkSameUser(){
-      console.log(this.reviews)
+      let found = false
       this.reviews.forEach(r => {
         if(r.user.uid == this.user.uid){
           this.alreadyPost = true
           this.rating = r.rating
           this.review = r.review
+          found = true
         }
       });
+      if(!found){
+        this.alreadyPost = false
+        this.rating = 0
+        this.review = ''
+      }
     }
   },
   async created() {

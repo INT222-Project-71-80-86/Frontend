@@ -135,42 +135,43 @@ router.beforeEach(async (to, from, next) => {
     next("")
   }
 
-  console.log(from)
-  console.log(to)
-
   let access_token = localStorage.getItem("access_token")
   let refresh_token = localStorage.getItem("refresh_token")
 
   if(access_token == null){
+    // Check if not have access_token but user is store in store
+    if(store.state.user != null || store.state.role != ''){
+      store.dispatch('removeUser')
+      next("login")
+    }
     // Check list of path whether user can route to or not
-    if (all.includes(to.name) || to.name == "login" || to.name == "Register") {
-      console.log("access token is null")
+    else if (all.includes(to.name) || to.name == "login" || to.name == "Register") {
       next()
     } else {
       next("")
     }
   }
-  // npm install jwt-decode
+
   let user = jwt_decode(access_token)
   console.log(user)
 
   if( (user.exp*1000) < new Date()){
-    console.log("User token is now expired at "+new Date(user.exp*1000))
-    console.log("Removing Access Token from Local Storage")
-    // localStorage.removeItem("access_token")
-    console.log("Trying to refresh token")
+    // console.log("User token is now expired at "+new Date(user.exp*1000))
+    // console.log("Removing Access Token from Local Storage")
+    // // localStorage.removeItem("access_token")
+    // console.log("Trying to refresh token")
 
     if(refresh_token == null) {
-      console.log("ERROR Not have refresh Token")
+      // console.log("ERROR Not have refresh Token")
       next("login")
     } 
 
     const res = await axios.get(`${backend_url}/user/token/refresh`, { headers: { 'Authorization': `Bearer ${refresh_token}` } }).catch(function (error) {
       if (error) {
-          console.log(error);
-          console.log("Removing Refresh Token and redirect to Login page")
-          // localStorage.removeItem("refresh_token")
-          console.log("Removing State User and other data")
+          // console.log(error);
+          // console.log("Removing Refresh Token and redirect to Login page")
+          // // localStorage.removeItem("refresh_token")
+          // console.log("Removing State User and other data")
           store.dispatch("removeUser")
           next('login')
       }
@@ -181,24 +182,24 @@ router.beforeEach(async (to, from, next) => {
     localStorage.setItem('access_token', access_token)
     localStorage.setItem('refresh_token', refresh_token)
     user = jwt_decode(access_token)
-    console.log('Set new Auth Token in Local Storage, Decoding new access token')
+    // console.log('Set new Auth Token in Local Storage, Decoding new access token')
   }
   
 
   if( store.state.user != null && store.state.expiryDate != null && store.state.user.username == user.sub && store.state.expiryDate.getTime() == user.exp*1000){
     if(checkValidRole(user, to.name)){
-      console.log("Validate token's username and username are matching then skipping store new User")
-      console.log(store.state.expiryDate)
+      // console.log("Validate token's username and username are matching then skipping store new User")
+      // console.log(store.state.expiryDate)
       next()
     } else {
       next("")
     }
   } else {
     await store.dispatch('fetchUser', {user, access_token} )
-    console.log("printing user/ role/ exp")
-    console.log(store.state.user)
-    console.log(store.state.role)
-    console.log(store.state.expiryDate)
+    // console.log("printing user/ role/ exp")
+    // console.log(store.state.user)
+    // console.log(store.state.role)
+    // console.log(store.state.expiryDate)
     if(checkValidRole(user, to.name)){
       next()
     } else {

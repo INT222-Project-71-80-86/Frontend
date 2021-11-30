@@ -2,7 +2,7 @@
 
     <nav-bar />
     <div class="w-full h-full bg-scroll bg-repeat" :style="{backgroundImage: 'url('+getLocalImage('order_bg.jpg')+')'}">
-        <div class="flex justify-center my-6 pt-4 pb-4">
+        <div v-if="!order" class="flex justify-center my-6 pt-4 pb-4">
             <div class="flex flex-col p-8 text-gray-800 bg-white shadow-lg pin-r pin-y md:w-4/5 lg:w-4/5 rounded-2xl mt-14">
                 <div class="flex-1">
                     <div v-if="cart.length > 0">
@@ -52,7 +52,10 @@
                     <div v-else class="m-3 text-4xl font-semibold text-center space-y-5">
                         <div class="text-gray-400">- NO ITEM IN CART -</div>
                         <hr />
-                        <div><router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">GO BACK TO SHOPPING</router-link></div>
+                    </div>
+                    <div class="my-3 flex justify-center space-x-5">
+                        <button v-if="cart.length > 0" @click="clearCart" class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-red-400 hover:bg-red-500 hover:text-black font-bold duration-200 uppercase">Clear cart</button>
+                        <router-link class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-blue-400 hover:bg-blue-500 hover:text-black font-bold duration-200 uppercase" :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">BACK TO SHOPPING</router-link>
                     </div>
                     <!-- Coupon  -->
                     <div v-if="cart.length>0" class="my-4 mt-6 -mx-2 lg:flex">
@@ -180,6 +183,53 @@
                 </div>
             </div>
         </div>
+        <div class="flex justify-center my-6 pt-4 pb-4" v-else>
+            <div class="flex flex-col p-8 text-gray-800 bg-white shadow-lg pin-r pin-y md:w-4/5 lg:w-4/5 rounded-2xl mt-14">
+                <div id="boxHeader" class="text-center mb-2">
+                    <p class="text-2xl font-semibold mb-4">Successfully placed your order #{{order.oid}}</p> 
+                    <a class="text-xl" href="#orderDetailHeader">Click to see your order details below</a> 
+                </div>
+                <div class="my-3 flex justify-center space-x-5">
+                        <button class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-green-400 hover:bg-green-500 hover:text-black font-bold duration-200 uppercase">View all your orders</button>
+                        <router-link class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-blue-400 hover:bg-blue-500 hover:text-black font-bold duration-200 uppercase" :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">BACK TO SHOPPING</router-link>
+                    </div>
+
+                <div class="h-px my-4 border border-black"></div>
+                <div class="w-5/6 mx-auto">
+                    <div id="orderDetailHeader" class="mb-3">
+                        <div class="text-3xl font-extrabold">Order Details</div>
+                        <div class="font-semibold"><span class="text-gray-500">Order number</span> {{order.oid}} &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp; {{ toDateTime(order.date) }}</div>
+                        <div class="row">
+                            <div v-if="order.coupon" class="col font-semibold"><span class="text-gray-500">Coupon: </span>{{order.coupon.couponcode}}</div>
+                            <div class="col font-semibold"><span class="text-gray-500">Total price: </span><span class="text-green-500">{{order.totalprice}}฿</span></div>
+                        </div>
+                        
+                    </div>
+                    <div id="orderDetail" class="space-y-5">
+                        <div class="row p-3 space-x-2" v-for="item in order.orderdetail" :key="item.id">
+                            <div class="col-3">
+                                <img :src="getImage(item.product.image)" style="max-height: 300px; width:auto;">
+                            </div>
+                            <div class="col pr-10 space-y-1">
+                                <div class="item-name row">
+                                    <span class="col flex text-xl font-semibold space-x-3"><span class=" w-7 h-7 border-2 border-transparent" :style="{ backgroundColor: item.color.code }"></span><span>{{ item.product.name }}</span></span> 
+                                    <span class="col-1 text-xl">&times;{{ item.amount }}</span>
+                                </div>
+                                <div class="item-price-each text-lg font-semibold mb-3" v-if="item.amount > 1">{{ toFixed(item.priceeach,item.amount) }}฿&nbsp;&nbsp;&nbsp;({{item.priceeach}}฿/pc.)</div>
+                                <div class="item-price-each text-lg font-semibold mb-3" v-else>{{ item.priceeach }}฿</div>
+                                <div class="item-description w-5/6 italic mb-3">{{ item.product.description }}</div>
+                                <div class="item-warranty" v-if="item.product.warranty > 0"><span class="font-semibold">Warranty: </span> {{ item.product.warranty }} year</div>
+                                <div class="item-warranty" v-else>No warranty</div>
+                            </div>
+                            <div class="h-px bg-gray-400 mt-5 mb-1"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <a class="text-xl" href="#">Back to top</a> 
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -196,7 +246,9 @@ export default {
             coupon: null,
             couponName: '',
             errMessage: '',
-            errCouponApplicable: null
+            errCouponApplicable: null,
+
+            order: null
         };
     },
     methods: {
@@ -212,8 +264,19 @@ export default {
         reRouting(param){
             this.$router.push({ name: 'singleProduct', params: { singleProd: param } })
         },
+        toFixed(price, amount){
+            return (Math.round((amount * price) * 100)/100).toFixed(2);
+        },
         removeFromCart(c){
             this.$store.dispatch("removeCartItem", c.productColor.id)
+        },
+        clearCart(){
+            if(confirm("Do you want to clear cart?")){
+                this.$store.dispatch("clearCart")
+            }
+        },
+        forceClearCart(){
+                this.$store.dispatch("clearCart")
         },
         increment(item){
             if(item.amount == item.productColor.amount){
@@ -228,6 +291,10 @@ export default {
             }
             item.amount--
             this.$store.dispatch('saveCart', this.cart)
+        },
+        toDateTime(date){
+            let newDate = new Date(date)
+            return new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(newDate);
         },
         async fetchCoupon(){
             this.coupon = null;
@@ -267,9 +334,6 @@ export default {
             this.coupon = null
             this.couponName = ''
         },
-        clearCart(){
-                this.$store.dispatch("clearCart")
-        },
         checkoutCart() {
             console.log(this.cart)
             let order = { oid: 0,  coupon: null, orderdetail: [] }
@@ -298,15 +362,13 @@ export default {
             const access_token = localStorage.getItem("access_token")
             const response = await axios.post(`${this.backend_url}/order/save`, order, { headers: { 'Authorization': `Bearer ${access_token}` } } ).catch( function (error) {
                 if(error){
-                    console.log(error.response)
-                    alert("An unexpected error occured.")
+                    alert("An unexpected error occurred: "+error.response.data.message)
                 }
             })
             if(response != undefined && response.status == 200){
                 let order = response.data
-                console.log(order)
-                alert("Successfully placed order.")
-                this.clearCart()
+                this.order = order
+                this.forceClearCart()
             }
         }
     },
