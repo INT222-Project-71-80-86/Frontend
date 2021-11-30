@@ -57,6 +57,7 @@
                          <input class="w-1/6 h-10 border rounded px-2" type="number" v-model="selectQuantity" min="1" :max="selectedProductColor.amount">
                          <div v-if="invalidQuantity" class="text-red-500">The amount must be <span v-if="selectedProductColor.amount == 1">1</span><span v-else>in range of 1-{{selectedProductColor.amount}}</span></div>
                      </div>
+                     <div v-if="!role"> <button @click="sendToLogin" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-gray-300 hover:text-black font-bold duration-500 uppercase">Login to order</button>  </div>
                      <div v-if="role == 'ROLE_CUSTOMER' && !inCart"> <button @click="addToCart" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-red-600 hover:text-white font-bold duration-500 uppercase">Add to Cart</button>  </div>
                      <div v-else-if="role == 'ROLE_CUSTOMER' && inCart"> <button disabled class="border-2 cursor-not-allowed border-gray-300 pl-5 pr-5 pt-2 pb-2 cart mt-3 font-bold uppercase bg-gray-300 text-gray-500">Already in cart</button>  </div>
                     <div v-if="invalidColor" class="text-red-500">Please select the color</div>
@@ -201,6 +202,9 @@ export default {
         }
         this.$store.dispatch("addItemToCart", addProduct)
         this.checkAlreadyInCart()
+    },
+    sendToLogin(){
+        this.$router.push({ name: 'login'})
     },
     async fetchProduct(pid) {
         let self = this
