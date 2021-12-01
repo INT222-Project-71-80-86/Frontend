@@ -65,6 +65,7 @@
              <li>
                 <hr class="dropdown-divider" v-if="user"/>
               </li>
+              
               <router-link to="/Register" v-if="!user">
                 <li>
                   <a class="text-white dropdown-item font-semibold"><span class="text-green-300 font-semibold">Register</span></a>
@@ -87,6 +88,13 @@
                 </li>
               </router-link>
               <hr class="dropdown-divider" v-if="role == 'ROLE_ADMIN'" />
+
+              <router-link to="/user/order" v-if="user && role == 'ROLE_CUSTOMER'">
+                <li>
+                  <a class="dropdown-item font-semibold"><span class="text-white">My Orders</span></a>
+                </li>
+              </router-link>
+              <hr class="dropdown-divider" v-if="user && role == 'ROLE_CUSTOMER'" />
               <router-link to="/Addproduct" v-if="role == 'ROLE_ADMIN' || role == 'ROLE_STAFF'">
                 <li>
                   <a class="text-white dropdown-item font-semibold">AddProduct</a>
@@ -149,9 +157,16 @@
                 placeholder="Search"
                 v-model="searchProduct"
               />
-					<router-link to="/Profile" v-if="user"><li class="mb-1">
-						<a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">My Profile</a>
-					</li></router-link>
+					<router-link to="/Profile" v-if="user">
+            <li class="mb-1">
+              <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">My Profile</a>
+            </li>
+          </router-link>
+          <router-link to="/user/order" v-if="user && role == 'ROLE_CUSTOMER'">
+            <li class="mb-1">
+              <a class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">My Orders</a>
+            </li>
+          </router-link>
          <router-link to="/AdminPage" v-if="role == 'ROLE_ADMIN'">
 					<li class="-mt-3">
 						<a class="flex p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded">ShopManage</a>

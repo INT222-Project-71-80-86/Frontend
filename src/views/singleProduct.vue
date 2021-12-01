@@ -41,23 +41,24 @@
                         <span class="text-xs font-semibold">Release Date:</span> <span class="text-xs tracking-widest">{{product.releaseDate}}</span> <br /> 
                         <span class="text-xs font-semibold">Warranty:</span> <span class="tracking-widest text-xs">{{product.warranty}} year</span>
                     </div>
-                    <div class="flex font-semibold mt-2 text-lg" v-if="productColorFilter(product.productcolor).length > 0">
+                    <div class="flex font-semibold mt-2 text-lg" v-if="productColorFilter(product.productcolor).length > 0 && product.deleted != 1">
                         <span>Color</span>
                         <span v-if="product.productcolor.length > 1">s</span>
                         <span v-if="selectedProductColor.color.cid > 0">: {{ selectedProductColor.color.name }}</span>
                     </div>
-                    <div class="flex space-x-2 mb-2">
+                    <div v-if="product.deleted != 1" class="flex space-x-2 mb-2">
                         <div class="flex items-center" v-for="c in productColorFilter(product.productcolor)" :key="c.cid">
                             <button @click="selectColor(c)" class=" w-10 h-10 border-2 border-transparent duration-300" 
                                     :class="{'ring-2 ring-red-600 border-transparent': (selectedProductColor.color.cid == c.color.cid)}" :style="{ backgroundColor: c.color.code }"></button>
                         </div>
                      </div>
-                     <div id="product-amount" v-if="selectedProductColor.color.cid > 0 && role == 'ROLE_CUSTOMER'">
+                     <div id="product-amount" v-if="selectedProductColor.color.cid > 0 && role == 'ROLE_CUSTOMER' && product.deleted != 1">
                          <p class="font-semibold">Amount</p>
                          <input class="w-1/6 h-10 border rounded px-2" type="number" v-model="selectQuantity" min="1" :max="selectedProductColor.amount">
                          <div v-if="invalidQuantity" class="text-red-500">The amount must be <span v-if="selectedProductColor.amount == 1">1</span><span v-else>in range of 1-{{selectedProductColor.amount}}</span></div>
                      </div>
-                     <div v-if="productColorFilter(product.productcolor).length<1"> <button disabled class="border-2 cursor-not-allowed border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 bg-red-500 text-white font-bold duration-500 uppercase">Out of stock</button>  </div>
+                     <div v-if="product.deleted == 1"> <button disabled class="border-2 cursor-not-allowed border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 bg-red-500 text-white font-bold duration-500 uppercase">Product deleted</button>  </div>
+                     <div v-else-if="productColorFilter(product.productcolor).length<1"> <button disabled class="border-2 cursor-not-allowed border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 bg-red-500 text-white font-bold duration-500 uppercase">Out of stock</button>  </div>
                      <div v-else-if="!role"> <button @click="sendToLogin" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-gray-300 hover:text-black font-bold duration-500 uppercase">Login to order</button>  </div>
                      <div v-else-if="role == 'ROLE_CUSTOMER' && !inCart"> <button @click="addToCart" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-red-600 hover:text-white font-bold duration-500 uppercase">Add to Cart</button>  </div>
                      <div v-else-if="role == 'ROLE_CUSTOMER' && inCart"> <button disabled class="border-2 cursor-not-allowed border-gray-300 pl-5 pr-5 pt-2 pb-2 cart mt-3 font-bold uppercase bg-gray-300 text-gray-500">Already in cart</button>  </div>

@@ -190,7 +190,7 @@
                     <a class="text-xl" href="#orderDetailHeader">Click to see your order details below</a> 
                 </div>
                 <div class="my-3 flex justify-center space-x-5">
-                        <button class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-green-400 hover:bg-green-500 hover:text-black font-bold duration-200 uppercase">View all your orders</button>
+                        <router-link class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-green-400 hover:bg-green-500 hover:text-black font-bold duration-200 uppercase" :to="{ name: 'UserOrder'}">View all your orders</router-link>
                         <router-link class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-blue-400 hover:bg-blue-500 hover:text-black font-bold duration-200 uppercase" :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">BACK TO SHOPPING</router-link>
                     </div>
 
