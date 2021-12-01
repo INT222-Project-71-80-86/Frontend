@@ -111,7 +111,7 @@ const routes = [
       }
     },
     {
-      path: "/test/order",
+      path: "/user/order",
       name: "UserOrder",
       component: UserOrder
     }
@@ -119,9 +119,9 @@ const routes = [
 
 // Each role access components name
 const staff = ["Addproduct", "EditProduct", "Profile"]
-const customer = ["cart", "Profile", "Order"]
+const customer = ["cart", "Profile", "Order", "UserOrder"]
 const admin = ["Addbrand", "Addcolor", "Addproduct", "EditProduct", "Profile", "AdminPage"]
-const all = ["Home", "About", "showproducts", "singleProduct", "UserOrder"]
+const all = ["Home", "About", "showproducts", "singleProduct"]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

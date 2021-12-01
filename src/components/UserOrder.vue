@@ -1,7 +1,8 @@
 <template>
+    <nav-bar />
     <div id="userOrder" class="mx-auto w-4/5 px-5 py-3 rounded-xl shadow-lg border border-black">
-        <div id="userOrderHeader">
-            All Orders
+        <div id="userOrderHeader" class="text-3xl font-semibold mb-3">
+            Your Orders
         </div>
         <div id="userOrderDetail">
             <div class="accordion" id="ordersAccordion" v-if="orders">
