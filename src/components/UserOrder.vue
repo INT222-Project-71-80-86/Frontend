@@ -1,11 +1,15 @@
 <template>
     <nav-bar />
-    <div id="userOrder" class="mx-auto w-4/5 px-5 py-3 rounded-xl shadow-lg border border-black">
-        <div id="userOrderHeader" class="text-3xl font-semibold mb-3">
+    <div id="userOrder" v-if="orders" class="mx-auto w-4/5 px-5 py-3 rounded-xl shadow-lg border border-black">
+        <div id="userOrderHeader" class="text-3xl font-semibold mb-3" v-if="orders.length > 0">
             Your Orders
         </div>
+        <div id="userOrderHeaderIF" class="text-3xl font-semibold mb-3 space-y-5" v-else>
+            <p class="text-center my-5">You have not order anything yet.</p> 
+            <div class="flex justify-center"><router-link class="border-2 shadow-md pl-5 pr-5 py-2 mt-3 text-2xl bg-blue-400 hover:bg-blue-500 hover:text-black font-bold duration-200 uppercase" :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">BACK TO SHOPPING</router-link></div>
+        </div>
         <div id="userOrderDetail">
-            <div class="accordion" id="ordersAccordion" v-if="orders">
+            <div class="accordion" id="ordersAccordion" v-if="orders.length > 0">
                 <div class="accordion-item" v-for="o in orders" :key="o.oid">
                     <h2 class="accordion-header -mr-3" :id="'heading'+o.oid">
                         <button class="accordion-button collapsed row" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse'+o.oid" aria-expanded="false" :aria-controls="'collapse'+o.oid">
@@ -19,7 +23,7 @@
                         <div class="accordion-body max-h-96 overflow-auto">
                             <div v-for="(od, index) in o.orderdetail" :key="od.id" class="orderDetail row">
                                 <div class="col-1">{{ index+1 }}</div>
-                                <div class="col-2"><img :src="getImage(od.product.image)" :alt="od.product.name" style="max-height: 120px; width:auto;"></div>
+                                <div class="col-2"><a href="#" @click="reRouting(od.product.pid)"><img :src="getImage(od.product.image)" :alt="od.product.name" style="max-height: 120px; width:auto;"></a></div>
                                 <div class="col-3 text-left"><a href="#" @click="reRouting(od.product.pid)">{{od.product.name}}</a></div>
                                 <div class="col">
                                     <div class="border-2 border-black w-7 h-7 hover:border-gray-500 transform duration-200" :style="{ backgroundColor: od.color.code }" />
