@@ -15,7 +15,7 @@
           :src="getImages(item.image)"
         /></router-link>
         <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-          <h1 class="text-white text-3xl font-medium mb-1 -ml-1">{{ item.name }}</h1>
+          <router-link :to=" {name: 'singleProduct', params: { singleProd: item.pid} } "><h1 class="text-white text-3xl font-medium mb-1 -ml-1">{{ item.name }}</h1></router-link>
                     <div class="flex space-x-2">
           <h2 class="text-sm text-white tracking-widest uppercase font-extrabold">{{ item.brand.name }}</h2>
           <h2 class="text-sm text-white tracking-widest uppercase font-light">— {{ item.category.name }}</h2>

@@ -36,8 +36,8 @@
                             </div>
                      </div> -->
                     <div class="flex-row align-items-center mt-2"> 
-                        <span class="text-xs font-semibold">Category: </span> <span class="text-xs"> {{ product.category.name }} </span><br />
-                        <span class="text-xs font-semibold">Brand: </span> <span class="text-xs"> {{ product.brand.name }} </span> <br />
+                        <span class="text-xs font-semibold">Category: </span> <router-link :to="{name: 'showproducts', params: {type: product.category.catid, value: 0}}"><span class="text-xs"> {{ product.category.name }} </span></router-link> <br />
+                        <span class="text-xs font-semibold">Brand: </span> <router-link :to="{name: 'showproducts', params: {type: 'brand', value: product.brand.bid}}"><span class="text-xs"> {{ product.brand.name }} </span></router-link> <br />
                         <span class="text-xs font-semibold">Release Date:</span> <span class="text-xs tracking-widest">{{product.releaseDate}}</span> <br /> 
                         <span class="text-xs font-semibold">Warranty:</span> <span class="tracking-widest text-xs">{{product.warranty}} year</span>
                     </div>

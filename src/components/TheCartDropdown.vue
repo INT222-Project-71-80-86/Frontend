@@ -17,7 +17,7 @@
                 <div  class="overflow-auto h-96">
                     <div id="bodyDetail" class="row mx-2 py-3 border-b" v-for="(c, index) in cart" :key="c.productColor.id">
                         <div class="col-1">{{index+1}}</div>
-                        <div class="col-2"><img :src="getImage(c.product.image)" style="max-height: 120px; width:auto;"></div>
+                        <div class="col-2"><a href="#" @click="reRouting(c.product.pid)"><img :src="getImage(c.product.image)" style="max-height: 120px; width:auto;"></a></div>
                         <div class="col-3"><button data-bs-dismiss="dropdown" type="button" @click="reRouting(c.product.pid)">{{c.product.name}}</button></div>
                         <div class="col-1">
                             <div class="color-circle border-2 border-black rounded-full w-7 h-7" :style="{ backgroundColor: c.productColor.color.code }" />

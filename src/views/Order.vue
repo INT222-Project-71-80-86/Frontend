@@ -18,7 +18,7 @@
                         <div  class="overflow-auto h-96">
                             <div id="bodyDetail" class="row mx-2 py-3 border-b" v-for="(c, index) in cart" :key="c.productColor.id">
                                 <div class="col-1">{{index+1}}</div>
-                                <div class="col-2"><img :src="getImage(c.product.image)" style="max-height: 120px; width:auto;"></div>
+                                <div class="col-2"><a href="#" @click="reRouting(c.product.pid)"><img :src="getImage(c.product.image)" style="max-height: 120px; width:auto;"></a></div>
                                 <div class="col-3"><button data-bs-dismiss="dropdown" type="button" @click="reRouting(c.product.pid)">{{c.product.name}}</button></div>
                                 <div class="col-1">
                                     <div class="color-circle border-2 border-black rounded-full w-7 h-7" :style="{ backgroundColor: c.productColor.color.code }" />
@@ -208,11 +208,11 @@
                     <div id="orderDetail" class="space-y-5">
                         <div class="row p-3 space-x-2" v-for="item in order.orderdetail" :key="item.id">
                             <div class="col-3">
-                                <img :src="getImage(item.product.image)" style="max-height: 300px; width:auto;">
+                                <a href="#" @click="reRouting(item.product.pid)"><img :src="getImage(item.product.image)" style="max-height: 300px; width:auto;"></a>
                             </div>
                             <div class="col pr-10 space-y-1">
                                 <div class="item-name row">
-                                    <span class="col flex text-xl font-semibold space-x-3"><span class=" w-7 h-7 border-2 border-transparent" :style="{ backgroundColor: item.color.code }"></span><span>{{ item.product.name }}</span></span> 
+                                    <span class="col flex text-xl font-semibold space-x-3"><span class=" w-7 h-7 border-2 border-transparent" :style="{ backgroundColor: item.color.code }"></span><a href="#" @click="reRouting(item.product.pid)"><span>{{ item.product.name }}</span></a></span> 
                                     <span class="col-1 text-xl">&times;{{ item.amount }}</span>
                                 </div>
                                 <div class="item-price-each text-lg font-semibold mb-3" v-if="item.amount > 1">{{ toFixed(item.priceeach,item.amount) }}฿&nbsp;&nbsp;&nbsp;({{item.priceeach}}฿/pc.)</div>

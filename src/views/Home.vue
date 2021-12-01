@@ -41,7 +41,7 @@ export default {
   name: 'Home',
   methods: {
     pushCategory(catid){
-      this.$router.push({ name: 'showproducts', params: {type: 'category' , value: catid}})
+      this.$router.push({ name: 'showproducts', params: {type: catid , value: 0}})
     },
     getLocalImage(file){
       return require(`@/assets/images/${file}`)
