@@ -12,7 +12,7 @@
                         class="block border border-grey-light w-full p-3 rounded"
                         name="fullname"
                         placeholder="Username" />
-                        <span class="block text-red-500 text-sm" v-if="invalidUsername">Please Enter Your Username</span>
+                        <span class="block text-red-500 text-sm" v-if="invalidUsername">Please Enter Valid Username</span>
                                 <span
                                     class="block text-red-500 text-sm"
                                     v-if="!usernameLength"
@@ -116,7 +116,7 @@
                         class="block border border-grey-light w-full p-3 rounded mt-4"
                         name="dob"
                         placeholder="Date of Birth" />
-                    <span class="text-red-500" v-if="invalidDob">Please Choose Your Date of Birth</span><br/>
+                    <span class="text-red-500" v-if="invalidDob">Please Enter Valid Date of Birth</span><br/>
 
                     <label class="text-muted">Address</label>
                     <textarea
@@ -130,7 +130,7 @@
                         name="email"
                         placeholder="Address"
                         > </textarea>
-                    <span class="text-red-500" v-if="invalidDob">Please Enter Your Address</span>
+                    <span class="text-red-500" v-if="invalidAddress">Please Enter Your Address</span>
                     <div class="mb-4">
                     <input 
                         v-model="tel"
@@ -226,14 +226,22 @@ export default {
             }
         },
         ValidateForm2() {
+            
             this.invalidFname = this.fname == null || this.fname.trim() === '' ? true : false
             this.invalidLname = this.lname == null || this.lname.trim() === '' ? true : false
             this.invalidEmail = this.email == null
             this.invalidtel = this.tel == null 
-            this.invalidDob = this.dob == null || this.dob === '' ? true : false
+            this.invalidDob = true
             this.invalidAddress = this.address == null || this.address.trim() === '' ? true : false
-                this.EmailPattern()
-                this.TelPattern()
+            this.EmailPattern()
+            this.TelPattern()
+            if(this.dob != null && this.dob != ''){
+                let dateNow = new Date()
+                dateNow.setHours(0,0,0,0)
+                let dob = new Date(this.dob)
+                dob.setHours(0,0,0,0)
+                this.invalidDob = dob > dateNow ? true : false
+            }
             if (!this.invalidFname && !this.invalidLname && !this.invalidEmail && !this.invalidDob && !this.invalidTel && !this.invalidAddress) {
                 this.makeForm()
             }
@@ -256,10 +264,7 @@ export default {
 
             const res = await axios.post(`${this.backend_url}/user/save`, user).catch(function (error) {
                 if (error.response) {
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-
+                    alert(error.response.data.message);
                 } else if (error.request) {
                     console.log(error.request);
                 } else {
@@ -269,7 +274,6 @@ export default {
             if (res != undefined) {
                 this.login()
             }
-            console.log(res)
         },
         checkPassword() {
             this.invalidPassword = false
@@ -289,10 +293,8 @@ export default {
                 if (isNaN(char)) {
                     if (char == char.toUpperCase()) {
                         this.caseUpper = true
-                        console.log('up case :' + this.caseUpper);
                     } else if (char == char.toLowerCase()) {
                         this.caseLower = true
-                        console.log('low case :' + this.caseLower);
                     }
                 }
             }
@@ -304,7 +306,6 @@ export default {
             if (this.username) {
                 if (this.username.length > 7) {
                     this.usernameLength = true
-                    console.log(this.usernameLength)
                 } else {
                     this.usernamelength = false
                 }
@@ -331,49 +332,44 @@ export default {
 
         async login() {
         const formData = this.makeLoginForm()
-        console.log(formData);
         const res = await axios.post(`${this.backend_url}/login`, formData).catch(function (error) {
             if (error.response) {
-                console.log(error)
-                console.log(error.response);
+                alert(error.response.data.message)
             } else if (error.request) {
                 console.log(error.request);
             } else {
                 console.log('Error', error.message);
             }
         })
-        console.log(res);
-        const data = await res.data
-        const access_token = data.access_token
-        localStorage.setItem("access_token", access_token)
-        localStorage.setItem("refresh_token", data.refresh_token)
-        const user = jwt_decode(data.access_token)
-        this.$store.dispatch('fetchUser', { user, access_token })
+
+        if(res != undefined){
+            const data = await res.data
+            const access_token = data.access_token
+            localStorage.setItem("access_token", access_token)
+            localStorage.setItem("refresh_token", data.refresh_token)
+            const user = jwt_decode(data.access_token)
+            this.$store.dispatch('fetchUser', { user, access_token })
+            this.$router.push({ path: "/" })
+        }
 
 
-        this.$router.push({ path: "/" })
     },
     makeLoginForm() {
         let formData = new FormData()
         formData.append("username", this.username)
         formData.append("password", this.password)
-        console.log(this.username);
         return formData
     },
 
     nextForm() {
-        console.log(this.Form)
         if (this.Form > 1) {
             alert('Do not have page')
         } else {
             this.Form = this.Form + 1
         }
-        console.log(this.Form)
-
     },
 
     backForm() {
-        console.log(this.Form)
         if (this.Form == 1) {
             alert('Do not have page')
         } else
@@ -384,9 +380,6 @@ export default {
         const res = await axios.get(`${this.backend_url}/user/check/${username}`).catch(function (error) {
             if (error.response) {
                 console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-
             } else if (error.request) {
                 console.log(error.request);
             } else {

@@ -76,9 +76,6 @@ export default {
         }
     },
     methods: {
-        close(){
-            console.log("close")
-        },
         calTotal(amount, price) {
             return (Math.round((amount * price) * 100)/100).toFixed(2);
         },

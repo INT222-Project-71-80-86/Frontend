@@ -85,7 +85,6 @@ export default {
             return this.pageInfo.pageNumber+1 == i  
         },
         fetchOrder(i = 1){
-            console.log(i)
             const access_token = localStorage.getItem('access_token')
             this.$store.dispatch('fetchOrder', {token: access_token, pageNo: i})
         },
