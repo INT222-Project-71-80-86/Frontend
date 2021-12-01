@@ -306,7 +306,6 @@ export default {
             
             const response = await axios.get(`${this.backend_url}/coupon/get/${name}`, { headers: { 'Authorization': `Bearer ${access_token}` } }).catch( function (error) {
                 if (error) {
-                    console.log(error.response)
                     message = error.response.data.message
                 }
             })
@@ -315,7 +314,6 @@ export default {
                 this.coupon = response.data
                 await axios.get(`${this.backend_url}/coupon/check/${name}`, { headers: { 'Authorization': `Bearer ${access_token}` } }).catch( function (error) {
                     if (error) {
-                        console.log(error.response)
                         message = error.response.data.message
                     }
                 })
@@ -335,7 +333,6 @@ export default {
             this.couponName = ''
         },
         checkoutCart() {
-            console.log(this.cart)
             let order = { oid: 0,  coupon: null, orderdetail: [] }
             if(this.coupon && !this.errMessage && !this.errCouponApplicable){
                 order.coupon = this.coupon
@@ -355,20 +352,24 @@ export default {
             }
             // console.log(order)
             this.placeOrder(order)
-
-            this.clearCoupon()
+            
         },
         async placeOrder(order) {
+            let self = this
             const access_token = localStorage.getItem("access_token")
             const response = await axios.post(`${this.backend_url}/order/save`, order, { headers: { 'Authorization': `Bearer ${access_token}` } } ).catch( function (error) {
                 if(error){
                     alert("An unexpected error occurred: "+error.response.data.message)
+                    if(confirm("Please clear cart and perform the transaction once again.")){
+                        self.forceClearCart()
+                    }
                 }
             })
             if(response != undefined && response.status == 200){
                 let order = response.data
                 this.order = order
                 this.forceClearCart()
+                this.clearCoupon()
             }
         }
     },

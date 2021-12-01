@@ -41,7 +41,7 @@
                         <span class="text-xs font-semibold">Release Date:</span> <span class="text-xs tracking-widest">{{product.releaseDate}}</span> <br /> 
                         <span class="text-xs font-semibold">Warranty:</span> <span class="tracking-widest text-xs">{{product.warranty}} year</span>
                     </div>
-                    <div  class="flex font-semibold mt-2 text-lg">
+                    <div class="flex font-semibold mt-2 text-lg" v-if="productColorFilter(product.productcolor).length > 0">
                         <span>Color</span>
                         <span v-if="product.productcolor.length > 1">s</span>
                         <span v-if="selectedProductColor.color.cid > 0">: {{ selectedProductColor.color.name }}</span>
@@ -57,8 +57,9 @@
                          <input class="w-1/6 h-10 border rounded px-2" type="number" v-model="selectQuantity" min="1" :max="selectedProductColor.amount">
                          <div v-if="invalidQuantity" class="text-red-500">The amount must be <span v-if="selectedProductColor.amount == 1">1</span><span v-else>in range of 1-{{selectedProductColor.amount}}</span></div>
                      </div>
-                     <div v-if="!role"> <button @click="sendToLogin" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-gray-300 hover:text-black font-bold duration-500 uppercase">Login to order</button>  </div>
-                     <div v-if="role == 'ROLE_CUSTOMER' && !inCart"> <button @click="addToCart" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-red-600 hover:text-white font-bold duration-500 uppercase">Add to Cart</button>  </div>
+                     <div v-if="productColorFilter(product.productcolor).length<1"> <button disabled class="border-2 cursor-not-allowed border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 bg-red-500 text-white font-bold duration-500 uppercase">Out of stock</button>  </div>
+                     <div v-else-if="!role"> <button @click="sendToLogin" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-gray-300 hover:text-black font-bold duration-500 uppercase">Login to order</button>  </div>
+                     <div v-else-if="role == 'ROLE_CUSTOMER' && !inCart"> <button @click="addToCart" class="border-2 border-black pl-5 pr-5 pt-2 pb-2 cart mt-3 hover:bg-red-600 hover:text-white font-bold duration-500 uppercase">Add to Cart</button>  </div>
                      <div v-else-if="role == 'ROLE_CUSTOMER' && inCart"> <button disabled class="border-2 cursor-not-allowed border-gray-300 pl-5 pr-5 pt-2 pb-2 cart mt-3 font-bold uppercase bg-gray-300 text-gray-500">Already in cart</button>  </div>
                     <div v-if="invalidColor" class="text-red-500">Please select the color</div>
                     <div class="d-flex flex-row align-items-center mt-3"> 

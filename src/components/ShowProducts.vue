@@ -35,7 +35,7 @@
             </span>
 
           </div>
-          <div class="flex items-center pb-1 -mt-6 border-b-2 border-gray-800 space-x-1">
+          <div class="flex items-center pb-1 -mt-6 border-b-2 border-gray-800 space-x-1" v-if="productColorFilter(item.productcolor).length>0">
           
             <span class="mr-1 font-semibold text-white">Color —</span>
             <span v-for="c in productColorFilter(item.productcolor)" :key="c.color.cid">
@@ -47,7 +47,9 @@
                     </div>
                 </div>
             </span>
-           
+          </div>
+          <div class="flex items-center pb-1 -mt-6 border-b-2 border-gray-800 space-x-1" v-else>
+            <span class="mr-1 font-semibold text-red-500">Out of stock</span>
           </div>
            <p class="leading-relaxed">{{ item.description }}</p>
           
