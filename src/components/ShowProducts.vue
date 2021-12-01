@@ -145,7 +145,8 @@ export default {
           const access_token = localStorage.getItem("access_token")
           const res = await axios.delete(`${this.backend_url}/product/delete/${pid}`, { headers: { 'Authorization': `Bearer ${access_token}` } })
           if(res != undefined && res.status == 200){
-            this.$store.dispatch('fetchAllProducts', this.currentPage)
+            let page = this.pageSize <= 1 ? this.currentPage-1 : this.currentPage
+            this.$store.dispatch('fetchAllProducts', page)
             alert("Successfully Remove the product")
           } else {
             alert("Error Removing Product")
@@ -205,6 +206,7 @@ export default {
       brands: computed(() => store.state.brands),
       categories: computed(() => store.state.categories),
       currentPage: computed(() => store.state.currentPage),
+      pageSize: computed(() => store.state.products.numberOfElements),
       user: computed(() => store.state.user),
       role: computed(() => store.state.role)
     }
