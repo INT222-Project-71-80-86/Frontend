@@ -251,7 +251,6 @@ export default {
             const res = await axios.delete(`${this.backend_url}/review/delete`, { headers: { 'Authorization': `Bearer ${access_token}` } , data: { pid: r.pid, uid: r.uid}} ).catch(function (error) {
                 if (error) {
                     alert(error.response.data.message)
-                    console.log(error.response)
                     return
                 }
             })

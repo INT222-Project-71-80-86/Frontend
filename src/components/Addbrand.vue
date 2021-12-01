@@ -204,9 +204,6 @@ export default {
       let access_token = localStorage.getItem("access_token")
       const res = await axios.post(`${this.backend_url}/brand/save`, brand, { headers: { 'Authorization': `Bearer ${access_token}` } }).catch(function (error) {
         if (error) {
-          console.log("ERROR HERE")
-          console.log(error)
-          console.log(error.response);
           alert("An Unexpected Error Occured. Response Status: " + error.response.status)
           check = true;
         }
@@ -248,11 +245,7 @@ export default {
       let access_token = localStorage.getItem("access_token")
       const res = await axios.delete(`${this.backend_url}/brand/delete/${brandId}`, { headers: { 'Authorization': `Bearer ${access_token}` } }).catch(function (error) {
         if (error) {
-          console.log("ERROR HERE")
-          console.log(error)
-          console.log(error.response);
           alert("An Unexpected Error Occured. Response Status: " + error.response.status)
-          check = true;
         }
       })
       if (res != undefined && res.status == 200) {

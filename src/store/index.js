@@ -132,7 +132,7 @@ export default createStore({
     async fetchUser({commit}, userTokenDetail){
       const res = await axios.get(`${backend_url}/user/get`, { headers: { 'Authorization': `Bearer ${userTokenDetail.access_token}` }} ).catch(function (error) {
         if(error){
-          console.log(error)
+          console.log(error.response)
         }
       })
       const user = res.data
@@ -147,7 +147,6 @@ export default createStore({
           }
       })
       let orders = response.data
-      console.log(orders)
       commit('setOrder', {orders, page: detail.pageNo})
   },
     removeUser({commit}){

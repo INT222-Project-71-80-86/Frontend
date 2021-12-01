@@ -523,9 +523,6 @@ export default {
             setTimeout(() => this.$router.push({ name: 'showproducts', params: { type: 'all', value: '1' } }), 1000);
         }).catch(function (error) {
             if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
                 if(error.response.data.errorCode == 'PRODUCT_ALREADY_EXIST') {
                     temp = true
                 }
@@ -544,7 +541,6 @@ export default {
     async fetchProduct(pid) {
       const res = await axios.get(`${this.backend_url}/product/${pid}`);
       this.product = res.data;
-      console.log(res)
     },
     fillColor(){
         this.product.productcolor.forEach( c => {

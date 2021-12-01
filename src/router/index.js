@@ -8,18 +8,13 @@ import Addproduct from '../views/AddproductV2.vue'
 import About from '../views/About.vue'
 import singleProduct from '../views/singleProduct.vue'
 // Import Components
-import Addbrand from '../components/Addbrand.vue'
-import Addcolor from '../components/Addcolor.vue'
 import ShowProducts from '../components/ShowProducts.vue'
 import EditProduct from '../views/EditProductV2.vue'
 import Login from '../components/Login.vue'
 import Profile from '../components/Profile.vue'
 import store from '../store/index.js'
 import AdminPage from '../components/AdminPage.vue'
-import RoleManage from '../components/RoleManage.vue'
-import CouponManage from '../components/CouponManage.vue'
 import Register from '../components/Register.vue'
-// Test Import
 import UserOrder from '../components/UserOrder.vue'
 
 const routes = [
@@ -56,16 +51,6 @@ const routes = [
     component: Addproduct
   },
   {
-    path: '/Addcolor',
-    name: 'Addcolor',
-    component: Addcolor
-  },
-  {
-    path: '/Addbrand',
-    name: 'Addbrand',
-    component: Addbrand
-  },
-  {
     path: '/edit/:editProduct',
     name: 'EditProduct',
     component: EditProduct,
@@ -86,16 +71,6 @@ const routes = [
       path:'/AdminPage',
       name:'AdminPage',
       component: AdminPage
-     },
-     {
-       path:'/RoleManage',
-       name:'RoleManage',
-       component: RoleManage
-     },
-     {
-       path:'/CouponManage',
-       name:'CouponManage',
-       component: CouponManage
      },
      {
        path:'/Register',
@@ -120,8 +95,8 @@ const routes = [
 // Each role access components name
 const staff = ["Addproduct", "EditProduct", "Profile"]
 const customer = ["cart", "Profile", "Order", "UserOrder"]
-const admin = ["Addbrand", "Addcolor", "Addproduct", "EditProduct", "Profile", "AdminPage"]
-const all = ["Home", "About", "showproducts", "singleProduct"]
+const admin = ["Addproduct", "EditProduct", "Profile", "AdminPage"]
+const all = ["Home", "About", "showproducts", "singleProduct", "RoleManage"]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -153,25 +128,18 @@ router.beforeEach(async (to, from, next) => {
   }
 
   let user = jwt_decode(access_token)
-  console.log(user)
 
   if( (user.exp*1000) < new Date()){
-    // console.log("User token is now expired at "+new Date(user.exp*1000))
-    // console.log("Removing Access Token from Local Storage")
-    // // localStorage.removeItem("access_token")
-    // console.log("Trying to refresh token")
 
     if(refresh_token == null) {
-      // console.log("ERROR Not have refresh Token")
+      // Not have refresh Token
       next("login")
     } 
 
     const res = await axios.get(`${backend_url}/user/token/refresh`, { headers: { 'Authorization': `Bearer ${refresh_token}` } }).catch(function (error) {
       if (error) {
-          // console.log(error);
-          // console.log("Removing Refresh Token and redirect to Login page")
-          // // localStorage.removeItem("refresh_token")
-          // console.log("Removing State User and other data")
+          // Removing Refresh Token and redirect to Login page
+          // Removing State User and other data
           store.dispatch("removeUser")
           next('login')
       }
@@ -182,24 +150,19 @@ router.beforeEach(async (to, from, next) => {
     localStorage.setItem('access_token', access_token)
     localStorage.setItem('refresh_token', refresh_token)
     user = jwt_decode(access_token)
-    // console.log('Set new Auth Token in Local Storage, Decoding new access token')
+    // Set new Auth Token in Local Storage, Decoding new access token
   }
   
 
   if( store.state.user != null && store.state.expiryDate != null && store.state.user.username == user.sub && store.state.expiryDate.getTime() == user.exp*1000){
     if(checkValidRole(user, to.name)){
-      // console.log("Validate token's username and username are matching then skipping store new User")
-      // console.log(store.state.expiryDate)
+      // Validate token's username and username are matching then skipping store new User
       next()
     } else {
       next("")
     }
   } else {
     await store.dispatch('fetchUser', {user, access_token} )
-    // console.log("printing user/ role/ exp")
-    // console.log(store.state.user)
-    // console.log(store.state.role)
-    // console.log(store.state.expiryDate)
     if(checkValidRole(user, to.name)){
       next()
     } else {

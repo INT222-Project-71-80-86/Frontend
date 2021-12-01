@@ -498,8 +498,6 @@ export default {
             let formData = new FormData()
             formData.append('photo', this.uploadFile) // Add image file
             formData.append('product', blob) // Add blob json file
-            console.log(formData)
-            console.log(product)
     
                 this.saveAddProduct(formData);
                 setTimeout(() => this.$router.push({ name: 'showproducts', params: { type: 'all', value: '1' } }), 1000);

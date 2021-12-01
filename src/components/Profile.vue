@@ -218,10 +218,7 @@ export default {
             const access_token = localStorage.getItem("access_token")
             const res = await axios.put(`${this.backend_url}/user/edit`, formData,{headers:{'Authorization': `Bearer ${access_token}`}}).catch(function (error) {
                 if (error.response) {
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-
+                    alert(error.response.data.message);
                 } else if (error.request) {
                     console.log(error.request);
                 } else {

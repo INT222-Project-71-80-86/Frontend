@@ -360,7 +360,6 @@ export default {
                     order.orderdetail.push(od)
                 });
             }
-            // console.log(order)
             this.placeOrder(order)
             
         },
