@@ -53,10 +53,10 @@
                         <div class="text-gray-400">- NO ITEM IN CART -</div>
                         <hr />
                     </div>
-                    <div class="my-3 flex justify-center space-x-5">
+                    <!-- <div class="my-3 flex justify-center space-x-5">
                         <button v-if="cart.length > 0" @click="clearCart" class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-red-400 hover:bg-red-500 hover:text-black font-bold duration-200 uppercase">Clear cart</button>
                         <router-link class="border-2 border-black pl-5 pr-5 py-2 mt-3 text-2xl bg-blue-400 hover:bg-blue-500 hover:text-black font-bold duration-200 uppercase" :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }">BACK TO SHOPPING</router-link>
-                    </div>
+                    </div> -->
                     <!-- Coupon  -->
                     <div v-if="cart.length>0" class="my-4 mt-6 -mx-2 lg:flex">
                         <div class="lg:px-2 lg:w-1/2">
@@ -171,12 +171,22 @@
                                         {{ calCouponPrice }} ฿
                                     </div>
                                 </div>
-                                <button @click="checkoutCart" class="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-700 rounded-full shadow item-center hover:bg-gray-500 focus:shadow-outline focus:outline-none">
+                                <button @click="checkoutCart" class="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-green-700 rounded-full shadow item-center hover:bg-green-500 focus:shadow-outline focus:outline-none">
                                     <svg aria-hidden="true" data-prefix="far" data-icon="credit-card" class="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" >
                                         <path fill="currentColor" d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"/>
                                     </svg>
                                     <span class="ml-2 mt-5px">Checkout</span>
                                 </button>
+                                <div class="flex space-x-2">
+                                    <button v-if="cart.length > 0" @click="clearCart" class="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-red-700 rounded-full shadow item-center hover:bg-red-500 focus:shadow-outline focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10.975 8l.025-.5c0-.517-.067-1.018-.181-1.5h5.993l-.564 2h-5.273zm-2.475 10c-.828 0-1.5.672-1.5 1.5 0 .829.672 1.5 1.5 1.5s1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm11.305-15l-3.432 12h-10.428l-.455-1.083c-.323.049-.653.083-.99.083-.407 0-.805-.042-1.191-.114l1.306 3.114h13.239l3.474-12h1.929l.743-2h-4.195zm-6.305 15c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm-4.5-10.5c0 2.485-2.017 4.5-4.5 4.5s-4.5-2.015-4.5-4.5 2.017-4.5 4.5-4.5 4.5 2.015 4.5 4.5zm-3.086-2.122l-1.414 1.414-1.414-1.414-.707.707 1.414 1.415-1.414 1.414.707.708 1.414-1.415 1.414 1.414.708-.708-1.414-1.413 1.414-1.414-.708-.708z"/></svg>
+                                        <span class="ml-2 mt-5px">Clear Cart</span>
+                                    </button>
+                                    <router-link :to="{ name: 'showproducts', params: { type: 'all', value: '1' } }"  class="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-700 rounded-full shadow item-center hover:bg-gray-500 focus:shadow-outline focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.939 0l-.939 4.971v1.098c0 1.066-.933 1.931-2 1.931s-2-.865-2-1.932v-1.097l2.996-4.971h1.943zm-3.052 0l-2.887 4.971v1.098c0 1.066-.933 1.931-2 1.931s-2-.865-2-1.932v-1.097l4.874-4.971h2.013zm17.113 6.068c0 1.067-.933 1.932-2 1.932s-2-.933-2-2v-1.098l-2.887-4.902h2.014l4.873 4.971v1.097zm-10-1.168v1.098c0 1.066-.933 2.002-2 2.002s-2-.933-2-2v-1.098l1.047-4.902h1.905l1.048 4.9zm2.004-4.9l2.993 5.002v1.098c.001 1.067-.93 1.9-1.997 1.9s-2-.933-2-2v-1.098l-.939-4.902h1.943zm-15.004 10v14h10v-2h-8v-10h18v12h2v-14h-22zm18 4h-6v10h6v-10z"/></svg>
+                                        <span class="ml-2 mt-5px">Back to shopping</span>
+                                    </router-link>
+                                </div>
                             </div>
                         </div>
                     </div>
