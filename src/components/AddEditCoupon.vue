@@ -146,8 +146,11 @@ export default {
             this.invalidCouponCode = this.couponcode.trim() == '' || this.checkCouponCode()
             this.invalidCouponName = this.name.trim() == '' || this.name.length > 100 
             this.invalidCouponDesc = this.description.length > 200 
+            if(this.value == null){
+                this.invalidValue = true
+                return
+            }
             this.checkInvalidValue()
-            this.invalidValue = this.value == null
             this.invalidExpDate = this.expdate == null || this.checkInvalidDate() 
             if(this.isMaxUsage){
                 this.invalidMaxUsage = this.maxusage <= 0 
