@@ -86,7 +86,7 @@
                     <tr v-if="editing != item.cid" class="hover:bg-grey-lighter">
                         
                         <td class="py-4 px-6 border-b border-grey-light font-bold flex space-x-2">
-                            <div class="w-7 h-7 border-2 border-transparent" :style="{ backgroundColor: item.code }"></div><span>{{ item.name }}</span></td>
+                            <div class="w-7 h-7 border-2 border-opacity-50 border-black" :style="{ backgroundColor: item.code }"></div><span>{{ item.name }}</span></td>
                         <td class="py-4 px-6 border-b border-grey-light space-x-2 text-white">
                             <button
                                 class="text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-600 duration-300"

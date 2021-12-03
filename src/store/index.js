@@ -75,6 +75,10 @@ export default createStore({
     setAllUsers(state, users){
       state.pagingItems = users
       state.currentPage = (users.pageable.pageNumber) + 1
+    },
+    removePagingItem(state){
+      state.pagingItems = []
+      state.currentPage = 1
     }
   },
   actions: {
@@ -197,6 +201,9 @@ export default createStore({
       const res = await axios.get(`${backend_url}/user/allusers?pageNo=${pageNo-1}&size=10`,{ headers: { 'Authorization': `Bearer ${access_token}` }})
       const users = res.data
       commit('setAllUsers', users)
+    },
+    removePagingItem({commit}){
+      commit('removePagingItem')
     }
   },
   modules: {
