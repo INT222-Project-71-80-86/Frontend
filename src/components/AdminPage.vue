@@ -75,6 +75,11 @@ export default {
         }
 
     },
+    watch: {
+        "case"() {
+            this.$store.dispatch("removePagingItem")
+        }
+    }
 
 }
 
